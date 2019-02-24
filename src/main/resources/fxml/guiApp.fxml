@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TreeView?>
+<?import javafx.scene.effect.*?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.supsi.GuiAppController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.supsi.GuiAppController">
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
@@ -27,12 +29,29 @@
             </items>
           </Menu>
         </menus>
+         <effect>
+            <Lighting bumpInput="$null">
+               <light>
+                  <Light.Distant color="#999595" />
+               </light>
+            </Lighting>
+         </effect>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
       </MenuBar>
    </top>
    <left>
       <VBox BorderPane.alignment="CENTER">
          <children>
-            <TreeView fx:id="treeItemView" VBox.vgrow="ALWAYS" />
+            <TreeView fx:id="treeItemView" VBox.vgrow="ALWAYS">
+               <effect>
+                  <Lighting bumpInput="$null">
+                     <light>
+                        <Light.Distant />
+                     </light>
+                  </Lighting>
+               </effect></TreeView>
          </children>
       </VBox>
    </left>

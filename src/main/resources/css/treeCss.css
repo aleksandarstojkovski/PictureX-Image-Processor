@@ -1,0 +1,10 @@
+.tree-cell .tree-disclosure-node .arrow {
+    -fx-shape: null;
+    -fx-background-color: null;
+    -fx-background-image: url("file:///C:/Users/Vincenzo/IdeaProjects/SUPSI_Ingegneria_e_sviluppo_software_1/src/main/resources/icons/folder_Closed_24x24.png");
+}
+.tree-cell:expanded .tree-disclosure-node .arrow {
+    -fx-shape: null;
+    -fx-background-color: null;
+    -fx-background-image: url("file:///C:/Users/Vincenzo/IdeaProjects/SUPSI_Ingegneria_e_sviluppo_software_1/src/main/resources/icons/folder_Open_256x256.png");
+}
