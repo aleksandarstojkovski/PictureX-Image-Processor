@@ -13,6 +13,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 import javafx.stage.*;
 import javafx.util.Duration;
 
@@ -31,6 +32,7 @@ import javafx.util.Duration;
 import java.net.URL;
 
 public class FXApp extends Application {
+
     private static final String ROOT_FOLDER = "c:/";
     @Override
 
@@ -41,11 +43,14 @@ public class FXApp extends Application {
             FXMLLoader loader = new FXMLLoader();
             URL fxmlLocation = getClass().getResource("/fxml/guiApp.fxml");
             loader.setLocation(fxmlLocation);
-            GuiAppController controller = loader.<GuiAppController>getController();
+            //GuiAppController controller = loader.<GuiAppController>getController();
 
             BorderPane rootLayout = loader.load();
             Scene scene = new Scene(rootLayout, 400, 400);
+
+
             stage.setScene(scene);
+
             stage.show();
         } catch(Exception e) {
             e.printStackTrace();

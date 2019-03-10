@@ -9,6 +9,7 @@ import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -19,7 +20,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class GuiAppController{
-
+    @FXML               //non funziona
+    private VBox LVBox; //non funziona
     public TreeView<Path> treeItemView;
     private static final String ROOT_FOLDER = "c:/";
 
@@ -32,10 +34,12 @@ public class GuiAppController{
         createTree(treeItem);
         treeItemView.setRoot(treeItem);
         treeItemView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> handle(newValue));
+        //DragResizer.makeResizable(LVBox); //non funziona
+        DragResizer.makeResizable(treeItemView);
     }
 
     public void handle(Object newValue){
-        System.out.println(newValue);
+        //System.out.println(newValue);
 
         TreeItem<Path> tree = (TreeItem<Path>)newValue;
         System.out.println(tree.isExpanded());
@@ -66,7 +70,7 @@ public class GuiAppController{
 
                 newItem.setExpanded(true);
                 if (Files.isDirectory(path)){
-                    newItem.setGraphic(folderIconClosed);
+                   newItem.setGraphic(folderIconClosed);
                 }
 
 

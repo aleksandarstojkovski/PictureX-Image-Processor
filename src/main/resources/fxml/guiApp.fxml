@@ -42,9 +42,9 @@
       </MenuBar>
    </top>
    <left>
-      <VBox BorderPane.alignment="CENTER">
+      <VBox fx:id="LVBox" prefHeight="375.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
-            <TreeView fx:id="treeItemView" VBox.vgrow="ALWAYS">
+            <TreeView fx:id="treeItemView" stylesheets="@../css/treeCss2.css" VBox.vgrow="ALWAYS">
                <effect>
                   <Lighting bumpInput="$null">
                      <light>
