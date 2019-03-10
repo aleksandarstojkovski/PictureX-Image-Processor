@@ -1,17 +1,13 @@
 package ch.supsi;
 
-import javafx.application.Application;
+import DragResizer.DragResizer;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
