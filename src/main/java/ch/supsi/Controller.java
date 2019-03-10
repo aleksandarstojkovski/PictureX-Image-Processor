@@ -1,5 +1,6 @@
 package ch.supsi;
 
+import ij.ImageJ;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -79,10 +80,8 @@ public class Controller {
         chosenDirectory = dirChoser.showDialog(stage);
         if (chosenDirectory != null){
             browseTextField.setText(chosenDirectory.getAbsolutePath());
+            popolateTilePane();
         }
-
-        popolateTilePane();
-
     }
 
     public void popolateTilePane(){
@@ -100,24 +99,17 @@ public class Controller {
     }
 
     public void populateListOfImagesAndFiles() {
-        if (chosenDirectory != null) {
-            for (File f : chosenDirectory.listFiles()) {
-                try {
-                    if (ImageIO.read(f) != null) {
-                        System.out.println("immagine trovta! -> " + f);
-                        Image img = new Image(f.toURI().toString(),
-                                100, // requested width
-                                100, // requested height
-                                false, // preserve ratio
-                                false, // smooth rescaling
-                                true // load in background
-                                 );
-                        listOfImages.add(img);
-                    }
-                    listOfFiles.add(f);
-                } catch (IOException e) {
+        for (File f : chosenDirectory.listFiles()) {
+            String[] extensions = {".jpg",".png",".jpeg"};
+            for (String extension : extensions) {
+                if(f.getName().endsWith(extension)){
+                    //System.out.println("Its an image");
+                    Image img = new Image(f.toURI().toString());
+                    listOfImages.add(img);
+                    break;
                 }
             }
+            listOfFiles.add(f);
         }
     }
 
