@@ -34,6 +34,6 @@
             <TextField fx:id="browseTextField" layoutX="14.0" layoutY="5.0" prefHeight="26.0" prefWidth="275.0" />
             <Button layoutX="303.0" layoutY="5.0" mnemonicParsing="false" onAction="#handleBrowseButton" text="Browse" />
          </children></AnchorPane>
-      <ScrollPane fx:id="scrollPane" layoutX="362.0" layoutY="79.0" prefHeight="500.0" prefWidth="512.0" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="80.0" />
+      <ScrollPane fx:id="scrollPane" layoutX="362.0" layoutY="79.0" prefHeight="500.0" prefWidth="517.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="363.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="80.0" />
    </children>
 </AnchorPane>
