@@ -92,7 +92,7 @@ public class Controller {
     }
 
     void cleanImages(){
-        tilePane.getChildren().removeAll();
+        tilePane.getChildren().clear();
         listOfThubnails.clear();
         listOfFiles.clear();
         listOfImages.clear();
@@ -133,5 +133,6 @@ public class Controller {
             scrollPane.setContent(tilePane);
         }
     }
+
 
 }
