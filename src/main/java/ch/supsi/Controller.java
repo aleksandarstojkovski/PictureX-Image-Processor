@@ -29,6 +29,8 @@ import java.util.List;
 
 public class Controller {
 
+    long lastTime = 0;
+
     private File chosenDirectory;
     private List<File> listOfFiles;
     private List<Image> listOfImages;
@@ -138,7 +140,29 @@ public class Controller {
 
     private void displayThubnails(){
         for (int i=0;i<listOfThubnails.size();i++){
+            final int imageID = i;
             ImageView imgView = new ImageView(listOfThubnails.get(i));
+
+            imgView.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+                long diff;
+                boolean isdblClicked = false;
+                final long currentTime = System.currentTimeMillis();
+
+                if(lastTime!=0 && currentTime!=0){
+                    diff=currentTime-lastTime;
+
+                    if( diff<=215)
+                        isdblClicked=true;
+                    else
+                        isdblClicked=false;
+                }
+
+                lastTime=currentTime;
+
+                System.out.println("IsDblClicked: "+isdblClicked);
+                System.out.println(listOfFiles.get(imageID).getName());
+                event.consume();
+            });
             VBox vbox = new VBox(imgView);
             vbox.setMaxSize(100,100);
             vbox.setAlignment(Pos.CENTER);
