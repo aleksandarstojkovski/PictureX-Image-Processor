@@ -9,6 +9,9 @@ import javafx.scene.layout.Region;
  * {@link DragResizer} can be used to add mouse listeners to a {@link Region}
  * and make it resizable by the user by clicking and dragging the border in the
  * same way as a window.
+ * Add a search of the region parent to have the correct position in scene of the mouse,
+ * without this position the start of isInDraggableZone() is never > of the max Width of
+ * the region that you pass through the DragResizer.makeResizable().
  * <p>
  * Height and Width resizing is working (hopefully) properly
  *
@@ -16,7 +19,7 @@ import javafx.scene.layout.Region;
  * DragResizer.makeResizable(myAnchorPane);
  * </pre>
  *
- * @author Cannibalsticky (modified from the original DragResizer created by AndyTill)
+ * @author Vinsub (modified from the original DragResizerXY created by Cannibalsticky modified from the original DragResizer created byAndyTill)
  *
  */
 public class DragResizer {
