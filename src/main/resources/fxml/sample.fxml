@@ -4,9 +4,9 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.TilePane?>
 
 <AnchorPane fx:id="mainAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.supsi.Controller">
    <children>
@@ -34,6 +34,6 @@
             <TextField fx:id="browseTextField" layoutX="14.0" layoutY="5.0" prefHeight="26.0" prefWidth="275.0" />
             <Button layoutX="303.0" layoutY="5.0" mnemonicParsing="false" onAction="#handleBrowseButton" text="Browse" />
          </children></AnchorPane>
-      <TilePane fx:id="tilePane" layoutX="20.0" layoutY="79.0" prefHeight="505.0" prefWidth="858.0" />
+      <ScrollPane fx:id="scrollPane" layoutX="362.0" layoutY="79.0" prefHeight="500.0" prefWidth="512.0" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="80.0" />
    </children>
 </AnchorPane>

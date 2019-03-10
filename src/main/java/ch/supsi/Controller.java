@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableView;
@@ -47,6 +48,9 @@ public class Controller {
     private TilePane tilePane;
 
     @FXML
+    private ScrollPane scrollPane;
+
+    @FXML
     ImageView imageView;
 
     @FXML
@@ -55,9 +59,11 @@ public class Controller {
         listOfFiles = new ArrayList<>();
         listOfThubnails = new ArrayList<>();
         browseTextField.setText("chose directory...");
+        tilePane = new TilePane();
         tilePane.setPadding(new Insets(5));
         tilePane.setVgap(4);
         tilePane.setHgap(4);
+        tilePane.setAlignment(Pos.TOP_LEFT);
     }
 
     @FXML
@@ -99,7 +105,13 @@ public class Controller {
                 try {
                     if (ImageIO.read(f) != null) {
                         System.out.println("immagine trovta! -> " + f);
-                        Image img = new Image(f.toURI().toString());
+                        Image img = new Image(f.toURI().toString(),
+                                100, // requested width
+                                100, // requested height
+                                false, // preserve ratio
+                                false, // smooth rescaling
+                                true // load in background
+                                 );
                         listOfImages.add(img);
                     }
                     listOfFiles.add(f);
@@ -112,10 +124,10 @@ public class Controller {
     public void createThubnails(){
         for (File file : listOfFiles) {
             Image thubnail = new Image(file.toURI().toString(),
-                    240, // requested width
-                    240, // requested height
-                    true, // preserve ratio
-                    true, // smooth rescaling
+                    100, // requested width
+                    100, // requested height
+                    false, // preserve ratio
+                    false, // smooth rescaling
                     true // load in background
             );
             listOfThubnails.add(thubnail);
@@ -126,6 +138,7 @@ public class Controller {
         for (Image img : listOfThubnails){
             ImageView imgView = new ImageView(img);
             tilePane.getChildren().addAll(imgView);
+            scrollPane.setContent(tilePane);
         }
     }
 
