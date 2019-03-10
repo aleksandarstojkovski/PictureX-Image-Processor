@@ -6,17 +6,12 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.TilePane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
@@ -56,15 +51,25 @@ public class Controller {
 
     @FXML
     public void initialize() {
+
+        // Inizializzo liste
         listOfImages = new ArrayList<>();
         listOfFiles = new ArrayList<>();
         listOfThubnails = new ArrayList<>();
-        browseTextField.setText("chose directory...");
+
+        // Frase default sul textField di browse
+        browseTextField.setText("Chose a directory...");
+
+        // tilePane utilizzato all'interno dello scrollPane
         tilePane = new TilePane();
         tilePane.setPadding(new Insets(5));
-        tilePane.setVgap(4);
-        tilePane.setHgap(4);
-        tilePane.setAlignment(Pos.TOP_LEFT);
+        tilePane.setVgap(5);
+        tilePane.setHgap(5);
+        tilePane.setAlignment(Pos.TOP_CENTER);
+
+        // rende lo scrollPane resizable
+        scrollPane.setFitToHeight(true);
+        scrollPane.setFitToWidth(true);
     }
 
     @FXML
@@ -84,7 +89,7 @@ public class Controller {
         }
     }
 
-    public void popolateTilePane(){
+    private void popolateTilePane(){
         cleanImages();
         populateListOfImagesAndFiles();
         createThubnails();
@@ -98,22 +103,27 @@ public class Controller {
         listOfImages.clear();
     }
 
-    public void populateListOfImagesAndFiles() {
+    private void populateListOfImagesAndFiles() {
+
+        String[] extensions = {".jpg",".png",".jpeg",".tiff"};
+
         for (File f : chosenDirectory.listFiles()) {
-            String[] extensions = {".jpg",".png",".jpeg"};
-            for (String extension : extensions) {
-                if(f.getName().endsWith(extension)){
-                    //System.out.println("Its an image");
-                    Image img = new Image(f.toURI().toString());
-                    listOfImages.add(img);
-                    break;
+            if (f.isFile()) {
+                for (String extension : extensions) {
+                    if (f.getName().endsWith(extension)) {
+                        //System.out.println("Its an image");
+                        Image img = new Image(f.toURI().toString());
+                        listOfImages.add(img);
+                        break;
+                    }
                 }
+                listOfFiles.add(f);
             }
-            listOfFiles.add(f);
         }
+
     }
 
-    public void createThubnails(){
+    private void createThubnails(){
         for (File file : listOfFiles) {
             Image thubnail = new Image(file.toURI().toString(),
                     100, // requested width
@@ -126,10 +136,15 @@ public class Controller {
         }
     }
 
-    public void displayThubnails(){
-        for (Image img : listOfThubnails){
-            ImageView imgView = new ImageView(img);
-            tilePane.getChildren().addAll(imgView);
+    private void displayThubnails(){
+        for (int i=0;i<listOfThubnails.size();i++){
+            ImageView imgView = new ImageView(listOfThubnails.get(i));
+            VBox vbox = new VBox(imgView);
+            vbox.setMaxSize(100,100);
+            vbox.setAlignment(Pos.CENTER);
+            vbox.getChildren().add(new Label(listOfFiles.get(i).getName()));
+            //vbox.setOnMouseClicked(e -> {vbox.setStyle("-fx-background-color: blue;");});
+            tilePane.getChildren().addAll(vbox);
             scrollPane.setContent(tilePane);
         }
     }
