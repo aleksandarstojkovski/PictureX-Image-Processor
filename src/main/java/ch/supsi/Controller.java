@@ -114,10 +114,10 @@ public class Controller {
                         //System.out.println("Its an image");
                         Image img = new Image(f.toURI().toString());
                         listOfImages.add(img);
+                        listOfFiles.add(f);
                         break;
                     }
                 }
-                listOfFiles.add(f);
             }
         }
 
