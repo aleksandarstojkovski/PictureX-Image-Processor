@@ -65,7 +65,7 @@ public class Controller {
         tilePane.setPadding(new Insets(5));
         tilePane.setVgap(5);
         tilePane.setHgap(5);
-        tilePane.setAlignment(Pos.TOP_CENTER);
+        tilePane.setAlignment(Pos.TOP_LEFT);
 
         // rende lo scrollPane resizable
         scrollPane.setFitToHeight(true);
