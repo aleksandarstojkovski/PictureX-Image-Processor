@@ -2,38 +2,27 @@ package ch.supsi;
 
 //import ij.ImageJ;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
-import javafx.scene.*;
-import javafx.stage.*;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Controller {
 
-    long lastTime = 0;
+    private long lastTime = 0;
 
     private File chosenDirectory;
     private List<File> listOfFiles;
-    private List<Image> listOfImages;
     private List<Image> listOfThubnails;
 
     @FXML
@@ -55,7 +44,6 @@ public class Controller {
     public void initialize() {
 
         // Inizializzo liste
-        listOfImages = new ArrayList<>();
         listOfFiles = new ArrayList<>();
         listOfThubnails = new ArrayList<>();
 
@@ -93,19 +81,18 @@ public class Controller {
 
     private void popolateTilePane(){
         cleanImages();
-        populateListOfImagesAndFiles();
+        populateListOfFiles();
         createThubnails();
         displayThubnails();
     }
 
-    void cleanImages(){
+    private void cleanImages(){
         tilePane.getChildren().clear();
         listOfThubnails.clear();
         listOfFiles.clear();
-        listOfImages.clear();
     }
 
-    private void populateListOfImagesAndFiles() {
+    private void populateListOfFiles() {
 
         String[] extensions = {".jpg",".png",".jpeg",".tiff"};
 
@@ -113,9 +100,6 @@ public class Controller {
             if (f.isFile()) {
                 for (String extension : extensions) {
                     if (f.getName().endsWith(extension)) {
-                        //System.out.println("Its an image");
-                        Image img = new Image(f.toURI().toString());
-                        listOfImages.add(img);
                         listOfFiles.add(f);
                         break;
                     }
