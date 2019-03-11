@@ -38,9 +38,6 @@ public class Controller {
     private ScrollPane scrollPane;
 
     @FXML
-    ImageView imageView;
-
-    @FXML
     public void initialize() {
 
         // Inizializzo liste
@@ -94,7 +91,7 @@ public class Controller {
 
     private void populateListOfFiles() {
 
-        String[] extensions = {".jpg",".png",".jpeg",".tiff"};
+        String[] extensions = {".jpg",".png",".jpeg"};
 
         for (File f : chosenDirectory.listFiles()) {
             if (f.isFile()) {
