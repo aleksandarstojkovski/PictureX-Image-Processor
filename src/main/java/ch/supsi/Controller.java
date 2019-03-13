@@ -20,6 +20,7 @@ import java.util.List;
 public class Controller {
 
     private long lastTime = 0;
+    private long totalSizeInBytes = 0;
 
     private File chosenDirectory;
     private List<File> listOfFiles;
@@ -34,10 +35,17 @@ public class Controller {
     @FXML
     private TilePane tilePane;
 
-
-
     @FXML
     private ScrollPane scrollPane;
+
+    @FXML
+    private AnchorPane bottonPane;
+
+    @FXML
+    private Label numberOfFilesLabel;
+
+    @FXML
+    private Label totalSizeLabel;
 
     @FXML
     public void initialize() {
@@ -52,8 +60,8 @@ public class Controller {
         // tilePane utilizzato all'interno dello scrollPane
         tilePane = new TilePane();
         tilePane.setPadding(new Insets(5));
-        tilePane.setVgap(5);
-        tilePane.setHgap(5);
+        tilePane.setVgap(10);
+        tilePane.setHgap(10);
         tilePane.setAlignment(Pos.TOP_LEFT);
 
         // rende lo scrollPane resizable
@@ -74,18 +82,29 @@ public class Controller {
         chosenDirectory = dirChoser.showDialog(stage);
         if (chosenDirectory != null){
             browseTextField.setText(chosenDirectory.getAbsolutePath());
-            popolateTilePane();
+            populateTilePane();
         }
     }
 
-    private void popolateTilePane(){
+    private void populateTilePane(){
         cleanImages();
         populateListOfFiles();
+        populateBottomPane();
         createThubnails();
         displayThubnails();
     }
 
+    private void populateBottomPane(){
+        long totalSizeInMegaBytes=totalSizeInBytes/1024;
+        numberOfFilesLabel.setText(listOfFiles.size() + " elementi");
+        if (totalSizeInMegaBytes <= 1)
+            totalSizeLabel.setText(totalSizeInBytes + " Bytes");
+        else
+            totalSizeLabel.setText(totalSizeInMegaBytes + " MB");
+    }
+
     private void cleanImages(){
+        totalSizeInBytes=0;
         tilePane.getChildren().clear();
         listOfThubnails.clear();
         listOfFiles.clear();
@@ -100,6 +119,7 @@ public class Controller {
                 for (String extension : extensions) {
                     if (f.getName().endsWith(extension)) {
                         listOfFiles.add(f);
+                        totalSizeInBytes +=f.length()/(long)(1024);
                         break;
                     }
                 }
@@ -155,7 +175,4 @@ public class Controller {
             scrollPane.setContent(tilePane);
         }
     }
-
-
-
 }
