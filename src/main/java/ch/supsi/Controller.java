@@ -5,6 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -16,11 +17,13 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeSet;
 
 public class Controller {
 
     private long lastTime = 0;
-
+    private ArrayList<VBox> vBoxSelected = new ArrayList<>();
+    private ArrayList<VBox> vBoxALL = new ArrayList<>();
     private File chosenDirectory;
     private List<File> listOfFiles;
     private List<Image> listOfThubnails;
@@ -125,8 +128,8 @@ public class Controller {
         for (int i=0;i<listOfThubnails.size();i++){
             final int imageID = i;
             ImageView imgView = new ImageView(listOfThubnails.get(i));
-
-            imgView.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+            VBox vbox = new VBox(imgView);
+            vbox.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> { //aggiunta listener ad immagini
                 long diff;
                 boolean isdblClicked = false;
                 final long currentTime = System.currentTimeMillis();
@@ -136,26 +139,50 @@ public class Controller {
 
                     if( diff<=215)
                         isdblClicked=true;
-                    else
-                        isdblClicked=false;
+                    else {
+                        isdblClicked = false;
+                        vBoxSelected.clear();
+                        vBoxSelected.add(vbox);
+                    }
+
                 }
 
                 lastTime=currentTime;
 
                 System.out.println("IsDblClicked: "+isdblClicked);
                 System.out.println(listOfFiles.get(imageID).getName());
+                colorVBoxImageView();
                 event.consume();
             });
-            VBox vbox = new VBox(imgView);
+            vBoxALL.add(vbox);
             vbox.setMaxSize(100,100);
             vbox.setAlignment(Pos.CENTER);
             vbox.getChildren().add(new Label(listOfFiles.get(i).getName()));
             //vbox.setOnMouseClicked(e -> {vbox.setStyle("-fx-background-color: blue;");});
             tilePane.getChildren().addAll(vbox);
             scrollPane.setContent(tilePane);
+
         }
     }
 
+    private void colorVBoxImageView() {
+        //for (ImagelistOfThubnails
+        if (!vBoxSelected.isEmpty()){
+            for (VBox im : vBoxALL){
+                if (vBoxSelected.contains(im)){
+                    im.setStyle("-fx-border-color: blue;\n"
+                            + "-fx-border-insets: 5;\n"
+                            + "-fx-border-width: 3;\n"
+                            + "-fx-border-style: dashed;\n");
+
+                }
+                else{
+                    im.setStyle("-fx-border-color:white;");
+                }
+
+            }
+        }
+    }
 
 
 }
