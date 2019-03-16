@@ -150,6 +150,7 @@ public class Controller {
             vBoxALL.add(vbox);
             vbox.setMaxSize(100,100);
             vbox.setAlignment(Pos.CENTER);
+            vbox.setStyle("-fx-border-color:white;\n"+ "-fx-border-width: 2;\n");
             vbox.getChildren().add(new Label(imgWrp.getName()));
             Tooltip.install(vbox, new Tooltip(imgWrp.getTooltipString()));
             tilePane.getChildren().addAll(vbox);
@@ -161,14 +162,11 @@ public class Controller {
         if (!vBoxSelected.isEmpty()){
             for (VBox im : vBoxALL){
                 if (vBoxSelected.contains(im)){
-                    im.setStyle("-fx-border-color: blue;\n"
-                            + "-fx-border-insets: 5;\n"
-                            + "-fx-border-width: 3;\n"
-                            + "-fx-border-style: dashed;\n");
+                    im.setStyle("-fx-border-color: blue;\n" + "-fx-border-width: 2;\n");
 
                 }
                 else{
-                    im.setStyle("-fx-border-color:white;");
+                    im.setStyle("-fx-border-color: white;"+ "-fx-border-width: 2;\n");
                 }
 
             }

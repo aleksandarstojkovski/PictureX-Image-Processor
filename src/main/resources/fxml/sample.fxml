@@ -10,7 +10,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="mainAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.supsi.Controller">
+<AnchorPane fx:id="mainAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1040.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.supsi.Controller">
    <children>
       <MenuBar layoutY="1.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <menus>
@@ -37,11 +37,12 @@
             <Button layoutX="303.0" layoutY="5.0" mnemonicParsing="false" onAction="#handleBrowseButton" text="Browse" />
          </children></AnchorPane>
       <ScrollPane fx:id="scrollPane" layoutX="413.0" layoutY="91.0" prefHeight="461.0" prefWidth="457.0" style="-fx-border-color: grey;" AnchorPane.bottomAnchor="48.0" AnchorPane.leftAnchor="413.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="91.0" />
-      <AnchorPane fx:id="bottomPane" layoutX="7.0" layoutY="574.0" prefHeight="18.0" prefWidth="883.0" style="-fx-border-color: grey;" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="9.799999999999955">
+      <AnchorPane fx:id="bottomPane" layoutX="7.0" layoutY="574.0" prefHeight="26.0" prefWidth="983.0" style="-fx-border-color: grey;" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="10.0">
          <children>
-            <Label fx:id="numberOfFilesLabel" layoutX="416.0" layoutY="1.0" prefHeight="18.0" prefWidth="114.0" />
-            <Label fx:id="totalSizeLabel" layoutX="520.0" layoutY="1.0" prefHeight="18.0" prefWidth="114.0" />
-            <ProgressBar fx:id="progressBar" layoutX="664.0" layoutY="3.0" prefWidth="200.0" progress="0.0" />
+            <Label fx:id="numberOfFilesLabel" layoutX="416.0" layoutY="4.0" prefHeight="18.0" prefWidth="114.0" />
+            <Label fx:id="totalSizeLabel" layoutX="520.0" layoutY="4.0" prefHeight="18.0" prefWidth="114.0" />
+            <ProgressBar fx:id="progressBar" layoutX="804.0" layoutY="5.0" prefWidth="200.0" progress="0.0" AnchorPane.rightAnchor="19.0" />
+            <Label layoutX="762.0" layoutY="5.0" text="Status" AnchorPane.rightAnchor="228.2" />
          </children>
       </AnchorPane>
    </children>
