@@ -1,34 +1,26 @@
 package ch.supsi;
 
-//import ij.ImageJ;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TreeSet;
 
 public class Controller {
-
-    private long lastTime = 0;
-    private long totalSizeInBytes = 0;
 
     private ArrayList<VBox> vBoxSelected = new ArrayList<>();
     private ArrayList<VBox> vBoxALL = new ArrayList<>();
     private File chosenDirectory;
-    private List<File> listOfFiles;
-    private List<Image> listOfThubnails;
+    private List<ImageWrapper> listOfImages;
+    private long lastTime = 0;
 
     @FXML
     private TextField browseTextField;
@@ -52,103 +44,85 @@ public class Controller {
     private Label totalSizeLabel;
 
     @FXML
+    private ProgressBar progressBar;
+
+    @FXML
     public void initialize() {
+        // init list of images
+        listOfImages = new ArrayList<>();
 
-        // Inizializzo liste
-        listOfFiles = new ArrayList<>();
-        listOfThubnails = new ArrayList<>();
-
-        // Frase default sul textField di browse
+        // default text on browse button
         browseTextField.setText("Chose a directory...");
 
-        // tilePane utilizzato all'interno dello scrollPane
+        // tilePane used inside the scroll pane
         tilePane = new TilePane();
         tilePane.setPadding(new Insets(5));
         tilePane.setVgap(10);
         tilePane.setHgap(10);
         tilePane.setAlignment(Pos.TOP_LEFT);
 
-        // rende lo scrollPane resizable
+        // make scrollPane resizable
         scrollPane.setFitToHeight(true);
         scrollPane.setFitToWidth(true);
+        scrollPane.setContent(tilePane);
     }
 
     @FXML
     public void handleBrowseButton(ActionEvent event){
 
-        // directory choser di Windows
+        // default Windows directory choser
         final DirectoryChooser dirChoser = new DirectoryChooser();
 
-        // Stega principale
+        // get main stage
         Stage stage = (Stage)mainAnchorPane.getScene().getWindow();
 
-        // Mostra dirchoser di Windows
+        // display Windows directory choser
         chosenDirectory = dirChoser.showDialog(stage);
         if (chosenDirectory != null){
             browseTextField.setText(chosenDirectory.getAbsolutePath());
-            populateTilePane();
+            directoryChosenAction();
         }
+
     }
 
-    private void populateTilePane(){
-        cleanImages();
+    private void directoryChosenAction(){
+        initUI();
         populateListOfFiles();
         populateBottomPane();
-        createThubnails();
-        displayThubnails();
+        displayThumbnails();
     }
 
-    private void populateBottomPane(){
-        long totalSizeInMegaBytes=totalSizeInBytes/1024;
-        numberOfFilesLabel.setText(listOfFiles.size() + " elementi");
-        if (totalSizeInMegaBytes <= 1)
-            totalSizeLabel.setText(totalSizeInBytes + " Bytes");
-        else
-            totalSizeLabel.setText(totalSizeInMegaBytes + " MB");
-    }
-
-    private void cleanImages(){
-        totalSizeInBytes=0;
+    private void initUI(){
         tilePane.getChildren().clear();
-        listOfThubnails.clear();
-        listOfFiles.clear();
+        listOfImages.clear();
+        ImageWrapper.clear();
     }
 
     private void populateListOfFiles() {
-
-        String[] extensions = {".jpg",".png",".jpeg"};
-
+        String[] validExtensions = {".jpg",".png",".jpeg"};
         for (File f : chosenDirectory.listFiles()) {
             if (f.isFile()) {
-                for (String extension : extensions) {
-                    if (f.getName().endsWith(extension)) {
-                        listOfFiles.add(f);
-                        totalSizeInBytes +=f.length()/(long)(1024);
+                for (String extension : validExtensions) {
+                    if (f.getName().toLowerCase().endsWith(extension)) {
+                        listOfImages.add(new ImageWrapper(f));
                         break;
                     }
                 }
             }
         }
-
     }
 
-    private void createThubnails(){
-        for (File file : listOfFiles) {
-            Image thubnail = new Image(file.toURI().toString(),
-                    100, // requested width
-                    100, // requested height
-                    false, // preserve ratio
-                    false, // smooth rescaling
-                    true // load in background
-            );
-            listOfThubnails.add(thubnail);
-        }
+    private void populateBottomPane(){
+        numberOfFilesLabel.setText(listOfImages.size() + " elementi");
+        if (ImageWrapper.getTotalSizeInMegaBytes() <= 1)
+            totalSizeLabel.setText(ImageWrapper.getTotalSizeInBytes() + " Bytes");
+        else
+            totalSizeLabel.setText(ImageWrapper.getTotalSizeInMegaBytes() + " MB");
     }
 
-    private void displayThubnails(){
-        for (int i=0;i<listOfThubnails.size();i++){
-            final int imageID = i;
-            ImageView imgView = new ImageView(listOfThubnails.get(i));
+    private void displayThumbnails(){
+        for(ImageWrapper imgWrp : listOfImages){
+            ImageView imgView = new ImageView(imgWrp.getThumbnail());
             VBox vbox = new VBox(imgView);
             vbox.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> { //aggiunta listener ad immagini
                 long diff;
@@ -167,22 +141,18 @@ public class Controller {
                     }
 
                 }
-
                 lastTime=currentTime;
-
                 System.out.println("IsDblClicked: "+isdblClicked);
-                System.out.println(listOfFiles.get(imageID).getName());
+                System.out.println(imgWrp.getName());
                 colorVBoxImageView();
                 event.consume();
             });
             vBoxALL.add(vbox);
             vbox.setMaxSize(100,100);
             vbox.setAlignment(Pos.CENTER);
-            vbox.getChildren().add(new Label(listOfFiles.get(i).getName()));
-            //vbox.setOnMouseClicked(e -> {vbox.setStyle("-fx-background-color: blue;");});
+            vbox.getChildren().add(new Label(imgWrp.getName()));
+            Tooltip.install(vbox, new Tooltip(imgWrp.getTooltipString()));
             tilePane.getChildren().addAll(vbox);
-            scrollPane.setContent(tilePane);
-
         }
     }
 
