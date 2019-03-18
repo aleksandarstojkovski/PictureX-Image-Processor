@@ -47,6 +47,9 @@ public class Controller {
     private ProgressBar progressBar;
 
     @FXML
+    private ImageView imageViewPreview;
+
+    @FXML
     public void initialize() {
         // init list of images
         listOfImages = new ArrayList<>();
@@ -129,11 +132,13 @@ public class Controller {
                 boolean isdblClicked = false;
                 final long currentTime = System.currentTimeMillis();
 
+                imageViewPreview.setImage(imgWrp.getOriginalImage());
                 if(lastTime!=0 && currentTime!=0){
                     diff=currentTime-lastTime;
 
-                    if( diff<=215)
-                        isdblClicked=true;
+                    if( diff<=215) {
+                        isdblClicked = true;
+                    }
                     else {
                         isdblClicked = false;
                         vBoxSelected.clear();
