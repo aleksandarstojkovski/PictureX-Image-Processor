@@ -94,7 +94,7 @@ public class Controller {
     }
 
     private void directoryChosenAction(){
-        setLastFilePath(chosenDirectory);
+        setLastFilePath(chosenDirectory); //aggiorna ad ogni selezione il path nelle preferenze
         initUI();
         populateListOfFiles();
         populateBottomPane();
