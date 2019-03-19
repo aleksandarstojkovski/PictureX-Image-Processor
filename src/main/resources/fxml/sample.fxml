@@ -13,6 +13,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 
 <AnchorPane fx:id="mainAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1040.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.supsi.Controller">
     <children>
@@ -42,15 +43,18 @@
             </children></AnchorPane>
         <AnchorPane fx:id="bottomPane" layoutX="21.0" layoutY="574.0" prefHeight="15.0" prefWidth="991.0" style="-fx-border-color: grey;" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0">
             <children>
-            <HBox prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="834.0" AnchorPane.topAnchor="0.0" />
-                <ProgressBar fx:id="progressBar" layoutX="824.0" layoutY="4.0" prefWidth="200.0" progress="0.0">
-               <padding>
-                  <Insets right="4.0" />
-               </padding>
-            </ProgressBar>
-                <Label layoutX="765.0" layoutY="4.0" text="Status" />
-                <Label fx:id="totalSizeLabel" layoutX="582.0" layoutY="3.0" prefHeight="18.0" prefWidth="114.0" style="-fx-border-color: black;" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="500.0" AnchorPane.rightAnchor="920.0" AnchorPane.topAnchor="2.0" />
-                <Label fx:id="numberOfFilesLabel" layoutX="419.0" layoutY="4.0" prefHeight="18.0" prefWidth="114.0" style="-fx-border-color: black;" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="918.0" AnchorPane.topAnchor="2.0" />
+            <HBox layoutX="4.0" layoutY="4.0" prefHeight="23.0" prefWidth="1036.0" AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="-2.0" AnchorPane.topAnchor="2.0">
+               <children>
+                      <Label fx:id="totalSizeLabel" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="24.0" prefWidth="222.0" style="-fx-border-color: black;" />
+                      <Label fx:id="numberOfFilesLabel" prefHeight="19.0" prefWidth="108.0" style="-fx-border-color: black;" />
+                  <StackPane prefHeight="19.0" prefWidth="321.0" />
+                      <Label prefHeight="19.0" prefWidth="37.0" text="Status" />
+                      <ProgressBar fx:id="progressBar" prefHeight="19.0" prefWidth="348.0" progress="0.0">
+                     <padding>
+                        <Insets bottom="2.0" right="4.0" top="2.0" />
+                     </padding>
+                  </ProgressBar>
+               </children></HBox>
             </children>
          <padding>
             <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
