@@ -56,15 +56,20 @@
             <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
          </padding>
         </AnchorPane>
-        <SplitPane dividerPositions="0.36608863198458574" layoutY="62.0" prefHeight="604.0" prefWidth="1040.0" AnchorPane.bottomAnchor="34.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="62.0">
+        <SplitPane fx:id="orizontalSplitPane" dividerPositions="0.36608863198458574" layoutY="62.0" prefHeight="604.0" prefWidth="1040.0" AnchorPane.bottomAnchor="34.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="62.0">
             <items>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                     <children>
-                        <AnchorPane fx:id="previewImageAnchorPane" layoutX="11.0" layoutY="14.0" prefHeight="257.0" prefWidth="354.0" style="-fx-border-color: grey;" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="14.0">
-                            <children>
-                                <ImageView fx:id="imageViewPreview" fitHeight="231.0" fitWidth="329.0" layoutX="20.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" />
-                            </children>
+                  <SplitPane dividerPositions="0.4393939393939394" layoutX="6.0" orientation="VERTICAL" prefHeight="584.0" prefWidth="367.0" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="15.0">
+                    <items>
+                      <AnchorPane fx:id="previewImageAnchorPane" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                           <children>
+                                      <ImageView fx:id="imageViewPreview" fitHeight="231.0" fitWidth="329.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="22.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="10.0" />
+                           </children>
                         </AnchorPane>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="22.0" prefWidth="335.0" />
+                    </items>
+                  </SplitPane>
                     </children>
                 </AnchorPane>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">

@@ -48,7 +48,13 @@ public class Controller {
     private ProgressBar progressBar;
 
     @FXML
+    private SplitPane orizontalSplitPane;
+
+    @FXML
     private ImageView imageViewPreview;
+
+    @FXML
+    private AnchorPane previewImageAnchorPane;
 
     @FXML
     public void initialize() {
@@ -139,11 +145,14 @@ public class Controller {
                 final long currentTime = System.currentTimeMillis();
 
                 imageViewPreview.setImage(imgWrp.getOriginalImage());
+                imageViewPreview.fitWidthProperty().bind(previewImageAnchorPane.widthProperty());
                 if(lastTime!=0 && currentTime!=0){
                     diff=currentTime-lastTime;
 
                     if( diff<=215) {
                         isdblClicked = true;
+                        orizontalSplitPane.setDividerPosition(0, 1);
+                        setClickListenerImageViewPreview(imageViewPreview);
                     }
                     else {
                         isdblClicked = false;
@@ -166,6 +175,32 @@ public class Controller {
             Tooltip.install(vbox, new Tooltip(imgWrp.getTooltipString()));
             tilePane.getChildren().addAll(vbox);
         }
+    }
+
+    private void setClickListenerImageViewPreview(ImageView imageViewPreview) {
+        imageViewPreview.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> { //aggiunta listener ad immagini
+            long diff;
+            boolean isdblClicked = false;
+            final long currentTime = System.currentTimeMillis();
+
+            if(lastTime!=0 && currentTime!=0){
+                diff=currentTime-lastTime;
+
+                if( diff<=215) {
+                    isdblClicked = true;
+                    orizontalSplitPane.setDividerPosition(0, 0.5);
+                }
+                else {
+                    isdblClicked = false;
+
+                }
+                System.out.println("IsDblClicked: "+isdblClicked);
+
+            }
+            lastTime=currentTime;
+            event.consume();
+        });
+
     }
 
     private void colorVBoxImageView() {
