@@ -13,9 +13,10 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.prefs.Preferences;
 
 public class Controller {
-
+    private Preferences lastFilePath;
     private ArrayList<VBox> vBoxSelected = new ArrayList<>();
     private ArrayList<VBox> vBoxALL = new ArrayList<>();
     private File chosenDirectory;
@@ -80,7 +81,11 @@ public class Controller {
         Stage stage = (Stage)mainAnchorPane.getScene().getWindow();
 
         // display Windows directory choser
+        if(getLastFilePath() != null){
+            dirChoser.setInitialDirectory(getLastFilePath());
+        }
         chosenDirectory = dirChoser.showDialog(stage);
+
         if (chosenDirectory != null){
             browseTextField.setText(chosenDirectory.getAbsolutePath());
             directoryChosenAction();
@@ -89,6 +94,7 @@ public class Controller {
     }
 
     private void directoryChosenAction(){
+        setLastFilePath(chosenDirectory);
         initUI();
         populateListOfFiles();
         populateBottomPane();
@@ -175,6 +181,20 @@ public class Controller {
                 }
 
             }
+        }
+    }
+    private File getLastFilePath(){
+        Preferences preference = Preferences.userNodeForPackage(Controller.class);
+        String filePath = preference.get("filePath", null);
+        if(filePath != null){
+            return new File(filePath);
+        }
+        return null;
+    }
+    private void setLastFilePath(File file){
+        Preferences preference = Preferences.userNodeForPackage(Controller.class);
+        if (file != null) {
+            preference.put("filePath", file.getPath());
         }
     }
 
