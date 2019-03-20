@@ -145,14 +145,15 @@ public class Controller {
                 final long currentTime = System.currentTimeMillis();
 
                 imageViewPreview.setImage(imgWrp.getOriginalImage());
-                imageViewPreview.fitWidthProperty().bind(previewImageAnchorPane.widthProperty());
+                imageViewPreview.fitWidthProperty().bind(previewImageAnchorPane.widthProperty()); //make resizable imageViewPreview
+                imageViewPreview.fitHeightProperty().bind(previewImageAnchorPane.heightProperty()); //make resizable imageViewPreview
                 if(lastTime!=0 && currentTime!=0){
                     diff=currentTime-lastTime;
 
                     if( diff<=215) {
                         isdblClicked = true;
                         orizontalSplitPane.setDividerPosition(0, 1);
-                        setClickListenerImageViewPreview(imageViewPreview);
+                        setClickListenerImageViewPreview(imageViewPreview);//aggiunta listener ad immagine
                     }
                     else {
                         isdblClicked = false;
