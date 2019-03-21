@@ -65,7 +65,7 @@
             <items>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                     <children>
-                  <SplitPane dividerPositions="0.4393939393939394" layoutX="6.0" orientation="VERTICAL" prefHeight="584.0" prefWidth="367.0" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="15.0">
+                  <SplitPane dividerPositions="0.4393939393939394" layoutX="6.0" orientation="VERTICAL" prefHeight="584.0" prefWidth="367.0" AnchorPane.bottomAnchor="3.3999999999999773" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="15.0">
                     <items>
                       <AnchorPane fx:id="previewImageAnchorPane" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" style="-fx-border-color: red;">
                            <children>

@@ -88,15 +88,19 @@ public class Controller {
 
         // set tableview
         tableView.setEditable(true);
+        
         TableColumn<String,String> firstColumn = new TableColumn<>("type");
-        firstColumn.setPrefWidth(70);
-        TableColumn<String,String> secondColumn = new TableColumn<>("name");
-        secondColumn.setPrefWidth(150);
-        TableColumn<String,String> thirdColumn = new TableColumn<>("value");
-        thirdColumn.setPrefWidth(100);
         firstColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
+        firstColumn.prefWidthProperty().bind(tableView.widthProperty().divide(4));
+
+        TableColumn<String,String> secondColumn = new TableColumn<>("name");
         secondColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        secondColumn.prefWidthProperty().bind(tableView.widthProperty().divide(2));
+
+        TableColumn<String,String> thirdColumn = new TableColumn<>("value");
         thirdColumn.setCellValueFactory(new PropertyValueFactory<>("value"));
+        thirdColumn.prefWidthProperty().bind(tableView.widthProperty().divide(4));
+
         tableView.getColumns().addAll(firstColumn,secondColumn,thirdColumn);
 
     }
