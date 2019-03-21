@@ -9,13 +9,14 @@
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 
-<AnchorPane fx:id="mainAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1040.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.supsi.Controller">
+<AnchorPane fx:id="mainAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1040.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.supsi.Controller">
     <children>
         <MenuBar layoutY="1.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <menus>
@@ -71,7 +72,10 @@
                                       <ImageView fx:id="imageViewPreview" fitHeight="231.0" fitWidth="329.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="22.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="10.0" />
                            </children>
                         </AnchorPane>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="22.0" prefWidth="335.0" />
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="22.0" prefWidth="335.0">
+                           <children>
+                              <TableView fx:id="tableView" layoutX="14.0" layoutY="14.0" prefHeight="292.0" prefWidth="329.0" AnchorPane.bottomAnchor="17.19999999999999" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="22.799999999999955" AnchorPane.topAnchor="14.0" />
+                           </children></AnchorPane>
                     </items>
                   </SplitPane>
                     </children>

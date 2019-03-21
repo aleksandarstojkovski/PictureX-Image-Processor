@@ -1,16 +1,23 @@
 package ch.supsi;
 
+import com.drew.imaging.ImageMetadataReader;
+import com.drew.imaging.ImageProcessingException;
+import com.drew.metadata.Directory;
+import com.drew.metadata.Metadata;
+import com.drew.metadata.Tag;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.prefs.Preferences;
@@ -57,6 +64,9 @@ public class Controller {
     private AnchorPane previewImageAnchorPane;
 
     @FXML
+    private TableView tableView;
+
+    @FXML
     public void initialize() {
         // init list of images
         listOfImages = new ArrayList<>();
@@ -75,6 +85,20 @@ public class Controller {
         scrollPane.setFitToHeight(true);
         scrollPane.setFitToWidth(true);
         scrollPane.setContent(tilePane);
+
+        // set tableview
+        tableView.setEditable(true);
+        TableColumn<String,String> firstColumn = new TableColumn<>("type");
+        firstColumn.setPrefWidth(70);
+        TableColumn<String,String> secondColumn = new TableColumn<>("name");
+        secondColumn.setPrefWidth(150);
+        TableColumn<String,String> thirdColumn = new TableColumn<>("value");
+        thirdColumn.setPrefWidth(100);
+        firstColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
+        secondColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        thirdColumn.setCellValueFactory(new PropertyValueFactory<>("value"));
+        tableView.getColumns().addAll(firstColumn,secondColumn,thirdColumn);
+
     }
 
     @FXML
@@ -146,16 +170,19 @@ public class Controller {
 
                 imageViewPreview.setImage(imgWrp.getOriginalImage());
                 imageViewPreview.fitWidthProperty().bind(previewImageAnchorPane.widthProperty());
+
                 if(lastTime!=0 && currentTime!=0){
                     diff=currentTime-lastTime;
 
                     if( diff<=215) {
                         isdblClicked = true;
+                        displayMetadata(imgWrp.getFile());
                         orizontalSplitPane.setDividerPosition(0, 1);
                         setClickListenerImageViewPreview(imageViewPreview);
                     }
                     else {
                         isdblClicked = false;
+                        displayMetadata(imgWrp.getFile());
                         vBoxSelected.clear();
                         vBoxSelected.add(vbox);
                     }
@@ -218,6 +245,7 @@ public class Controller {
             }
         }
     }
+
     private File getLastFilePath(){
         Preferences preference = Preferences.userNodeForPackage(Controller.class);
         String filePath = preference.get("filePath", null);
@@ -226,11 +254,34 @@ public class Controller {
         }
         return null;
     }
+
     private void setLastFilePath(File file){
         Preferences preference = Preferences.userNodeForPackage(Controller.class);
         if (file != null) {
             preference.put("filePath", file.getPath());
         }
+    }
+
+    private void displayMetadata(File file){
+
+        Metadata metadata = null;
+        try {
+            metadata = ImageMetadataReader.readMetadata(file);
+        } catch (ImageProcessingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        tableView.getItems().clear();
+
+        for (Directory directory : metadata.getDirectories()) {
+            for (Tag tag : directory.getTags()) {
+                MetadataWrapper mw = new MetadataWrapper(tag);
+                tableView.getItems().add(mw);
+            }
+        }
+
     }
 
 
