@@ -67,9 +67,9 @@
                     <children>
                   <SplitPane dividerPositions="0.4393939393939394" layoutX="6.0" orientation="VERTICAL" prefHeight="584.0" prefWidth="367.0" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="15.0">
                     <items>
-                      <AnchorPane fx:id="previewImageAnchorPane" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                      <AnchorPane fx:id="previewImageAnchorPane" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" style="-fx-border-color: red;">
                            <children>
-                                      <ImageView fx:id="imageViewPreview" fitHeight="231.0" fitWidth="329.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="22.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="10.0" />
+                                      <ImageView fx:id="imageViewPreview" fitHeight="253.0" fitWidth="365.0" layoutX="2.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                            </children>
                         </AnchorPane>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="22.0" prefWidth="335.0">

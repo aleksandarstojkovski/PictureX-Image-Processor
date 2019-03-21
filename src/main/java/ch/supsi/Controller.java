@@ -169,6 +169,8 @@ public class Controller {
                 final long currentTime = System.currentTimeMillis();
 
                 imageViewPreview.setImage(imgWrp.getOriginalImage());
+                imageViewPreview.fitWidthProperty().bind(previewImageAnchorPane.widthProperty()); //make resizable imageViewPreview
+                imageViewPreview.fitHeightProperty().bind(previewImageAnchorPane.heightProperty()); //make resizable imageViewPreview
                 imageViewPreview.fitWidthProperty().bind(previewImageAnchorPane.widthProperty());
 
                 if(lastTime!=0 && currentTime!=0){
@@ -178,7 +180,7 @@ public class Controller {
                         isdblClicked = true;
                         displayMetadata(imgWrp.getFile());
                         orizontalSplitPane.setDividerPosition(0, 1);
-                        setClickListenerImageViewPreview(imageViewPreview);
+                        setClickListenerImageViewPreview(imageViewPreview);//aggiunta listener ad immagine
                     }
                     else {
                         isdblClicked = false;
