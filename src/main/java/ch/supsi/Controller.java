@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.prefs.Preferences;
 
 public class Controller {
@@ -88,7 +89,7 @@ public class Controller {
 
         // set tableview
         tableView.setEditable(true);
-        
+
         TableColumn<String,String> firstColumn = new TableColumn<>("type");
         firstColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
         firstColumn.prefWidthProperty().bind(tableView.widthProperty().divide(4));
@@ -114,10 +115,12 @@ public class Controller {
         // get main stage
         Stage stage = (Stage)mainAnchorPane.getScene().getWindow();
 
-        // display Windows directory choser
+        // if program has been already opened, load previous directry
         if(getLastFilePath() != null){
             dirChoser.setInitialDirectory(getLastFilePath());
         }
+
+        // display Windows directory choser
         chosenDirectory = dirChoser.showDialog(stage);
 
         if (chosenDirectory != null){
@@ -143,7 +146,7 @@ public class Controller {
 
     private void populateListOfFiles() {
         String[] validExtensions = {".jpg",".png",".jpeg"};
-        for (File f : chosenDirectory.listFiles()) {
+        for (File f : Objects.requireNonNull(chosenDirectory.listFiles())) {
             if (f.isFile()) {
                 for (String extension : validExtensions) {
                     if (f.getName().toLowerCase().endsWith(extension)) {
@@ -273,14 +276,13 @@ public class Controller {
         Metadata metadata = null;
         try {
             metadata = ImageMetadataReader.readMetadata(file);
-        } catch (ImageProcessingException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (ImageProcessingException | IOException e) {
             e.printStackTrace();
         }
 
         tableView.getItems().clear();
 
+        assert metadata != null : "Unable to get image metadata: null";
         for (Directory directory : metadata.getDirectories()) {
             for (Tag tag : directory.getTags()) {
                 MetadataWrapper mw = new MetadataWrapper(tag);
