@@ -180,7 +180,7 @@ public class Controller {
                 imageViewPreview.fitHeightProperty().bind(previewImageAnchorPane.heightProperty()); //make resizable imageViewPreview
                 imageViewPreview.fitWidthProperty().bind(previewImageAnchorPane.widthProperty());
 
-                if(lastTime!=0 && currentTime!=0){
+                if(currentTime!=0){//lastTime!=0 && creava bug al primo click
                     diff=currentTime-lastTime;
 
                     if( diff<=215) {
@@ -210,6 +210,7 @@ public class Controller {
             vbox.getChildren().add(new Label(imgWrp.getName()));
             Tooltip.install(vbox, new Tooltip(imgWrp.getTooltipString()));
             tilePane.getChildren().addAll(vbox);
+
         }
     }
 
