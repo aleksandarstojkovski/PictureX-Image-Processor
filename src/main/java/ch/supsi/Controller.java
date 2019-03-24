@@ -104,6 +104,12 @@ public class Controller {
 
         tableView.getColumns().addAll(firstColumn,secondColumn,thirdColumn);
 
+        if(getLastFilePath() != null){      //(INIZIO) all'inizializzazione se il programma è già stato usato fa partire tutto dall'ultimo path
+            chosenDirectory = getLastFilePath();
+            browseTextField.setText(chosenDirectory.getAbsolutePath());
+            directoryChosenAction();
+        }                                   //(FINE) all'inizializzazione se il programma è già stato usato fa partire tutto dall'ultimo path
+
     }
 
     @FXML
@@ -178,7 +184,6 @@ public class Controller {
                 imageViewPreview.setImage(imgWrp.getOriginalImage());
                 imageViewPreview.fitWidthProperty().bind(previewImageAnchorPane.widthProperty()); //make resizable imageViewPreview
                 imageViewPreview.fitHeightProperty().bind(previewImageAnchorPane.heightProperty()); //make resizable imageViewPreview
-                imageViewPreview.fitWidthProperty().bind(previewImageAnchorPane.widthProperty());
 
                 if(currentTime!=0){//lastTime!=0 && creava bug al primo click
                     diff=currentTime-lastTime;
@@ -195,11 +200,10 @@ public class Controller {
                         vBoxSelected.clear();
                         vBoxSelected.add(vbox);
                     }
-
                 }
                 lastTime=currentTime;
-                System.out.println("IsDblClicked: "+isdblClicked);
-                System.out.println(imgWrp.getName());
+                //System.out.println("IsDblClicked: "+isdblClicked);
+                //System.out.println(imgWrp.getName());
                 colorVBoxImageView();
                 event.consume();
             });
