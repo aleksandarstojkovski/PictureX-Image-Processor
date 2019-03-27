@@ -5,12 +5,14 @@ import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
+import ij.plugin.frame.Fitter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
@@ -62,7 +64,16 @@ public class Controller {
     private ImageView imageViewPreview;
 
     @FXML
-    private AnchorPane previewImageAnchorPane;
+    private Pane previewImageAnchorPane;
+
+    @FXML
+    private HBox hBoxOut;
+
+    @FXML
+    private GridPane previewPanel;
+
+    @FXML
+    private Pane panePreview;
 
     @FXML
     private TableView tableView;
@@ -81,7 +92,11 @@ public class Controller {
         tilePane.setVgap(10);
         tilePane.setHgap(10);
         tilePane.setAlignment(Pos.TOP_LEFT);
-
+//        tilePane.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+//            tilePane.addEventHandler(MouseEvent.MOUSE_DRAGGED, event2 -> {
+//                event2.
+//            });
+//        });
         // make scrollPane resizable
         scrollPane.setFitToHeight(true);
         scrollPane.setFitToWidth(true);
@@ -109,6 +124,7 @@ public class Controller {
             browseTextField.setText(chosenDirectory.getAbsolutePath());
             directoryChosenAction();
         }                                   //(FINE) all'inizializzazione se il programma è già stato usato fa partire tutto dall'ultimo path
+
 
     }
 
@@ -181,9 +197,13 @@ public class Controller {
                 boolean isdblClicked = false;
                 final long currentTime = System.currentTimeMillis();
 
+               //AnchorPane.setAlignment(imageViewPreview, Pos.TOP_CENTER);
                 imageViewPreview.setImage(imgWrp.getOriginalImage());
-                imageViewPreview.fitWidthProperty().bind(previewImageAnchorPane.widthProperty()); //make resizable imageViewPreview
-                imageViewPreview.fitHeightProperty().bind(previewImageAnchorPane.heightProperty()); //make resizable imageViewPreview
+
+
+                imageViewPreview.fitWidthProperty().bind(previewPanel.widthProperty()); //make resizable imageViewPreview
+                imageViewPreview.fitHeightProperty().bind(previewPanel.heightProperty()); //make resizable imageViewPreview
+
 
                 if(currentTime!=0){//lastTime!=0 && creava bug al primo click
                     diff=currentTime-lastTime;
@@ -296,6 +316,7 @@ public class Controller {
         }
 
     }
+
 
 
 }

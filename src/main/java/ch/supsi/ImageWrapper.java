@@ -21,7 +21,7 @@ public class ImageWrapper {
         thumbnail = new Image(file.toURI().toString(),
                 100, // requested width
                 100, // requested height
-                false, // preserve ratio
+                true, // preserve ratio
                 false, // smooth rescaling
                 true // load in background
         );

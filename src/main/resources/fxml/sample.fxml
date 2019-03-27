@@ -13,10 +13,13 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 
-<AnchorPane fx:id="mainAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1040.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.supsi.Controller">
+<AnchorPane fx:id="mainAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1040.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.supsi.Controller">
     <children>
         <MenuBar layoutY="1.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <menus>
@@ -37,7 +40,7 @@
                 </Menu>
             </menus>
         </MenuBar>
-        <AnchorPane layoutX="-1.0" layoutY="26.0" prefHeight="36.0" prefWidth="600.0" style="-fx-background-color: red;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="26.0">
+        <AnchorPane layoutX="-1.0" layoutY="26.0" prefHeight="36.0" prefWidth="600.0" style="-fx-background-color: grey;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="26.0">
             <children>
                 <TextField fx:id="browseTextField" layoutX="14.0" layoutY="5.0" prefHeight="26.0" prefWidth="275.0" />
                 <Button layoutX="303.0" layoutY="5.0" mnemonicParsing="false" onAction="#handleBrowseButton" text="Browse" />
@@ -65,17 +68,25 @@
             <items>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                     <children>
-                  <SplitPane dividerPositions="0.4393939393939394" layoutX="6.0" orientation="VERTICAL" prefHeight="584.0" prefWidth="367.0" AnchorPane.bottomAnchor="3.3999999999999773" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="15.0">
+                  <SplitPane dividerPositions="0.5" layoutX="6.0" orientation="VERTICAL" prefHeight="584.0" prefWidth="367.0" AnchorPane.bottomAnchor="3.3999999999999773" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="15.0">
                     <items>
-                      <AnchorPane fx:id="previewImageAnchorPane" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" style="-fx-border-color: red;">
+                        <GridPane fx:id="previewPanel">
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
                            <children>
-                                      <ImageView fx:id="imageViewPreview" fitHeight="253.0" fitWidth="365.0" layoutX="2.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                              
+                                                 <ImageView fx:id="imageViewPreview" fitHeight="288.0" fitWidth="283.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
                            </children>
-                        </AnchorPane>
+                        </GridPane>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="22.0" prefWidth="335.0">
                            <children>
                               <TableView fx:id="tableView" layoutX="14.0" layoutY="14.0" prefHeight="292.0" prefWidth="329.0" AnchorPane.bottomAnchor="17.19999999999999" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="22.799999999999955" AnchorPane.topAnchor="14.0" />
-                           </children></AnchorPane>
+                           </children>
+                        </AnchorPane>
                     </items>
                   </SplitPane>
                     </children>
