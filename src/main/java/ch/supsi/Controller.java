@@ -16,8 +16,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+import org.controlsfx.control.Notifications;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -302,7 +306,12 @@ public class Controller {
         try {
             metadata = ImageMetadataReader.readMetadata(file);
         } catch (ImageProcessingException | IOException e) {
-            e.printStackTrace();
+            Notifications.create()
+                    .title("Warning")
+                    .text("The filetype is not supported.")
+                    .showWarning();
+            return;
+            //e.printStackTrace();
         }
 
         tableView.getItems().clear();
