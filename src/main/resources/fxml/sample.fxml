@@ -6,22 +6,18 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.StackPane?>
 
 <AnchorPane fx:id="mainAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1040.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.supsi.Controller">
     <children>
-        <MenuBar useSystemMenuBar="true" layoutY="1.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" >
+        <MenuBar layoutY="1.0" useSystemMenuBar="true" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <menus>
                 <Menu mnemonicParsing="false" text="NomeApplicazione">
                     <items>
@@ -67,23 +63,17 @@
         </MenuBar>
         <AnchorPane layoutX="-1.0" layoutY="26.0" prefHeight="36.0" prefWidth="600.0" style="-fx-background-color: grey;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="26.0">
             <children>
-                <TextField fx:id="browseTextField" layoutX="14.0" layoutY="5.0" prefHeight="26.0" prefWidth="275.0" />
-                <Button layoutX="303.0" layoutY="5.0" mnemonicParsing="false" onAction="#handleBrowseButton" text="Browse" />
+                <Button layoutX="303.0" layoutY="5.0" mnemonicParsing="false" onAction="#handleBrowseButton" text="Browse" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="5.0" />
             </children></AnchorPane>
         <AnchorPane fx:id="bottomPane" layoutX="21.0" layoutY="574.0" prefHeight="15.0" prefWidth="991.0" style="-fx-border-color: grey;" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0">
             <children>
-            <HBox layoutX="4.0" layoutY="4.0" prefHeight="23.0" prefWidth="1036.0" AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="-2.0" AnchorPane.topAnchor="2.0">
+            <AnchorPane prefHeight="30.0" prefWidth="1036.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                      <Label fx:id="totalSizeLabel" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="24.0" prefWidth="222.0" style="-fx-border-color: black;" />
-                      <Label fx:id="numberOfFilesLabel" prefHeight="19.0" prefWidth="108.0" style="-fx-border-color: black;" />
-                  <StackPane prefHeight="19.0" prefWidth="321.0" />
-                      <Label prefHeight="19.0" prefWidth="37.0" text="Status" />
-                      <ProgressBar fx:id="progressBar" prefHeight="19.0" prefWidth="348.0" progress="0.0">
-                     <padding>
-                        <Insets bottom="2.0" right="4.0" top="2.0" />
-                     </padding>
-                  </ProgressBar>
-               </children></HBox>
+                      <Label fx:id="totalSizeLabel" layoutX="672.0" layoutY="7.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="19.0" prefWidth="222.0" style="-fx-border-color: grey;" AnchorPane.bottomAnchor="3.0" AnchorPane.rightAnchor="138.0" AnchorPane.topAnchor="4.0" />
+                      <Label fx:id="numberOfFilesLabel" layoutX="915.0" layoutY="4.0" prefHeight="19.0" prefWidth="108.0" style="-fx-border-color: grey;" AnchorPane.bottomAnchor="3.0" AnchorPane.rightAnchor="9.0" AnchorPane.topAnchor="4.0" />
+                      <Label fx:id="browseTextField" layoutX="385.0" layoutY="7.0" prefHeight="19.0" prefWidth="275.0" style="-fx-border-color: grey;" AnchorPane.bottomAnchor="3.0" AnchorPane.rightAnchor="372.0" AnchorPane.topAnchor="4.0" />
+               </children>
+            </AnchorPane>
             </children>
          <padding>
             <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />

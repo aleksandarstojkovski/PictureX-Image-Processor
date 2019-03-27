@@ -38,7 +38,7 @@ public class Controller {
     private long lastTime = 0;
 
     @FXML
-    private TextField browseTextField;
+    private Label browseTextField;
 
     @FXML
     private AnchorPane mainAnchorPane;
@@ -232,7 +232,7 @@ public class Controller {
                 event.consume();
             });
             vBoxALL.add(vbox);
-            vbox.setMaxSize(200,200);
+            vbox.setMaxSize(110,110);
             vbox.setAlignment(Pos.CENTER);
             vbox.setStyle("-fx-border-color:white;\n"+ "-fx-border-width: 2;\n");
             vbox.getChildren().add(new Label(imgWrp.getName()));
