@@ -228,7 +228,7 @@ public class Controller {
                 event.consume();
             });
             vBoxALL.add(vbox);
-            vbox.setMaxSize(100,100);
+            vbox.setMaxSize(200,200);
             vbox.setAlignment(Pos.CENTER);
             vbox.setStyle("-fx-border-color:white;\n"+ "-fx-border-width: 2;\n");
             vbox.getChildren().add(new Label(imgWrp.getName()));
