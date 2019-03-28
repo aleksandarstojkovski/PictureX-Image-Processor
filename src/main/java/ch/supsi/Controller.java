@@ -14,6 +14,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -33,6 +34,7 @@ public class Controller {
     private Preferences lastFilePath;
     private ArrayList<VBox> vBoxSelected = new ArrayList<>();
     private ArrayList<VBox> vBoxALL = new ArrayList<>();
+    private ArrayList<File> imageFileListSelected = new ArrayList<>();
     private File chosenDirectory;
     private List<ImageWrapper> listOfImages;
     private long lastTime = 0;
@@ -196,40 +198,53 @@ public class Controller {
         for(ImageWrapper imgWrp : listOfImages){
             ImageView imgView = new ImageView(imgWrp.getThumbnail());
             VBox vbox = new VBox(imgView);
-            vbox.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> { //aggiunta listener ad immagini
+            vbox.addEventHandler(MouseEvent.MOUSE_CLICKED, eventM -> { //aggiunta listener ad immagini
+//                vbox.addEventHandler(KeyEvent.KEY_PRESSED, eventK -> {
+//                    if(eventK.isShiftDown()){
+//                        vBoxSelected.add(vbox);
+//                        colorVBoxImageView();
+//                        eventK.consume();
+//                        eventM.consume();
+//                    }
+//                });
                 long diff;
                 boolean isdblClicked = false;
                 final long currentTime = System.currentTimeMillis();
-
-               //AnchorPane.setAlignment(imageViewPreview, Pos.TOP_CENTER);
-                imageViewPreview.setImage(imgWrp.getOriginalImage());
-
-
-                imageViewPreview.fitWidthProperty().bind(previewPanel.widthProperty()); //make resizable imageViewPreview
-                imageViewPreview.fitHeightProperty().bind(previewPanel.heightProperty()); //make resizable imageViewPreview
-
-
-                if(currentTime!=0){//lastTime!=0 && creava bug al primo click
-                    diff=currentTime-lastTime;
-
-                    if( diff<=215) {
-                        isdblClicked = true;
-                        displayMetadata(imgWrp.getFile());
-                        orizontalSplitPane.setDividerPosition(0, 1);
-                        setClickListenerImageViewPreview(imageViewPreview);//aggiunta listener ad immagine
-                    }
-                    else {
-                        isdblClicked = false;
-                        displayMetadata(imgWrp.getFile());
-                        vBoxSelected.clear();
-                        vBoxSelected.add(vbox);
-                    }
+                if (eventM.isShiftDown()){
+                    vBoxSelected.add(vbox);
+                    imageFileListSelected.add(imgWrp.getFile());
+                    colorVBoxImageView();
                 }
-                lastTime=currentTime;
-                //System.out.println("IsDblClicked: "+isdblClicked);
-                //System.out.println(imgWrp.getName());
-                colorVBoxImageView();
-                event.consume();
+                else{
+                    //AnchorPane.setAlignment(imageViewPreview, Pos.TOP_CENTER);
+                    imageViewPreview.setImage(imgWrp.getOriginalImage());
+
+                    imageViewPreview.fitWidthProperty().bind(previewPanel.widthProperty()); //make resizable imageViewPreview
+                    imageViewPreview.fitHeightProperty().bind(previewPanel.heightProperty()); //make resizable imageViewPreview
+                    if(currentTime!=0){//lastTime!=0 && creava bug al primo click
+                        diff=currentTime-lastTime;
+
+                        if( diff<=215) {
+                            isdblClicked = true;
+                            displayMetadata(imgWrp.getFile());
+                            orizontalSplitPane.setDividerPosition(0, 1);
+                            setClickListenerImageViewPreview(imageViewPreview);//aggiunta listener ad immagine
+                        }
+                        else {
+                            isdblClicked = false;
+                            displayMetadata(imgWrp.getFile());
+                            vBoxSelected.clear();
+                            vBoxSelected.add(vbox);
+                            imageFileListSelected.clear();
+                            imageFileListSelected.add(imgWrp.getFile());
+                        }
+                    }
+                    lastTime=currentTime;
+                    //System.out.println("IsDblClicked: "+isdblClicked);
+                    //System.out.println(imgWrp.getName());
+                    colorVBoxImageView();
+                }
+                eventM.consume();
             });
             vBoxALL.add(vbox);
             vbox.setMaxSize(110,110);
