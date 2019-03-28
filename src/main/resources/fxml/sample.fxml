@@ -9,6 +9,7 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -64,6 +65,7 @@
         <AnchorPane layoutX="-1.0" layoutY="26.0" prefHeight="36.0" prefWidth="600.0" style="-fx-background-color: grey;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="26.0">
             <children>
                 <Button layoutX="303.0" layoutY="5.0" mnemonicParsing="false" onAction="#handleBrowseButton" text="Browse" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="5.0" />
+            <TextField fx:id="globingTextField" layoutX="390.0" layoutY="5.0" AnchorPane.bottomAnchor="6.0" AnchorPane.rightAnchor="501.0" AnchorPane.topAnchor="5.0" />
             </children></AnchorPane>
         <AnchorPane fx:id="bottomPane" layoutX="21.0" layoutY="574.0" prefHeight="15.0" prefWidth="991.0" style="-fx-border-color: grey;" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0">
             <children>

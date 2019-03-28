@@ -5,7 +5,10 @@ import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
+import com.sun.javafx.geom.AreaOp;
 import ij.plugin.frame.Fitter;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -86,6 +89,9 @@ public class Controller {
     private TableView tableView;
 
     @FXML
+    private TextField globingTextField;
+
+    @FXML
     public void initialize() {
         // init list of images
         listOfImages = new ArrayList<>();
@@ -125,7 +131,10 @@ public class Controller {
         thirdColumn.prefWidthProperty().bind(tableView.widthProperty().divide(4));
 
         tableView.getColumns().addAll(firstColumn,secondColumn,thirdColumn);
+
         setClickListenerImageViewPreview(imageViewPreview);//aggiunta listener ad immagine //////////////////////////////////////////////////////////////////////////////
+
+        setGlobingListener(globingTextField);
         if(getLastFilePath() != null){      //(INIZIO) all'inizializzazione se il programma è già stato usato fa partire tutto dall'ultimo path
             chosenDirectory = getLastFilePath();
             browseTextField.setText(chosenDirectory.getAbsolutePath());
@@ -162,7 +171,14 @@ public class Controller {
     private void directoryChosenAction(){
         setLastFilePath(chosenDirectory); //aggiorna ad ogni selezione il path nelle preferenze
         initUI();
-        populateListOfFiles();
+        populateListOfFiles(null);
+        populateBottomPane();
+        displayThumbnails();
+    }
+    private void directoryChosenAction(String fileNamePart){
+        setLastFilePath(chosenDirectory); //aggiorna ad ogni selezione il path nelle preferenze
+        initUI();
+        populateListOfFiles(fileNamePart);
         populateBottomPane();
         displayThumbnails();
     }
@@ -173,18 +189,34 @@ public class Controller {
         ImageWrapper.clear();
     }
 
-    private void populateListOfFiles() {
-        String[] validExtensions = {".jpg",".png",".jpeg"};
-        for (File f : Objects.requireNonNull(chosenDirectory.listFiles())) {
-            if (f.isFile()) {
-                for (String extension : validExtensions) {
-                    if (f.getName().toLowerCase().endsWith(extension)) {
-                        listOfImages.add(new ImageWrapper(f));
-                        break;
+    private void populateListOfFiles(String fileNamePart) {
+        if (fileNamePart == null){
+            String[] validExtensions = {".jpg",".png",".jpeg"};
+            for (File f : Objects.requireNonNull(chosenDirectory.listFiles())) {
+                if (f.isFile()) {
+                    for (String extension : validExtensions) {
+                        if (f.getName().toLowerCase().endsWith(extension)) {
+                            listOfImages.add(new ImageWrapper(f));
+                            break;
+                        }
                     }
                 }
             }
         }
+        else{
+            String[] validExtensions = {".jpg",".png",".jpeg"};
+            for (File f : Objects.requireNonNull(chosenDirectory.listFiles())) {
+                if (f.isFile()) {
+                    for (String extension : validExtensions) {
+                        if (f.getName().toLowerCase().endsWith(extension) && f.getName().toLowerCase().startsWith(fileNamePart.toLowerCase())) {
+                            listOfImages.add(new ImageWrapper(f));
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
     }
 
     private void populateBottomPane(){
@@ -281,9 +313,19 @@ public class Controller {
                 mouseEvent.consume();
             }
         };
-//        imageViewPreview.removeEventHandler(MouseEvent.MOUSE_CLICKED, myHandler);
         imageViewPreview.addEventHandler(MouseEvent.MOUSE_CLICKED, myHandler);
+    }
 
+    private void setGlobingListener (TextField globingTextField){
+        globingTextField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                directoryChosenAction(t1);
+                //System.out.println(observableValue);
+                System.out.println(s);
+                System.out.println(t1);
+            }
+        });
     }
 
     private void colorVBoxImageView() {
