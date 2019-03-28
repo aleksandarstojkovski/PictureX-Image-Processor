@@ -7,6 +7,7 @@ import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
 import ij.plugin.frame.Fitter;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -37,7 +38,7 @@ public class Controller {
     private ArrayList<File> imageFileListSelected = new ArrayList<>();
     private File chosenDirectory;
     private List<ImageWrapper> listOfImages;
-    private long lastTime = 0;
+    private long lastTime = 1;
 
     @FXML
     private Label browseTextField;
@@ -124,7 +125,7 @@ public class Controller {
         thirdColumn.prefWidthProperty().bind(tableView.widthProperty().divide(4));
 
         tableView.getColumns().addAll(firstColumn,secondColumn,thirdColumn);
-
+        setClickListenerImageViewPreview(imageViewPreview);//aggiunta listener ad immagine //////////////////////////////////////////////////////////////////////////////
         if(getLastFilePath() != null){      //(INIZIO) all'inizializzazione se il programma è già stato usato fa partire tutto dall'ultimo path
             chosenDirectory = getLastFilePath();
             browseTextField.setText(chosenDirectory.getAbsolutePath());
@@ -195,18 +196,11 @@ public class Controller {
     }
 
     private void displayThumbnails(){
+
         for(ImageWrapper imgWrp : listOfImages){
             ImageView imgView = new ImageView(imgWrp.getThumbnail());
             VBox vbox = new VBox(imgView);
             vbox.addEventHandler(MouseEvent.MOUSE_CLICKED, eventM -> { //aggiunta listener ad immagini
-//                vbox.addEventHandler(KeyEvent.KEY_PRESSED, eventK -> {
-//                    if(eventK.isShiftDown()){
-//                        vBoxSelected.add(vbox);
-//                        colorVBoxImageView();
-//                        eventK.consume();
-//                        eventM.consume();
-//                    }
-//                });
                 long diff;
                 boolean isdblClicked = false;
                 final long currentTime = System.currentTimeMillis();
@@ -216,19 +210,16 @@ public class Controller {
                     colorVBoxImageView();
                 }
                 else{
-                    //AnchorPane.setAlignment(imageViewPreview, Pos.TOP_CENTER);
                     imageViewPreview.setImage(imgWrp.getOriginalImage());
-
                     imageViewPreview.fitWidthProperty().bind(previewPanel.widthProperty()); //make resizable imageViewPreview
                     imageViewPreview.fitHeightProperty().bind(previewPanel.heightProperty()); //make resizable imageViewPreview
                     if(currentTime!=0){//lastTime!=0 && creava bug al primo click
                         diff=currentTime-lastTime;
 
-                        if( diff<=215) {
+                        if(diff<=215) {
                             isdblClicked = true;
                             displayMetadata(imgWrp.getFile());
                             orizontalSplitPane.setDividerPosition(0, 1);
-                            setClickListenerImageViewPreview(imageViewPreview);//aggiunta listener ad immagine
                         }
                         else {
                             isdblClicked = false;
@@ -240,7 +231,7 @@ public class Controller {
                         }
                     }
                     lastTime=currentTime;
-                    //System.out.println("IsDblClicked: "+isdblClicked);
+                    System.out.println("IsDblClicked: "+isdblClicked);
                     //System.out.println(imgWrp.getName());
                     colorVBoxImageView();
                 }
@@ -257,29 +248,41 @@ public class Controller {
         }
     }
 
-    private void setClickListenerImageViewPreview(ImageView imageViewPreview) {
-        imageViewPreview.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> { //aggiunta listener ad immagini
-            long diff;
-            boolean isdblClicked = false;
-            final long currentTime = System.currentTimeMillis();
+    private void setClickListenerImageViewPreview(ImageView imageViewPreview) {//aggiunta listener ad immagini
+        EventHandler<MouseEvent> myHandler = new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                long diff = 0;
+                boolean isdblClicked = false;
+                final long currentTime = System.currentTimeMillis();
 
-            if(lastTime!=0 && currentTime!=0){
-                diff=currentTime-lastTime;
+                if(currentTime!=0){
+                    diff=currentTime-lastTime;
 
-                if( diff<=215) {
-                    isdblClicked = true;
-                    orizontalSplitPane.setDividerPosition(0, 0.5);
+                    if(diff<=215) {
+                        isdblClicked = true;
+                        double x = orizontalSplitPane.getDividerPositions()[0];
+                        if(orizontalSplitPane.getDividerPositions()[0]>0.9){
+                            orizontalSplitPane.setDividerPosition(0, 0.5);
+                        }
+                        else {
+                            orizontalSplitPane.setDividerPosition(0, 1);
+                        }
+
+                    }
+                    else {
+                        isdblClicked = false;
+
+                    }
+                    System.out.println("IsDblClicked: "+isdblClicked);
+
                 }
-                else {
-                    isdblClicked = false;
-
-                }
-                System.out.println("IsDblClicked: "+isdblClicked);
-
+                lastTime=currentTime;
+                mouseEvent.consume();
             }
-            lastTime=currentTime;
-            event.consume();
-        });
+        };
+//        imageViewPreview.removeEventHandler(MouseEvent.MOUSE_CLICKED, myHandler);
+        imageViewPreview.addEventHandler(MouseEvent.MOUSE_CLICKED, myHandler);
 
     }
 
