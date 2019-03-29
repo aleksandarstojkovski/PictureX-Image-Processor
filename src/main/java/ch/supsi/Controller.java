@@ -208,7 +208,7 @@ public class Controller {
             for (File f : Objects.requireNonNull(chosenDirectory.listFiles())) {
                 if (f.isFile()) {
                     for (String extension : validExtensions) {
-                        if (f.getName().toLowerCase().endsWith(extension) && f.getName().toLowerCase().startsWith(fileNamePart.toLowerCase())) {
+                        if (f.getName().toLowerCase().endsWith(extension) && f.getName().toLowerCase().contains(fileNamePart.toLowerCase())) {
                             listOfImages.add(new ImageWrapper(f));
                             break;
                         }
@@ -263,8 +263,8 @@ public class Controller {
                         }
                     }
                     lastTime=currentTime;
-                    System.out.println("IsDblClicked: "+isdblClicked);
-                    //System.out.println(imgWrp.getName());
+                    //System.out.println("IsDblClicked: "+isdblClicked); TODO: remove
+                    //System.out.println(imgWrp.getName()); TODO: remove
                     colorVBoxImageView();
                 }
                 eventM.consume();
@@ -306,7 +306,7 @@ public class Controller {
                         isdblClicked = false;
 
                     }
-                    System.out.println("IsDblClicked: "+isdblClicked);
+                    //System.out.println("IsDblClicked: "+isdblClicked); TODO: remove
 
                 }
                 lastTime=currentTime;
@@ -321,9 +321,9 @@ public class Controller {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
                 directoryChosenAction(t1);
-                //System.out.println(observableValue);
-                System.out.println(s);
-                System.out.println(t1);
+                //System.out.println(observableValue); TODO: remove
+                //.out.println(s); TODO: remove
+                //System.out.println(t1); TODO: remove
             }
         });
     }
