@@ -227,7 +227,7 @@ public class Controller {
                 long diff;
                 boolean isdblClicked = false;
                 final long currentTime = System.currentTimeMillis();
-                if (eventM.isShiftDown()){
+                if (eventM.isShiftDown() || eventM.isControlDown()){
                     vBoxSelected.add(vbox);
                     imageFileListSelected.add(imgWrp.getFile());
                     colorVBoxImageView();
@@ -263,7 +263,7 @@ public class Controller {
             vBoxALL.add(vbox);
             vbox.setMaxSize(110,110);
             vbox.setAlignment(Pos.CENTER);
-            vbox.setStyle("-fx-border-color:white;\n"+ "-fx-border-width: 2;\n");
+            vbox.setStyle("-fx-border-color:transparent;\n" + "-fx-border-width: 2;\n");
             vbox.getChildren().add(new Label(imgWrp.getName()));
             Tooltip.install(vbox, new Tooltip(imgWrp.getTooltipString()));
             tilePane.getChildren().addAll(vbox);
@@ -320,7 +320,6 @@ public class Controller {
     }
 
     private void colorVBoxImageView() {
-        //for (ImagelistOfThubnails
         if (!vBoxSelected.isEmpty()){
             for (VBox im : vBoxALL){
                 if (vBoxSelected.contains(im)){
@@ -328,7 +327,7 @@ public class Controller {
 
                 }
                 else{
-                    im.setStyle("-fx-border-color: white;"+ "-fx-border-width: 2;\n");
+                    im.setStyle("-fx-border-color: transparent;"+ "-fx-border-width: 2;\n");
                 }
 
             }
