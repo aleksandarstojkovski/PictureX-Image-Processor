@@ -134,7 +134,7 @@ public class Controller {
 
         setClickListenerImageViewPreview(imageViewPreview);//aggiunta listener ad immagine //////////////////////////////////////////////////////////////////////////////
 
-        setGlobingListener(globingTextField);
+        setGlobingListener(globingTextField); ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if(getLastFilePath() != null){      //(INIZIO) all'inizializzazione se il programma è già stato usato fa partire tutto dall'ultimo path
             chosenDirectory = getLastFilePath();
             browseTextField.setText(chosenDirectory.getAbsolutePath());
