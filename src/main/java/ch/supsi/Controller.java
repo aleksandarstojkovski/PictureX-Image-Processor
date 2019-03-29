@@ -105,11 +105,7 @@ public class Controller {
         tilePane.setVgap(10);
         tilePane.setHgap(10);
         tilePane.setAlignment(Pos.TOP_LEFT);
-//        tilePane.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-//            tilePane.addEventHandler(MouseEvent.MOUSE_DRAGGED, event2 -> {
-//                event2.
-//            });
-//        });
+
         // make scrollPane resizable
         scrollPane.setFitToHeight(true);
         scrollPane.setFitToWidth(true);
@@ -132,15 +128,17 @@ public class Controller {
 
         tableView.getColumns().addAll(firstColumn,secondColumn,thirdColumn);
 
-        setClickListenerImageViewPreview(imageViewPreview);//aggiunta listener ad immagine //////////////////////////////////////////////////////////////////////////////
+        //aggiunta listener ad alla preview di sinistra
+        setClickListenerImageViewPreview(imageViewPreview);
 
-        setGlobingListener(globingTextField); ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        if(getLastFilePath() != null){      //(INIZIO) all'inizializzazione se il programma è già stato usato fa partire tutto dall'ultimo path
+        setGlobingListener(globingTextField);
+
+        //alla partenza se il programma è già stato usato fa partire tutto dall'ultimo path
+        if(getLastFilePath() != null){
             chosenDirectory = getLastFilePath();
             browseTextField.setText(chosenDirectory.getAbsolutePath());
-            directoryChosenAction();
-        }                                   //(FINE) all'inizializzazione se il programma è già stato usato fa partire tutto dall'ultimo path
-
+            directoryChosenAction(null);
+        }
 
     }
 
@@ -163,18 +161,11 @@ public class Controller {
 
         if (chosenDirectory != null){
             browseTextField.setText(chosenDirectory.getAbsolutePath());
-            directoryChosenAction();
+            directoryChosenAction(null);
         }
 
     }
 
-    private void directoryChosenAction(){
-        setLastFilePath(chosenDirectory); //aggiorna ad ogni selezione il path nelle preferenze
-        initUI();
-        populateListOfFiles(null);
-        populateBottomPane();
-        displayThumbnails();
-    }
     private void directoryChosenAction(String fileNamePart){
         setLastFilePath(chosenDirectory); //aggiorna ad ogni selezione il path nelle preferenze
         initUI();
