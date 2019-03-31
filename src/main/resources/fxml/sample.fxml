@@ -73,7 +73,7 @@
                <children>
                       <Label fx:id="totalSizeLabel" layoutX="672.0" layoutY="7.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="19.0" prefWidth="222.0" style="-fx-border-color: grey;" AnchorPane.bottomAnchor="3.0" AnchorPane.rightAnchor="138.0" AnchorPane.topAnchor="4.0" />
                       <Label fx:id="numberOfFilesLabel" layoutX="915.0" layoutY="4.0" prefHeight="19.0" prefWidth="108.0" style="-fx-border-color: grey;" AnchorPane.bottomAnchor="3.0" AnchorPane.rightAnchor="9.0" AnchorPane.topAnchor="4.0" />
-                      <Label fx:id="browseTextField" layoutX="385.0" layoutY="7.0" prefHeight="19.0" prefWidth="275.0" style="-fx-border-color: grey;" AnchorPane.bottomAnchor="3.0" AnchorPane.rightAnchor="372.0" AnchorPane.topAnchor="4.0" />
+                      <Label fx:id="browseTextField" layoutX="385.0" layoutY="7.0" prefHeight="19.0" prefWidth="588.0" style="-fx-border-color: grey;" AnchorPane.bottomAnchor="3.0" AnchorPane.rightAnchor="372.0" AnchorPane.topAnchor="4.0" />
                </children>
             </AnchorPane>
             </children>

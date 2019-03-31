@@ -14,6 +14,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
@@ -311,10 +312,49 @@ public class Controller {
         globingTextField.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-                directoryChosenAction(t1);
+                //tilePane.getChildren().addAll(vBoxALL);
+                ArrayList<VBox> assenti = new ArrayList<>();
+                ArrayList<VBox> presenti = new ArrayList<>();
+                for(VBox v : vBoxALL){
+                    for(Node nodeIn:((VBox)v).getChildren()){
+                        if(nodeIn instanceof ImageView){
+                            Image ii = ((ImageView) nodeIn).getImage();
+                            if(!ii.getUrl().toLowerCase().contains(t1.toLowerCase())){
+                                assenti.add(v);
+                            }
+                        }
+                    }
+                }
+                if(s.length() > t1.length()) {
+                    for (VBox v : vBoxALL) {
+                        for (Node nodeIn : ((VBox) v).getChildren()) {
+                            if (nodeIn instanceof ImageView) {
+                                Image ii = ((ImageView) nodeIn).getImage();
+                                if (ii.getUrl().toLowerCase().contains(t1.toLowerCase())) {
+                                   // assenti.remove(v);
+                                    presenti.add(v);
+                                }
+                                //else
+                            }
+                        }
+                    }
+
+                    for(VBox v : presenti){
+                        try{
+                            tilePane.getChildren().add(v);
+                        }catch (java.lang.IllegalArgumentException e){
+
+                        }
+                    }
+
+
+                }
+
+                tilePane.getChildren().removeAll(assenti);
+                //directoryChosenAction(t1);
                 //System.out.println(observableValue); TODO: remove
-                //.out.println(s); TODO: remove
-                //System.out.println(t1); TODO: remove
+                System.out.println("s " + s);
+                System.out.println("t1 " + t1);
             }
         });
     }
