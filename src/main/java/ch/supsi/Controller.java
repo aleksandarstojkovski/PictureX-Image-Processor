@@ -338,16 +338,12 @@ public class Controller {
                             }
                         }
                     }
-
                     for(VBox v : presenti){
                         try{
                             tilePane.getChildren().add(v);
                         }catch (java.lang.IllegalArgumentException e){
-
                         }
                     }
-
-
                 }
 
                 tilePane.getChildren().removeAll(assenti);

@@ -101,7 +101,7 @@
                         </GridPane>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="22.0" prefWidth="335.0">
                            <children>
-                              <TableView fx:id="tableView" layoutX="14.0" layoutY="14.0" prefHeight="292.0" prefWidth="329.0" AnchorPane.bottomAnchor="17.19999999999999" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="22.799999999999955" AnchorPane.topAnchor="14.0" />
+                              <TableView fx:id="tableView" layoutX="14.0" layoutY="14.0" prefHeight="292.0" prefWidth="329.0" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="1.0" />
                            </children>
                         </AnchorPane>
                     </items>
