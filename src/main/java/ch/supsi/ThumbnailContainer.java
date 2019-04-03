@@ -9,15 +9,29 @@ import javafx.scene.layout.VBox;
 
 public class ThumbnailContainer extends VBox{
 
-    ImageView test;
+    private final ImageView imageView;
+
     ThumbnailContainer(ImageWrapper imageWrapper){
-        super(new ImageView(imageWrapper.getThumbnail()));
-        test = (ImageView) this.getChildren().get(0);
-        setMaxSize(110,110);
-        setAlignment(Pos.CENTER);
-        setStyle("-fx-border-color:transparent;\n" + "-fx-border-width: 2;\n");
-        getChildren().add(new Label(imageWrapper.getName()));
+        // call super constructor
+        super();
+
+        // set style
+        this.setMaxSize(110,110);
+        this.setAlignment(Pos.CENTER);
+        this.setStyle("-fx-border-color:transparent;\n" + "-fx-border-width: 2;\n");
+
+        // set content
+        imageView=new ImageView(imageWrapper.getThumbnail());
+        this.getChildren().add(imageView);
+        this.getChildren().add(new Label(imageWrapper.getName()));
+
+        // set tooltip
         Tooltip.install(this, new Tooltip(imageWrapper.getTooltipString()));
+
+    }
+
+    public ImageView getImageView() {
+        return imageView;
     }
 
 }
