@@ -22,7 +22,6 @@ import javafx.scene.layout.*;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import org.controlsfx.control.Notifications;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -303,8 +302,7 @@ public class Controller {
                     for(VBox v : presenti){
                         try{
                             tilePane.getChildren().add(v);
-                        }catch (java.lang.IllegalArgumentException e){
-                        }
+                        }catch (java.lang.IllegalArgumentException e){}
                     }
                 }
                 tilePane.getChildren().removeAll(assenti);
