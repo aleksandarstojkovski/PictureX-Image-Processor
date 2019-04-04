@@ -79,8 +79,12 @@ public class Controller {
     private TextField globingTextField;
 
     @FXML
+    private StackPane buttonMenu;
+
+    @FXML
     public void initialize() {
 
+        //buttonMenu.setVisible(false);
 
         // init list of images
         listOfImageWrappers = new ArrayList<>();
@@ -229,6 +233,7 @@ public class Controller {
                             isdblClicked = true;
                             displayMetadata(imgWrp.getFile());
                             orizontalSplitPane.setDividerPosition(0, 1);
+                            //buttonMenu.setVisible(true);
                         }
                         else {
                             isdblClicked = false;
@@ -264,9 +269,11 @@ public class Controller {
                         double x = orizontalSplitPane.getDividerPositions()[0];
                         if(orizontalSplitPane.getDividerPositions()[0]>0.9){
                             orizontalSplitPane.setDividerPosition(0, 0.5);
+                            //buttonMenu.setVisible(false);
                         }
                         else {
                             orizontalSplitPane.setDividerPosition(0, 1);
+                            //buttonMenu.setVisible(true);
                         }
                     }
                     else {
