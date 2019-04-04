@@ -5,41 +5,58 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 
-
 <HBox xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.supsi.ButtonContainerMenuController">
    <children>
-      <Button mnemonicParsing="false">
+      <Button fx:id="zoomInButton" mnemonicParsing="false">
          <graphic>
-            <ImageView fitHeight="32.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#handleZoomInButton" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../icons/zoom-in.png" />
+                  <Image url="@../icons/baseline_zoom_in_black_18dp.png" />
                </image>
             </ImageView>
          </graphic>
       </Button>
-      <Button mnemonicParsing="false">
+      <Button fx:id="zoomOutButton" mnemonicParsing="false">
          <graphic>
-            <ImageView fitHeight="36.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../icons/zoom-out.png" />
+                  <Image url="@../icons/baseline_zoom_out_black_18dp.png" />
                </image>
             </ImageView>
          </graphic>
       </Button>
-      <Button mnemonicParsing="false">
+      <Button fx:id="bNButton" mnemonicParsing="false">
          <graphic>
-            <ImageView fitHeight="33.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../icons/contrast-circle-symbol.png" />
+                  <Image url="@../icons/baseline_invert_colors_black_18dp.png" />
                </image>
             </ImageView>
          </graphic>
       </Button>
-      <Button mnemonicParsing="false">
+      <Button fx:id="rotateSXButton" mnemonicParsing="false">
          <graphic>
-            <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../icons/update-arrows.png" />
+                  <Image url="@../icons/baseline_rotate_left_black_18dp.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      <Button fx:id="rotateDXButton" mnemonicParsing="false">
+         <graphic>
+            <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../icons/baseline_rotate_right_black_18dp.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      <Button fx:id="shareButton" mnemonicParsing="false">
+         <graphic>
+            <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../icons/baseline_share_black_18dp.png" />
                </image>
             </ImageView>
          </graphic>

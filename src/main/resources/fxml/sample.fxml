@@ -45,11 +45,6 @@
                               <MenuItem mnemonicParsing="false" text="Format" />
                           </items>
                       </Menu>
-                      <Menu mnemonicParsing="false" text="Help">
-                          <items>
-                              <MenuItem mnemonicParsing="false" text="Help" />
-                          </items>
-                      </Menu>
                       <Menu mnemonicParsing="false" text="View">
                           <items>
                               <MenuItem mnemonicParsing="false" text="View" />
@@ -70,11 +65,13 @@
             <ToolBar>
               <items>
                   <Button mnemonicParsing="false" onAction="#handleBrowseButton" text="Browse" />
+                  <Pane prefWidth="200.0" />
+                  <Label text="Search by name" />
                   <TextField fx:id="globingTextField" prefHeight="25.0" prefWidth="203.0" />
-                  <Pane />
+                  <Pane prefWidth="100.0" />
                   <StackPane fx:id="buttonMenu" prefHeight="29.0" prefWidth="200.0">
                      <children>
-                        <fx:include source="buttonContainerMenu.fxml" />
+                        <fx:include fx:id="buttonContainerMenu" source="buttonContainerMenu.fxml"/>
                      </children>
                   </StackPane>
               </items>
@@ -94,7 +91,7 @@
                                  </rowConstraints>
                                  <children>
                                     
-                                                       <ImageView fx:id="imageViewPreview" fitHeight="288.0" fitWidth="283.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
+                                     <ImageView fx:id="imageViewPreview" fitHeight="288.0" fitWidth="283.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
                                  </children>
                               </GridPane>
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="22.0" prefWidth="335.0">

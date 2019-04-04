@@ -8,11 +8,14 @@ import com.drew.metadata.Tag;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
@@ -31,8 +34,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.prefs.Preferences;
 
-public class Controller {
+public class Controller{
 
+    public HBox buttonContainerMenu;
     private boolean DEBUG = true;
 
     private ArrayList<VBox> vBoxSelected = new ArrayList<>();
@@ -81,9 +85,13 @@ public class Controller {
     @FXML
     private StackPane buttonMenu;
 
+    @FXML private ButtonContainerMenuController buttonContainerMenuController;
+
     @FXML
     public void initialize() {
-
+        buttonContainerMenuController.zoomInButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->{
+            System.out.println("zoom");
+        });
         //buttonMenu.setVisible(false);
 
         // init list of images
