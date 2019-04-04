@@ -10,11 +10,12 @@ import javafx.scene.layout.VBox;
 public class ThumbnailContainer extends VBox{
 
     private final ImageView imageView;
+    private final ImageWrapper imageWrapper;
 
     ThumbnailContainer(ImageWrapper imageWrapper){
         // call super constructor
         super();
-
+        this.imageWrapper = imageWrapper;
         // set style
         this.setMaxSize(110,110);
         this.setAlignment(Pos.CENTER);
@@ -33,5 +34,6 @@ public class ThumbnailContainer extends VBox{
     public ImageView getImageView() {
         return imageView;
     }
+    public ImageWrapper getImageWrapper(){ return imageWrapper; }
 
 }

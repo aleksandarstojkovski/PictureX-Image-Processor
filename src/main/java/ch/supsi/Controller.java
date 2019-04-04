@@ -24,12 +24,17 @@ import javafx.stage.Stage;
 import org.controlsfx.control.Notifications;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.prefs.Preferences;
 
 public class Controller {
+
+    private boolean DEBUG = true;
+
     private ArrayList<VBox> vBoxSelected = new ArrayList<>();
     private ArrayList<VBox> vBoxALL = new ArrayList<>();
     private ArrayList<File> imageFileListSelected = new ArrayList<>();
@@ -75,6 +80,8 @@ public class Controller {
 
     @FXML
     public void initialize() {
+
+
         // init list of images
         listOfImageWrappers = new ArrayList<>();
 
@@ -154,6 +161,7 @@ public class Controller {
     }
 
     private void initUI(){
+        vBoxALL.clear();
         tilePane.getChildren().clear();
         listOfImageWrappers.clear();
         ImageWrapper.clear();
@@ -276,28 +284,28 @@ public class Controller {
         globingTextField.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                printDebug("s= " + s);
+                printDebug("t1= " + t1);
                 ArrayList<VBox> assenti = new ArrayList<>();
                 ArrayList<VBox> presenti = new ArrayList<>();
                 for(VBox v : vBoxALL){
-                    for(Node nodeIn : v.getChildren()){
-                        if(nodeIn instanceof ImageView){
-                            Image ii = ((ImageView) nodeIn).getImage();
-                            if(!ii.getUrl().toLowerCase().contains(t1.toLowerCase())){
+                        if(v instanceof ThumbnailContainer){
+                            ImageWrapper iw = ((ThumbnailContainer) v).getImageWrapper();
+                            String filename = iw.getName().trim();
+                            if(!filename.toLowerCase().contains(t1.toLowerCase())){
                                 assenti.add(v);
                             }
                         }
-                    }
                 }
                 if(s.length() > t1.length()) {
                     for (VBox v : vBoxALL) {
-                        for (Node nodeIn : v.getChildren()) {
-                            if (nodeIn instanceof ImageView) {
-                                Image ii = ((ImageView) nodeIn).getImage();
-                                if (ii.getUrl().toLowerCase().contains(t1.toLowerCase())) {
+                            if (v instanceof ThumbnailContainer) {
+                                ImageWrapper iw = ((ThumbnailContainer) v).getImageWrapper();
+                                String filename = iw.getName().trim();
+                                if (filename.toLowerCase().contains(t1.toLowerCase())) {
                                     presenti.add(v);
                                 }
                             }
-                        }
                     }
                     for(VBox v : presenti){
                         try{
@@ -357,6 +365,9 @@ public class Controller {
                 tableView.getItems().add(mw);
             }
         }
+    }
+    private void printDebug(String msg){
+        if(DEBUG) System.out.println(msg);
     }
 
 }
