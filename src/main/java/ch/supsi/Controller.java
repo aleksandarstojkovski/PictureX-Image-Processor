@@ -299,10 +299,10 @@ public class Controller{
         if (!selectedThumbnailContainers.isEmpty()){
             for (ThumbnailContainer thumbnailContainer : allThumbnailContainers){
                 if (selectedThumbnailContainers.contains(thumbnailContainer)){
-                    thumbnailContainer.setStyle("-fx-border-color: blue;\n" + "-fx-border-width: 2;\n");
+                    thumbnailContainer.setStyle("-fx-background-color: #CCE8FF;\n");
                 }
                 else{
-                    thumbnailContainer.setStyle("-fx-border-color: transparent;"+ "-fx-border-width: 2;\n");
+                    thumbnailContainer.setStyle("-fx-background-color: transparent;");
                 }
             }
         }

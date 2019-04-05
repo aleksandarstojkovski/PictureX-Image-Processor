@@ -19,7 +19,6 @@ public class ThumbnailContainer extends VBox{
         // set style
         this.setMaxSize(110,110);
         this.setAlignment(Pos.CENTER);
-        this.setStyle("-fx-border-color:transparent;\n" + "-fx-border-width: 2;\n");
 
         // set content
         imageView=new ImageView(imageWrapper.getThumbnail());
