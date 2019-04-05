@@ -5,20 +5,13 @@ import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
@@ -27,8 +20,6 @@ import javafx.stage.Stage;
 import org.controlsfx.control.Notifications;
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -37,55 +28,39 @@ import java.util.prefs.Preferences;
 public class Controller{
 
     public HBox buttonContainerMenu;
-    private boolean DEBUG = true;
-
-    private ArrayList<VBox> vBoxSelected = new ArrayList<>();
-    private ArrayList<VBox> vBoxALL = new ArrayList<>();
-    private ArrayList<File> imageFileListSelected = new ArrayList<>();
+    private final boolean DEBUG = true;
+    private ArrayList<ThumbnailContainer> selectedThumbnailContainers = new ArrayList<>();
+    private ArrayList<ThumbnailContainer> allThumbnailContainers = new ArrayList<>();
     private File chosenDirectory;
     private List<ImageWrapper> listOfImageWrappers;
     private long lastTime = 1;
 
     @FXML
     private Label browseTextField;
-
     @FXML
     private AnchorPane mainAnchorPane;
-
     @FXML
     private TilePane tilePane;
-
     @FXML
     private ScrollPane scrollPane;
-
     @FXML
     private AnchorPane bottonPane;
-
     @FXML
     private Label numberOfFilesLabel;
-
     @FXML
     private Label totalSizeLabel;
-
     @FXML
     private SplitPane orizontalSplitPane;
-
     @FXML
     private ImageView imageViewPreview;
-
     @FXML
     private GridPane previewPanel;
-
     @FXML
     private TableView tableView;
-
     @FXML
     private TextField globingTextField;
-
     @FXML
-    private StackPane buttonMenu;
-
-    @FXML private ButtonContainerMenuController buttonContainerMenuController;
+    private ButtonContainerMenuController buttonContainerMenuController;
 
     @FXML
     public void initialize() {
@@ -173,7 +148,7 @@ public class Controller{
     }
 
     private void initUI(){
-        vBoxALL.clear();
+        allThumbnailContainers.clear();
         tilePane.getChildren().clear();
         listOfImageWrappers.clear();
         ImageWrapper.clear();
@@ -223,11 +198,10 @@ public class Controller{
             ThumbnailContainer thumbnailContainer = new ThumbnailContainer(imgWrp);
             thumbnailContainer.addEventHandler(MouseEvent.MOUSE_CLICKED, eventM -> { //aggiunta listener ad immagini
                 long diff;
-                boolean isdblClicked = false;
+                boolean isDoubleClicked = false;
                 final long currentTime = System.currentTimeMillis();
                 if (eventM.isShiftDown() || eventM.isControlDown()){
-                    vBoxSelected.add(thumbnailContainer);
-                    imageFileListSelected.add(imgWrp.getFile());
+                    selectedThumbnailContainers.add(thumbnailContainer);
                     colorVBoxImageView();
                 }
                 else{
@@ -238,18 +212,16 @@ public class Controller{
                         diff=currentTime-lastTime;
 
                         if(diff<=215) {
-                            isdblClicked = true;
+                            isDoubleClicked = true;
                             displayMetadata(imgWrp.getFile());
                             orizontalSplitPane.setDividerPosition(0, 1);
                             //buttonMenu.setVisible(true);
                         }
                         else {
-                            isdblClicked = false;
+                            isDoubleClicked = false;
                             displayMetadata(imgWrp.getFile());
-                            vBoxSelected.clear();
-                            vBoxSelected.add(thumbnailContainer);
-                            imageFileListSelected.clear();
-                            imageFileListSelected.add(imgWrp.getFile());
+                            selectedThumbnailContainers.clear();
+                            selectedThumbnailContainers.add(thumbnailContainer);
                         }
                     }
                     lastTime=currentTime;
@@ -257,90 +229,80 @@ public class Controller{
                 }
                 eventM.consume();
             });
-            vBoxALL.add(thumbnailContainer);
+            allThumbnailContainers.add(thumbnailContainer);
             tilePane.getChildren().add(thumbnailContainer);
         }
     }
 
     private void setClickListenerImageViewPreview(ImageView imageViewPreview) {//aggiunta listener ad immagini
-        EventHandler<MouseEvent> myHandler = new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                long diff = 0;
-                boolean isdblClicked = false;
-                final long currentTime = System.currentTimeMillis();
+        EventHandler<MouseEvent> myHandler = mouseEvent -> {
+            long diff = 0;
+            boolean isdblClicked = false;
+            final long currentTime = System.currentTimeMillis();
 
-                if(currentTime!=0){
-                    diff=currentTime-lastTime;
-                    if(diff<=215) {
-                        isdblClicked = true;
-                        double x = orizontalSplitPane.getDividerPositions()[0];
-                        if(orizontalSplitPane.getDividerPositions()[0]>0.9){
-                            orizontalSplitPane.setDividerPosition(0, 0.5);
-                            //buttonMenu.setVisible(false);
-                        }
-                        else {
-                            orizontalSplitPane.setDividerPosition(0, 1);
-                            //buttonMenu.setVisible(true);
-                        }
+            if(currentTime!=0){
+                diff=currentTime-lastTime;
+                if(diff<=215) {
+                    isdblClicked = true;
+                    double x = orizontalSplitPane.getDividerPositions()[0];
+                    if(orizontalSplitPane.getDividerPositions()[0]>0.9){
+                        orizontalSplitPane.setDividerPosition(0, 0.5);
+                        //buttonMenu.setVisible(false);
                     }
                     else {
-                        isdblClicked = false;
+                        orizontalSplitPane.setDividerPosition(0, 1);
+                        //buttonMenu.setVisible(true);
                     }
                 }
-                lastTime=currentTime;
-                mouseEvent.consume();
+                else {
+                    isdblClicked = false;
+                }
             }
+            lastTime=currentTime;
+            mouseEvent.consume();
         };
         imageViewPreview.addEventHandler(MouseEvent.MOUSE_CLICKED, myHandler);
     }
 
     private void setGlobingListener (TextField globingTextField){
-        globingTextField.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-                printDebug("s= " + s);
-                printDebug("t1= " + t1);
-                ArrayList<VBox> assenti = new ArrayList<>();
-                ArrayList<VBox> presenti = new ArrayList<>();
-                for(VBox v : vBoxALL){
-                        if(v instanceof ThumbnailContainer){
-                            ImageWrapper iw = ((ThumbnailContainer) v).getImageWrapper();
-                            String filename = iw.getName().trim();
-                            if(!filename.toLowerCase().contains(t1.toLowerCase())){
-                                assenti.add(v);
-                            }
-                        }
+        globingTextField.textProperty().addListener((observableValue, s, t1) -> {
+            printDebug("s= " + s);
+            printDebug("t1= " + t1);
+            ArrayList<ThumbnailContainer> toBeRemovedTC = new ArrayList<>();
+            ArrayList<ThumbnailContainer> toBeAddedTC = new ArrayList<>();
+            for(ThumbnailContainer v : allThumbnailContainers){
+                ImageWrapper iw = v.getImageWrapper();
+                String filename = iw.getName().trim();
+                if(!filename.toLowerCase().contains(t1.toLowerCase())){
+                    toBeRemovedTC.add(v);
                 }
-                if(s.length() > t1.length()) {
-                    for (VBox v : vBoxALL) {
-                            if (v instanceof ThumbnailContainer) {
-                                ImageWrapper iw = ((ThumbnailContainer) v).getImageWrapper();
-                                String filename = iw.getName().trim();
-                                if (filename.toLowerCase().contains(t1.toLowerCase())) {
-                                    presenti.add(v);
-                                }
-                            }
-                    }
-                    for(VBox v : presenti){
-                        try{
-                            tilePane.getChildren().add(v);
-                        }catch (java.lang.IllegalArgumentException e){}
-                    }
-                }
-                tilePane.getChildren().removeAll(assenti);
             }
+            if(s.length() > t1.length()) {
+                for (ThumbnailContainer v : allThumbnailContainers) {
+                    ImageWrapper iw = v.getImageWrapper();
+                    String filename = iw.getName().trim();
+                    if (filename.toLowerCase().contains(t1.toLowerCase())) {
+                        toBeAddedTC.add(v);
+                    }
+                }
+                for(ThumbnailContainer v : toBeAddedTC){
+                    try{
+                        tilePane.getChildren().add(v);
+                    }catch (IllegalArgumentException e){}
+                }
+            }
+            tilePane.getChildren().removeAll(toBeRemovedTC);
         });
     }
 
     private void colorVBoxImageView() {
-        if (!vBoxSelected.isEmpty()){
-            for (VBox im : vBoxALL){
-                if (vBoxSelected.contains(im)){
-                    im.setStyle("-fx-border-color: blue;\n" + "-fx-border-width: 2;\n");
+        if (!selectedThumbnailContainers.isEmpty()){
+            for (ThumbnailContainer thumbnailContainer : allThumbnailContainers){
+                if (selectedThumbnailContainers.contains(thumbnailContainer)){
+                    thumbnailContainer.setStyle("-fx-border-color: blue;\n" + "-fx-border-width: 2;\n");
                 }
                 else{
-                    im.setStyle("-fx-border-color: transparent;"+ "-fx-border-width: 2;\n");
+                    thumbnailContainer.setStyle("-fx-border-color: transparent;"+ "-fx-border-width: 2;\n");
                 }
             }
         }
