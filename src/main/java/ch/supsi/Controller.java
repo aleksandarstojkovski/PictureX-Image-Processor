@@ -196,11 +196,11 @@ public class Controller{
 
         for(ImageWrapper imgWrp : listOfImageWrappers){
             ThumbnailContainer thumbnailContainer = new ThumbnailContainer(imgWrp);
-            thumbnailContainer.addEventHandler(MouseEvent.MOUSE_CLICKED, eventM -> { //aggiunta listener ad immagini
+            thumbnailContainer.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> { //aggiunta listener ad immagini
                 long diff;
                 boolean isDoubleClicked = false;
                 final long currentTime = System.currentTimeMillis();
-                if (eventM.isShiftDown() || eventM.isControlDown()){
+                if (mouseEvent.isShiftDown() || mouseEvent.isControlDown()){
                     selectedThumbnailContainers.add(thumbnailContainer);
                     colorVBoxImageView();
                 }
@@ -227,7 +227,7 @@ public class Controller{
                     lastTime=currentTime;
                     colorVBoxImageView();
                 }
-                eventM.consume();
+                mouseEvent.consume();
             });
             allThumbnailContainers.add(thumbnailContainer);
             tilePane.getChildren().add(thumbnailContainer);
@@ -237,13 +237,13 @@ public class Controller{
     private void setClickListenerImageViewPreview(ImageView imageViewPreview) {//aggiunta listener ad immagini
         EventHandler<MouseEvent> myHandler = mouseEvent -> {
             long diff = 0;
-            boolean isdblClicked = false;
+            boolean isDoubleClicked = false;
             final long currentTime = System.currentTimeMillis();
 
             if(currentTime!=0){
                 diff=currentTime-lastTime;
                 if(diff<=215) {
-                    isdblClicked = true;
+                    isDoubleClicked = true;
                     double x = orizontalSplitPane.getDividerPositions()[0];
                     if(orizontalSplitPane.getDividerPositions()[0]>0.9){
                         orizontalSplitPane.setDividerPosition(0, 0.5);
@@ -255,7 +255,7 @@ public class Controller{
                     }
                 }
                 else {
-                    isdblClicked = false;
+                    isDoubleClicked = false;
                 }
             }
             lastTime=currentTime;
