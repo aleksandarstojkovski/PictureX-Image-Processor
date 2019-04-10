@@ -29,7 +29,7 @@ import java.util.prefs.Preferences;
 public class Controller{
 
     public HBox buttonContainerMenu;
-    private final boolean DEBUG = true;
+    private final boolean DEBUG = false;
     private ArrayList<ThumbnailContainer> selectedThumbnailContainers = new ArrayList<>();
     private ArrayList<ThumbnailContainer> allThumbnailContainers = new ArrayList<>();
     private File chosenDirectory;
@@ -66,9 +66,22 @@ public class Controller{
     @FXML
     public void initialize() {
         buttonContainerMenuController.zoomInButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->{
-            System.out.println("zoom");
+            printDebug("zoom in");
         });
-        //buttonMenu.setVisible(false);
+        buttonContainerMenuController.bNButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->{
+            printDebug("black and white");
+            for(ThumbnailContainer tc : selectedThumbnailContainers){
+                tc.getImageWrapper().applyBlackAndWhiteFilter();
+                imageViewPreview.setImage(tc.getImageWrapper().getPreviewImageView());
+            }
+        });
+        buttonContainerMenuController.rotateSXButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->{
+            printDebug("undo");
+            for(ThumbnailContainer tc : selectedThumbnailContainers){
+                tc.getImageWrapper().undo();
+                imageViewPreview.setImage(tc.getImageWrapper().getPreviewImageView());
+            }
+        });
 
         // init list of images
         listOfImageWrappers = new ArrayList<>();
@@ -114,6 +127,8 @@ public class Controller{
             directoryChosenAction(null);
         }
 
+        imageViewPreview.fitWidthProperty().bind(previewPanel.widthProperty()); //make resizable imageViewPreview
+        imageViewPreview.fitHeightProperty().bind(previewPanel.heightProperty()); //make resizable imageViewPreview
     }
 
     @FXML
@@ -206,9 +221,7 @@ public class Controller{
                     colorVBoxImageView();
                 }
                 else{
-                    imageViewPreview.setImage(imgWrp.getOriginalImage());
-                    imageViewPreview.fitWidthProperty().bind(previewPanel.widthProperty()); //make resizable imageViewPreview
-                    imageViewPreview.fitHeightProperty().bind(previewPanel.heightProperty()); //make resizable imageViewPreview
+                    imageViewPreview.setImage(imgWrp.getPreviewImageView());
                     if(currentTime!=0){//lastTime!=0 && creava bug al primo click
                         diff=currentTime-lastTime;
 

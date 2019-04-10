@@ -10,7 +10,6 @@ import javafx.scene.layout.VBox;
 
 public class ThumbnailContainer extends VBox{
 
-    private final ImageView imageView;
     private final ImageWrapper imageWrapper;
 
     ThumbnailContainer(ImageWrapper imageWrapper){
@@ -22,8 +21,7 @@ public class ThumbnailContainer extends VBox{
         this.setAlignment(Pos.CENTER);
 
         // set content
-        imageView=new ImageView(imageWrapper.getThumbnail());
-        this.getChildren().add(imageView);
+        this.getChildren().add(imageWrapper.getThumbnailImageView());
         this.getChildren().add(new Label(imageWrapper.getName()));
 
         // set tooltip
@@ -31,9 +29,6 @@ public class ThumbnailContainer extends VBox{
 
     }
 
-    public ImageView getImageView() {
-        return imageView;
-    }
     public ImageWrapper getImageWrapper(){ return imageWrapper; }
 
 }
