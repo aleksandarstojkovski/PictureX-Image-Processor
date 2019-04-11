@@ -27,6 +27,9 @@ public class ButtonContainerMenuController {
         zoomOutButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->{
             System.out.println("zoomOut");
         });
+        bNButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->{
+            System.out.println("BN");
+        });
 //        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/buttonContainerMenu.fxml"));
 //        try{
 //            Parent root2 = loader.load();
@@ -35,9 +38,9 @@ public class ButtonContainerMenuController {
 //        }
        // ButtonContainerMenuController dac = loader.getController();
     }
-    @FXML
-    public void handleZoomInButton(ActionEvent event){
-        System.out.println(event);
-
-    }
+//    @FXML
+//    public void handleZoomInButton(ActionEvent event){
+//        System.out.println(event);
+//
+//    }
 }

@@ -9,7 +9,7 @@
    <children>
       <Button fx:id="zoomInButton" mnemonicParsing="false">
          <graphic>
-            <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#handleZoomInButton" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="30.0" fitWidth="30.0"  pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../icons/baseline_zoom_in_black_18dp.png" />
                </image>

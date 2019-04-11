@@ -101,6 +101,7 @@ public class ImageWrapper {
     public void applyBlackAndWhiteFilter(){
         try {
             BufferedImage image = ImageIO.read(file);
+            if(image==null)return; // null pointer eliminato per file non immagine
             addToHistory(image);
 
             BufferedImage result = new BufferedImage(
