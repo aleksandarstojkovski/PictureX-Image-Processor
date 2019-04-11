@@ -5,50 +5,119 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane fx:id="mainAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1040.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.supsi.Controller">
-   <children>
-      <MenuBar layoutY="1.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <menus>
-          <Menu mnemonicParsing="false" text="File">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Edit">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Help">
-            <items>
-              <MenuItem mnemonicParsing="false" text="About" />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
-      <AnchorPane layoutX="-1.0" layoutY="26.0" prefHeight="36.0" prefWidth="600.0" style="-fx-background-color: red;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="26.0">
+<AnchorPane fx:id="mainAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1040.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.supsi.Controller">
+    <children>
+      <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <TextField fx:id="browseTextField" layoutX="14.0" layoutY="5.0" prefHeight="26.0" prefWidth="275.0" />
-            <Button layoutX="303.0" layoutY="5.0" mnemonicParsing="false" onAction="#handleBrowseButton" text="Browse" />
-         </children></AnchorPane>
-      <ScrollPane fx:id="scrollPane" layoutX="413.0" layoutY="91.0" prefHeight="461.0" prefWidth="457.0" style="-fx-border-color: grey;" AnchorPane.bottomAnchor="48.0" AnchorPane.leftAnchor="413.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="91.0" />
-      <AnchorPane fx:id="bottomPane" layoutX="21.0" layoutY="574.0" prefHeight="26.0" prefWidth="991.0" style="-fx-border-color: grey;" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="21.0" AnchorPane.rightAnchor="28.0">
-         <children>
-            <Label fx:id="numberOfFilesLabel" layoutX="416.0" layoutY="4.0" prefHeight="18.0" prefWidth="114.0" />
-            <Label fx:id="totalSizeLabel" layoutX="520.0" layoutY="4.0" prefHeight="18.0" prefWidth="114.0" />
-            <ProgressBar fx:id="progressBar" layoutX="804.0" layoutY="5.0" prefWidth="200.0" progress="0.0" AnchorPane.rightAnchor="19.0" />
-            <Label layoutX="762.0" layoutY="5.0" text="Status" AnchorPane.rightAnchor="228.2" />
+              <MenuBar useSystemMenuBar="true">
+                  <menus>
+                      <Menu mnemonicParsing="false" text="NomeApplicazione">
+                          <items>
+                              <MenuItem mnemonicParsing="false" text="Close" />
+                          </items>
+                      </Menu>
+                      <Menu mnemonicParsing="false" text="File">
+                          <items>
+                              <MenuItem mnemonicParsing="false" text="File" />
+                          </items>
+                      </Menu>
+                      <Menu mnemonicParsing="false" text="Edit">
+                          <items>
+                              <MenuItem mnemonicParsing="false" text="Edit" />
+                          </items>
+                      </Menu>
+                      <Menu mnemonicParsing="false" text="Format">
+                          <items>
+                              <MenuItem mnemonicParsing="false" text="Format" />
+                          </items>
+                      </Menu>
+                      <Menu mnemonicParsing="false" text="View">
+                          <items>
+                              <MenuItem mnemonicParsing="false" text="View" />
+                          </items>
+                      </Menu>
+                      <Menu mnemonicParsing="false" text="Window">
+                          <items>
+                              <MenuItem mnemonicParsing="false" text="Window" />
+                          </items>
+                      </Menu>
+                      <Menu mnemonicParsing="false" text="Help">
+                          <items>
+                              <MenuItem mnemonicParsing="false" text="Help" />
+                          </items>
+                      </Menu>
+                  </menus>
+              </MenuBar>
+            <ToolBar>
+              <items>
+                  <Button mnemonicParsing="false" onAction="#handleBrowseButton" text="Browse" />
+                  <Pane prefWidth="200.0" />
+                  <Label text="Search by name" />
+                  <TextField fx:id="globingTextField" prefHeight="25.0" prefWidth="203.0" />
+                  <Pane prefWidth="100.0" />
+                  <StackPane fx:id="buttonMenu" prefHeight="29.0" prefWidth="200.0">
+                     <children>
+                        <fx:include fx:id="buttonContainerMenu" source="buttonContainerMenu.fxml"/>
+                     </children>
+                  </StackPane>
+              </items>
+            </ToolBar>
+              <SplitPane fx:id="orizontalSplitPane" dividerPositions="0.36608863198458574" prefHeight="604.0" prefWidth="1040.0" VBox.vgrow="ALWAYS">
+                  <items>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                          <children>
+                        <SplitPane dividerPositions="0.5" layoutX="6.0" orientation="VERTICAL" prefHeight="584.0" prefWidth="367.0" AnchorPane.bottomAnchor="3.3999999999999773" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="15.0">
+                          <items>
+                              <GridPane fx:id="previewPanel">
+                                 <columnConstraints>
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                                 </columnConstraints>
+                                 <rowConstraints>
+                                    <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                                 <children>
+                                    
+                                     <ImageView fx:id="imageViewPreview" fitHeight="288.0" fitWidth="283.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
+                                 </children>
+                              </GridPane>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="22.0" prefWidth="335.0">
+                                 <children>
+                                    <TableView fx:id="tableView" layoutX="14.0" layoutY="14.0" prefHeight="292.0" prefWidth="329.0" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="1.0" />
+                                 </children>
+                              </AnchorPane>
+                          </items>
+                        </SplitPane>
+                          </children>
+                      </AnchorPane>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                          <children>
+                              <ScrollPane fx:id="scrollPane" layoutX="14.0" layoutY="14.0" prefHeight="579.0" prefWidth="611.0" style="-fx-border-color: grey;" AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="14.0" />
+                          </children>
+                      </AnchorPane>
+                  </items>
+              </SplitPane>
+            <ToolBar>
+              <items>
+                      <Label fx:id="numberOfFilesLabel" prefHeight="19.0" prefWidth="108.0" style="-fx-border-color: grey;" />
+                      <Label fx:id="browseTextField" prefHeight="19.0" prefWidth="365.0" style="-fx-border-color: grey;" />
+                      <Label fx:id="totalSizeLabel" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="19.0" prefWidth="222.0" style="-fx-border-color: grey;" />
+              </items>
+            </ToolBar>
          </children>
-      </AnchorPane>
-      <AnchorPane fx:id="previewImageAnchorPane" layoutX="21.0" layoutY="386.0" prefHeight="257.0" prefWidth="354.0" style="-fx-border-color: grey;">
-         <children>
-            <ImageView fx:id="imageViewPreview" fitHeight="231.0" fitWidth="329.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" />
-         </children></AnchorPane>
-   </children>
+      </VBox>
+    </children>
 </AnchorPane>
