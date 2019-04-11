@@ -75,7 +75,7 @@ public class Controller{
                 imageViewPreview.setImage(tc.getImageWrapper().getPreviewImageView());
             }
         });
-        buttonContainerMenuController.rotateSXButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->{
+        buttonContainerMenuController.undoButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->{
             printDebug("undo");
             for(ThumbnailContainer tc : selectedThumbnailContainers){
                 tc.getImageWrapper().undo();

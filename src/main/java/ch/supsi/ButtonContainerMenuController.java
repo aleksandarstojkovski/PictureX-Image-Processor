@@ -21,6 +21,8 @@ public class ButtonContainerMenuController {
     public Button rotateDXButton;
     @FXML
     public Button shareButton;
+    @FXML
+    public Button undoButton;
 
     @FXML
     public void initialize() {
