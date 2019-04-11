@@ -74,6 +74,7 @@ public class Controller{
                 tc.getImageWrapper().applyBlackAndWhiteFilter();
                 imageViewPreview.setImage(tc.getImageWrapper().getPreviewImageView());
             }
+            if(selectedThumbnailContainers.size()==1)displayMetadata(selectedThumbnailContainers.get(0).getImageWrapper().getFile()); //update exif table
         });
         buttonContainerMenuController.undoButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->{
             printDebug("undo");
@@ -81,6 +82,7 @@ public class Controller{
                 tc.getImageWrapper().undo();
                 imageViewPreview.setImage(tc.getImageWrapper().getPreviewImageView());
             }
+            if(selectedThumbnailContainers.size()==1)displayMetadata(selectedThumbnailContainers.get(0).getImageWrapper().getFile()); //update exif table
         });
 
         // init list of images
