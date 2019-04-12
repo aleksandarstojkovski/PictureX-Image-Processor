@@ -7,7 +7,6 @@ import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -24,6 +23,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.prefs.Preferences;
 
 public class Controller{
@@ -77,9 +78,25 @@ public class Controller{
             if(selectedThumbnailContainers.size()==1)displayMetadata(selectedThumbnailContainers.get(0).getImageWrapper().getFile()); //update exif table
         });
         buttonContainerMenuController.undoButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->{
-            printDebug("undo");
+            printDebug("undoChange");
             for(ThumbnailContainer tc : selectedThumbnailContainers){
-                tc.getImageWrapper().undo();
+                tc.getImageWrapper().undoChange();
+                imageViewPreview.setImage(tc.getImageWrapper().getPreviewImageView());
+            }
+            if(selectedThumbnailContainers.size()==1)displayMetadata(selectedThumbnailContainers.get(0).getImageWrapper().getFile()); //update exif table
+        });
+        buttonContainerMenuController.rotateSXButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->{
+            printDebug("rotateSX");
+            for(ThumbnailContainer tc : selectedThumbnailContainers){
+                tc.getImageWrapper().applyRotateLeft();
+                imageViewPreview.setImage(tc.getImageWrapper().getPreviewImageView());
+            }
+            if(selectedThumbnailContainers.size()==1)displayMetadata(selectedThumbnailContainers.get(0).getImageWrapper().getFile()); //update exif table
+        });
+        buttonContainerMenuController.rotateDXButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->{
+            printDebug("rotateDX");
+            for(ThumbnailContainer tc : selectedThumbnailContainers){
+                tc.getImageWrapper().applyRotateRight();
                 imageViewPreview.setImage(tc.getImageWrapper().getPreviewImageView());
             }
             if(selectedThumbnailContainers.size()==1)displayMetadata(selectedThumbnailContainers.get(0).getImageWrapper().getFile()); //update exif table

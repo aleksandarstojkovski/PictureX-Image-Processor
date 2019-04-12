@@ -1,14 +1,13 @@
 package ch.supsi;
 
+import ij.ImagePlus;
+import ij.process.ImageConverter;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +21,7 @@ public class ImageWrapper {
     private String tooltipString;
     private ImageView thumbnailImageView = new ImageView();
     private Image previewImageView;
-    private List<BufferedImage> history = new ArrayList<>();
+    private List<BufferedImage> versionHistory = new ArrayList<>();
     private int index = 0;
 
 
@@ -30,10 +29,10 @@ public class ImageWrapper {
         set(file);
     }
 
-    private void set(File newFile){
-        this.file=newFile;
-        name=newFile.getName();
-        thumbnail = new Image(newFile.toURI().toString(),
+    private void set(File file){
+        this.file=file;
+        name=file.getName();
+        thumbnail = new Image(file.toURI().toString(),
                 100, // requested width
                 100, // requested height
                 true, // preserve ratio
@@ -41,7 +40,7 @@ public class ImageWrapper {
                 true // load in background
         );
         thumbnailImageView.setImage(thumbnail);
-        sizeInBytes=newFile.length()/(long)1024;
+        sizeInBytes=file.length()/(long)1024;
         totalSizeInBytes+=sizeInBytes;
         if (getSizeInMegaBytes()<=1){
             tooltipString=String.format("Name:\t%s\nSize:\t\t%d Bytes", this.getName(), this.getSizeInBytes());
@@ -99,31 +98,13 @@ public class ImageWrapper {
     }
 
     public void applyBlackAndWhiteFilter(){
-        try {
-            BufferedImage image = ImageIO.read(file);
-            if(image==null)return; // null pointer eliminato per file non immagine
-            addToHistory(image);
-
-            BufferedImage result = new BufferedImage(
-                    image.getWidth(),
-                    image.getHeight(),
-                    BufferedImage.TYPE_BYTE_BINARY);
-
-            Graphics2D graphic = result.createGraphics();
-            graphic.drawImage(image, 0, 0, Color.WHITE, null);
-            graphic.dispose();
-            ImageIO.write(result, this.getExtension(), file);
-        }  catch (IOException e) {
-            e.printStackTrace();
-        }
-        set(file);
-    }
-
-    public void undo(){
-        if (index > 0){
-            index--;
+        if (saveVersion()) {
+            ImagePlus imp = new ImagePlus(file.getName(), versionHistory.get(versionHistory.size()-1));
+            ImageConverter ic = new ImageConverter(imp);
+            ic.convertToGray8();
+            imp.updateAndDraw();
             try {
-                ImageIO.write(history.get(index), this.getExtension(), file);
+                ImageIO.write(imp.getBufferedImage(), this.getExtension(), file);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -131,8 +112,61 @@ public class ImageWrapper {
         }
     }
 
-    private void addToHistory(BufferedImage image){
-        history.add(image);
+    public void applyRotateLeft(){
+        applyRotate(Directions.Left);
+    }
+
+    public void applyRotateRight(){
+        applyRotate(Directions.Right);
+    }
+
+    private void applyRotate(Directions direction){
+        if (saveVersion()) {
+            ImagePlus imp = new ImagePlus(file.getName(), versionHistory.get(versionHistory.size()-1));
+            if (direction == Directions.Left) {
+                imp.setProcessor(imp.getProcessor().rotateLeft());
+            }
+            else {
+                imp.setProcessor(imp.getProcessor().rotateRight());
+            }
+            imp.updateAndDraw();
+            try {
+                ImageIO.write(imp.getBufferedImage(), this.getExtension(), file);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            set(file);
+        }
+    }
+
+    public void undoChange(){
+        if (index > 0){
+            index--;
+            try {
+                ImageIO.write(versionHistory.get(index), this.getExtension(), file);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            set(file);
+        }
+    }
+
+    private boolean saveVersion(){
+        BufferedImage image = null;
+        try {
+            image = ImageIO.read(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if(image==null)
+            return false; // null pointer eliminato per file non immagine
+        versionHistory.add(image);
         index++;
+        return true;
+    }
+
+    private enum Directions{
+        Left,
+        Right
     }
 }
