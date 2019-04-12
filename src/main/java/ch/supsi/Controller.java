@@ -5,6 +5,7 @@ import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
+import de.muspellheim.eventbus.EventBus;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -23,8 +24,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.prefs.Preferences;
 
 public class Controller{
@@ -36,6 +35,7 @@ public class Controller{
     private File chosenDirectory;
     private List<ImageWrapper> listOfImageWrappers;
     private long lastTime = 1;
+    EventBus bus;
 
     @FXML
     private Label browseTextField;
@@ -66,6 +66,8 @@ public class Controller{
 
     @FXML
     public void initialize() {
+        configureBus();
+
         buttonContainerMenuController.zoomInButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->{
             printDebug("zoom in");
         });
@@ -148,6 +150,10 @@ public class Controller{
 
         imageViewPreview.fitWidthProperty().bind(previewPanel.widthProperty()); //make resizable imageViewPreview
         imageViewPreview.fitHeightProperty().bind(previewPanel.heightProperty()); //make resizable imageViewPreview
+    }
+
+    public void configureBus(){
+        bus = new EventBus();
     }
 
     @FXML
