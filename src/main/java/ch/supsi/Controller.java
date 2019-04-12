@@ -5,9 +5,9 @@ import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
+import de.muspellheim.eventbus.EventBus;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -35,6 +35,7 @@ public class Controller{
     private File chosenDirectory;
     private List<ImageWrapper> listOfImageWrappers;
     private long lastTime = 1;
+    EventBus bus;
 
     @FXML
     private Label browseTextField;
@@ -65,6 +66,8 @@ public class Controller{
 
     @FXML
     public void initialize() {
+        configureBus();
+
         buttonContainerMenuController.zoomInButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->{
             printDebug("zoom in");
         });
@@ -74,13 +77,31 @@ public class Controller{
                 tc.getImageWrapper().applyBlackAndWhiteFilter();
                 imageViewPreview.setImage(tc.getImageWrapper().getPreviewImageView());
             }
+            if(selectedThumbnailContainers.size()==1)displayMetadata(selectedThumbnailContainers.get(0).getImageWrapper().getFile()); //update exif table
         });
-        buttonContainerMenuController.rotateSXButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->{
-            printDebug("undo");
+        buttonContainerMenuController.undoButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->{
+            printDebug("undoChange");
             for(ThumbnailContainer tc : selectedThumbnailContainers){
-                tc.getImageWrapper().undo();
+                tc.getImageWrapper().undoChange();
                 imageViewPreview.setImage(tc.getImageWrapper().getPreviewImageView());
             }
+            if(selectedThumbnailContainers.size()==1)displayMetadata(selectedThumbnailContainers.get(0).getImageWrapper().getFile()); //update exif table
+        });
+        buttonContainerMenuController.rotateSXButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->{
+            printDebug("rotateSX");
+            for(ThumbnailContainer tc : selectedThumbnailContainers){
+                tc.getImageWrapper().applyRotateLeft();
+                imageViewPreview.setImage(tc.getImageWrapper().getPreviewImageView());
+            }
+            if(selectedThumbnailContainers.size()==1)displayMetadata(selectedThumbnailContainers.get(0).getImageWrapper().getFile()); //update exif table
+        });
+        buttonContainerMenuController.rotateDXButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->{
+            printDebug("rotateDX");
+            for(ThumbnailContainer tc : selectedThumbnailContainers){
+                tc.getImageWrapper().applyRotateRight();
+                imageViewPreview.setImage(tc.getImageWrapper().getPreviewImageView());
+            }
+            if(selectedThumbnailContainers.size()==1)displayMetadata(selectedThumbnailContainers.get(0).getImageWrapper().getFile()); //update exif table
         });
 
         // init list of images
@@ -129,6 +150,10 @@ public class Controller{
 
         imageViewPreview.fitWidthProperty().bind(previewPanel.widthProperty()); //make resizable imageViewPreview
         imageViewPreview.fitHeightProperty().bind(previewPanel.heightProperty()); //make resizable imageViewPreview
+    }
+
+    public void configureBus(){
+        bus = new EventBus();
     }
 
     @FXML
