@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class FXApp extends Application {
@@ -11,8 +12,9 @@ public class FXApp extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/sample.fxml"));
-        primaryStage.setTitle("Aleksandar e Vincenzo");
+        primaryStage.setTitle("PictureX");
         primaryStage.setScene(new Scene(root, 1040, 700));
+        primaryStage.getIcons().add(new Image("/icons/icon.png"));
         primaryStage.show();
     }
 
