@@ -29,7 +29,7 @@ import java.util.prefs.Preferences;
 public class Controller{
 
     public HBox buttonContainerMenu;
-    private final boolean DEBUG = false;
+    private final boolean DEBUG = true;
     private ArrayList<ThumbnailContainer> selectedThumbnailContainers = new ArrayList<>();
     private ArrayList<ThumbnailContainer> allThumbnailContainers = new ArrayList<>();
     private File chosenDirectory;

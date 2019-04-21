@@ -18,7 +18,10 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
 
+<?import org.controlsfx.control.textfield.CustomTextField?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 <AnchorPane fx:id="mainAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1040.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.supsi.Controller">
     <children>
       <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -62,14 +65,21 @@
                       </Menu>
                   </menus>
               </MenuBar>
-            <ToolBar>
+            <ToolBar style="-fx-background-color: grey">
               <items>
                   <Button mnemonicParsing="false" onAction="#handleBrowseButton" text="Browse" />
-                  <Pane prefWidth="200.0" />
-                  <Label text="Search by name" />
-                  <TextField fx:id="globingTextField" prefHeight="25.0" prefWidth="203.0" />
-                  <Pane prefWidth="100.0" />
-                  <StackPane fx:id="buttonMenu" prefHeight="29.0" prefWidth="200.0">
+                  <Pane prefWidth="320.0" style="-fx-background-color: yellow"/>
+                  <CustomTextField fx:id="globingTextField" styleClass="searchField" >
+                      <left>
+                          <Label styleClass="searchBoxLabel">
+                              <graphic>
+                                  <FontIcon iconLiteral="fa-search" />
+                              </graphic>
+                          </Label>
+                      </left>
+                  </CustomTextField>
+                  <Pane prefWidth="150.0" style="-fx-background-color: green"/>
+                  <StackPane fx:id="buttonMenu" prefHeight="29.0" prefWidth="200.0" AnchorPane.rightAnchor="0.0">
                      <children>
                         <fx:include fx:id="buttonContainerMenu" source="buttonContainerMenu.fxml"/>
                      </children>
