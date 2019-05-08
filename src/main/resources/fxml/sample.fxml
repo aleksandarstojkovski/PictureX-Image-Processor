@@ -67,7 +67,11 @@
               </MenuBar>
             <ToolBar style="-fx-background-color: grey">
               <items>
-                  <Button mnemonicParsing="false" onAction="#handleBrowseButton" text="Browse" />
+                  <Button mnemonicParsing="false" onAction="#handleBrowseButton" text="Browse">
+                      <graphic>
+                          <FontIcon iconLiteral="fa-folder-open-o" />
+                      </graphic>
+                  </Button>
                   <CustomTextField fx:id="globingTextField" styleClass="searchField" minWidth="300">
                       <left>
                           <Label styleClass="searchBoxLabel">
