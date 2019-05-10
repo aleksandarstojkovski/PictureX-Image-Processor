@@ -6,6 +6,7 @@ import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
 import de.muspellheim.eventbus.EventBus;
+import event.EventLog;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -154,6 +155,7 @@ public class Controller{
 
     public void configureBus(){
         bus = new EventBus();
+        bus.subscribe(EventLog.class, e -> log(e.getText()));
     }
 
     @FXML
@@ -386,4 +388,7 @@ public class Controller{
         if(DEBUG) System.out.println(msg);
     }
 
+    private void log(String text){
+        // TODO
+    }
 }
