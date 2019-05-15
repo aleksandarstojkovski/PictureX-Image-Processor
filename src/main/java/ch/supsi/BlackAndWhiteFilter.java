@@ -1,5 +1,6 @@
 package ch.supsi;
 
+import event.EventUpdatePreview;
 import ij.ImagePlus;
 import ij.process.ImageConverter;
 import javax.imageio.ImageIO;
@@ -27,6 +28,7 @@ public class BlackAndWhiteFilter implements IFilter {
             e.printStackTrace();
         }
         tc.getImageWrapper().set(tc.getImageWrapper().getFile());
+        Controller.bus.publish(new EventUpdatePreview(tc));
     }
 
 
