@@ -7,6 +7,7 @@ import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
 import de.muspellheim.eventbus.EventBus;
 import event.EventLog;
+import event.EventUpdatePreview;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -37,7 +38,7 @@ public class Controller{
     private File chosenDirectory;
     private List<ImageWrapper> listOfImageWrappers;
     private long lastTime = 1;
-    EventBus bus;
+    public static EventBus bus;
 
     @FXML
     private Label browseTextField;
@@ -162,11 +163,16 @@ public class Controller{
         imageViewPreview.fitWidthProperty().bind(previewPanel.widthProperty()); //make resizable imageViewPreview
         imageViewPreview.fitHeightProperty().bind(previewPanel.heightProperty()); //make resizable imageViewPreview
     }
+    public EventBus getEventBus(){
+        return this.bus;
+    }
 
     public void configureBus(){
         bus = new EventBus();
         bus.subscribe(EventLog.class, e -> log(e.getText()));
+        bus.subscribe(EventUpdatePreview.class, e -> imageViewPreview.setImage(e.getThubnailContainer().getImageWrapper().getPreviewImageView()));
     }
+
 
     @FXML
     public void handleBrowseButton(ActionEvent event){
