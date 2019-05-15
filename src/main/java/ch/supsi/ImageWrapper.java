@@ -97,21 +97,6 @@ public class ImageWrapper {
         return file.getName().substring(file.getName().lastIndexOf(".")).substring(1);
     }
 
-    public void applyBlackAndWhiteFilter(){
-        if (saveVersion()) {
-            ImagePlus imp = new ImagePlus(file.getName(), versionHistory.get(versionHistory.size()-1));
-            ImageConverter ic = new ImageConverter(imp);
-            ic.convertToGray8();
-            imp.updateAndDraw();
-            try {
-                ImageIO.write(imp.getBufferedImage(), this.getExtension(), file);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            set(file);
-        }
-    }
-
     public void applyRotateLeft(){
         applyRotate(Directions.Left);
     }

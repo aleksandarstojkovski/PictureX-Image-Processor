@@ -1,9 +1,12 @@
 package ch.supsi;
 
-import java.io.File;
+import ch.supsi.ThumbnailContainer;
+
 import java.util.HashMap;
+import java.util.Map;
 
-interface IFilter {
+public interface IFilter {
 
-    void apply(ThumbnailContainer tc, HashMap<String, Object> parameters);
+    void apply(ThumbnailContainer tc, Map<String, Object> parameters);
+
 }

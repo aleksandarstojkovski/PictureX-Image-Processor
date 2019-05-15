@@ -1,4 +1,4 @@
-package event;
+package events;
 
 import java.io.File;
 

@@ -1,12 +1,12 @@
-package event;
+package events;
 
 import ch.supsi.ThumbnailContainer;
 
-public class EventUpdatePreview {
+public class EventImageChanged {
 
     private ThumbnailContainer tc;
 
-    public EventUpdatePreview(ThumbnailContainer tc) {
+    public EventImageChanged(ThumbnailContainer tc) {
         this.tc = tc;
     }
 

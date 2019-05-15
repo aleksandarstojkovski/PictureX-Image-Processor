@@ -6,8 +6,8 @@ import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
 import de.muspellheim.eventbus.EventBus;
-import event.EventLog;
-import event.EventUpdatePreview;
+import events.EventLog;
+import events.EventImageChanged;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -23,10 +23,7 @@ import javafx.stage.Stage;
 import org.controlsfx.control.Notifications;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.prefs.Preferences;
 
 public class Controller{
@@ -75,45 +72,20 @@ public class Controller{
             printDebug("zoom in");
         });
         buttonContainerMenuController.bNButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->{
-            printDebug("black and white");
-            try {
-                Filters.apply(selectedThumbnailContainers,"BlackAndWhiteFilter",null);
-            } catch (ClassNotFoundException ex) {
-                ex.printStackTrace();
-            } catch (NoSuchMethodException ex) {
-                ex.printStackTrace();
-            } catch (IllegalAccessException ex) {
-                ex.printStackTrace();
-            } catch (InvocationTargetException ex) {
-                ex.printStackTrace();
-            } catch (InstantiationException ex) {
-                ex.printStackTrace();
-            }
-            if(selectedThumbnailContainers.size()==1)displayMetadata(selectedThumbnailContainers.get(0).getImageWrapper().getFile()); //update exif table
+            printDebug("black and white filters");
+            Filters.apply(selectedThumbnailContainers,"BlackAndWhite",null);
         });
         buttonContainerMenuController.undoButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->{
             printDebug("undoChange");
-            for(ThumbnailContainer tc : selectedThumbnailContainers){
-                tc.getImageWrapper().undoChange();
-                imageViewPreview.setImage(tc.getImageWrapper().getPreviewImageView());
-            }
-            if(selectedThumbnailContainers.size()==1)displayMetadata(selectedThumbnailContainers.get(0).getImageWrapper().getFile()); //update exif table
+            //Filters.undo();
         });
         buttonContainerMenuController.rotateSXButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->{
-            printDebug("rotateSX");
-            for(ThumbnailContainer tc : selectedThumbnailContainers){
-                tc.getImageWrapper().applyRotateLeft();
-                imageViewPreview.setImage(tc.getImageWrapper().getPreviewImageView());
-            }
-            if(selectedThumbnailContainers.size()==1)displayMetadata(selectedThumbnailContainers.get(0).getImageWrapper().getFile()); //update exif table
+            printDebug("rotate left filters");
+            Filters.apply(selectedThumbnailContainers,"Rotate", Map.of("direction", "left"));
         });
         buttonContainerMenuController.rotateDXButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->{
-            printDebug("rotateDX");
-            for(ThumbnailContainer tc : selectedThumbnailContainers){
-                tc.getImageWrapper().applyRotateRight();
-                imageViewPreview.setImage(tc.getImageWrapper().getPreviewImageView());
-            }
-            if(selectedThumbnailContainers.size()==1)displayMetadata(selectedThumbnailContainers.get(0).getImageWrapper().getFile()); //update exif table
+            printDebug("rotate right filter");
+            Filters.apply(selectedThumbnailContainers,"Rotate", Map.of("direction", "right"));
         });
 
         // init list of images
@@ -170,7 +142,10 @@ public class Controller{
     public void configureBus(){
         bus = new EventBus();
         bus.subscribe(EventLog.class, e -> log(e.getText()));
-        bus.subscribe(EventUpdatePreview.class, e -> imageViewPreview.setImage(e.getThubnailContainer().getImageWrapper().getPreviewImageView()));
+        bus.subscribe(EventImageChanged.class, e -> {
+            imageViewPreview.setImage(e.getThubnailContainer().getImageWrapper().getPreviewImageView());
+            if(selectedThumbnailContainers.size()==1)displayMetadata(selectedThumbnailContainers.get(0).getImageWrapper().getFile()); //update exif table
+        });
     }
 
 

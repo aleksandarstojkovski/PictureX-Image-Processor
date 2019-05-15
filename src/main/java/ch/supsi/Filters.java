@@ -1,8 +1,6 @@
 package ch.supsi;
 
-import com.sun.javafx.scene.traversal.Algorithm;
-
-import java.io.File;
+import events.EventImageChanged;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -16,25 +14,29 @@ public class Filters {
     private static int version=0;
     Map<ArrayList<ThumbnailContainer>,ArrayList<ThumbnailContainer>> versioni = new HashMap<>();
 
-    public static void apply(ArrayList<ThumbnailContainer> listOfTC, String filterName, HashMap<String, Object> parameters) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+    public static void apply(ArrayList<ThumbnailContainer> listOfTC, String filterName, Map<String, Object> parameters) {
         for (ThumbnailContainer tc : listOfTC) {
-            Class<IFilter> cls = (Class<IFilter>) Class.forName("ch.supsi." + filterName);
-            Constructor<IFilter> c = cls.getConstructor();
-            IFilter o = c.newInstance();
-            Method m = cls.getMethod("apply", ThumbnailContainer.class, HashMap.class);
-            m.invoke(o,tc, null);
+            Class<IFilter> cls = null;
+            try {
+                cls = (Class<IFilter>) Class.forName("filters." + filterName);
+                Constructor<IFilter> constructor = cls.getConstructor();
+                IFilter instanceOfIFilter = constructor.newInstance();
+                Method method = cls.getMethod("apply", ThumbnailContainer.class, Map.class);
+                method.invoke(instanceOfIFilter,tc, parameters);
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
         }
+        if(listOfTC.size()==1)
+            Controller.bus.publish(new EventImageChanged(listOfTC.get(0)));
     }
-
-//    public static void undo() {
-//        version--;
-//
-//        Class filter = Class.forName("ch.supsi"+filterName);
-//    }
-//
-//    private static void saveVersion(ThumbnailContainer tc){
-//        versions.add(tc);
-//        version++;
-//    }
 
 }
