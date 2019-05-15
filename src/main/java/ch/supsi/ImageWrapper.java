@@ -29,7 +29,7 @@ public class ImageWrapper {
         set(file);
     }
 
-    private void set(File file){
+    public void set(File file){
         this.file=file;
         name=file.getName();
         thumbnail = new Image(file.toURI().toString(),

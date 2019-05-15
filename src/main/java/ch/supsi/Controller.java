@@ -22,6 +22,7 @@ import javafx.stage.Stage;
 import org.controlsfx.control.Notifications;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -74,9 +75,18 @@ public class Controller{
         });
         buttonContainerMenuController.bNButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->{
             printDebug("black and white");
-            for(ThumbnailContainer tc : selectedThumbnailContainers){
-                tc.getImageWrapper().applyBlackAndWhiteFilter();
-                imageViewPreview.setImage(tc.getImageWrapper().getPreviewImageView());
+            try {
+                Filters.apply(selectedThumbnailContainers,"BlackAndWhiteFilter",null);
+            } catch (ClassNotFoundException ex) {
+                ex.printStackTrace();
+            } catch (NoSuchMethodException ex) {
+                ex.printStackTrace();
+            } catch (IllegalAccessException ex) {
+                ex.printStackTrace();
+            } catch (InvocationTargetException ex) {
+                ex.printStackTrace();
+            } catch (InstantiationException ex) {
+                ex.printStackTrace();
             }
             if(selectedThumbnailContainers.size()==1)displayMetadata(selectedThumbnailContainers.get(0).getImageWrapper().getFile()); //update exif table
         });
