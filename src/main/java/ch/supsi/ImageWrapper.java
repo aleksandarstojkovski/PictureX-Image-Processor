@@ -97,33 +97,6 @@ public class ImageWrapper {
         return file.getName().substring(file.getName().lastIndexOf(".")).substring(1);
     }
 
-    public void applyRotateLeft(){
-        applyRotate(Directions.Left);
-    }
-
-    public void applyRotateRight(){
-        applyRotate(Directions.Right);
-    }
-
-    private void applyRotate(Directions direction){
-        if (saveVersion()) {
-            ImagePlus imp = new ImagePlus(file.getName(), versionHistory.get(versionHistory.size()-1));
-            if (direction == Directions.Left) {
-                imp.setProcessor(imp.getProcessor().rotateLeft());
-            }
-            else {
-                imp.setProcessor(imp.getProcessor().rotateRight());
-            }
-            imp.updateAndDraw();
-            try {
-                ImageIO.write(imp.getBufferedImage(), this.getExtension(), file);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            set(file);
-        }
-    }
-
     public void undoChange(){
         if (index > 0){
             index--;
@@ -150,8 +123,4 @@ public class ImageWrapper {
         return true;
     }
 
-    private enum Directions{
-        Left,
-        Right
-    }
 }

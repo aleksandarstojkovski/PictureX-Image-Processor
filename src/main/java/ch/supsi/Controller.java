@@ -135,9 +135,6 @@ public class Controller{
         imageViewPreview.fitWidthProperty().bind(previewPanel.widthProperty()); //make resizable imageViewPreview
         imageViewPreview.fitHeightProperty().bind(previewPanel.heightProperty()); //make resizable imageViewPreview
     }
-    public EventBus getEventBus(){
-        return this.bus;
-    }
 
     public void configureBus(){
         bus = new EventBus();
@@ -147,7 +144,6 @@ public class Controller{
             if(selectedThumbnailContainers.size()==1)displayMetadata(selectedThumbnailContainers.get(0).getImageWrapper().getFile()); //update exif table
         });
     }
-
 
     @FXML
     public void handleBrowseButton(ActionEvent event){
