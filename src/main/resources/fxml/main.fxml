@@ -67,7 +67,7 @@
                       </graphic>
                   </Button>
                   <Pane HBox.hgrow="ALWAYS" minWidth="130"></Pane>
-                  <CustomTextField fx:id="globingTextField" styleClass="searchField" minWidth="220">
+                  <CustomTextField fx:id="globingTextField" styleClass="searchField" minWidth="210">
                       <left>
                           <Label styleClass="searchBoxLabel">
                               <graphic>

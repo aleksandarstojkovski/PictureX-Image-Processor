@@ -325,10 +325,6 @@ public class MainController {
         try {
             metadata = ImageMetadataReader.readMetadata(file);
         } catch (ImageProcessingException | IOException e) {
-            Notifications.create()
-                    .title("Warning")
-                    .text("The filetype is not supported.")
-                    .showWarning();
             return;
         }
         tableView.getItems().clear();

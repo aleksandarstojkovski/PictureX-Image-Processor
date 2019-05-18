@@ -3,15 +3,20 @@ package ch.picturex;
 import ch.picturex.controller.MainController;
 import ch.picturex.events.EventImageChanged;
 import ch.picturex.events.EventLog;
+import org.controlsfx.control.Notifications;
+
+import javax.management.Notification;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 public class Filters {
 
+    private static ResourceBundle resourceBundle = ResourceBundleService.getInstance();
     private static List<ArrayList<ThumbnailContainer>> selectionHistory = new ArrayList<>();
 
     public static void apply(ArrayList<ThumbnailContainer> thumbnailContainers, String filterName, Map<String, Object> parameters) {
@@ -25,7 +30,10 @@ public class Filters {
                 Method method = cls.getMethod("apply", ThumbnailContainer.class, Map.class);
                 method.invoke(instanceOfIFilter,tc, parameters);
             } catch (ClassNotFoundException | InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
-                e.printStackTrace();
+                Notifications.create()
+                        .title(resourceBundle.getString("notifica.formatononsupport.titolo"))
+                        .text(resourceBundle.getString("notifica.formatononsupport.testo"))
+                        .showWarning();
             }
             MainController.bus.publish(new EventLog("Filter "+ filterName + " applied on image: " + tc.getImageWrapper().getName(), Severity.INFO));
         }
