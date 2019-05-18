@@ -1,12 +1,11 @@
-package filters;
+package ch.picturex.filters;
 
-import ch.supsi.IFilter;
-import ch.supsi.ThumbnailContainer;
+import ch.picturex.IFilter;
+import ch.picturex.ThumbnailContainer;
 import ij.ImagePlus;
 
 import javax.imageio.ImageIO;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 public class Rotate implements IFilter {
@@ -16,16 +15,14 @@ public class Rotate implements IFilter {
         ImagePlus imp = null;
         try {
             imp = new ImagePlus(tc.getImageWrapper().getFile().getName(), ImageIO.read(tc.getImageWrapper().getFile()));
-            if ( parameters.get("direction").equals("left") ) {
+            if (parameters.get("direction").equals("left")) {
                 imp.setProcessor(imp.getProcessor().rotateLeft());
             }
             else {
                 imp.setProcessor(imp.getProcessor().rotateRight());
             }
             imp.updateAndDraw();
-            imp.updateAndDraw();
-            ImageIO.write(imp.getBufferedImage(), tc.getImageWrapper().getExtension(), tc.getImageWrapper().getFile());
-            tc.getImageWrapper().set(tc.getImageWrapper().getFile());
+            tc.getImageWrapper().set(imp.getBufferedImage());
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -13,12 +13,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Maven: org.kordamp.ikonli:ikonli-fontawesome-pack:11.3.4" level="project" />
     <orderEntry type="library" name="Maven: org.kordamp.ikonli:ikonli-core:11.3.4" level="project" />
-    <orderEntry type="library" name="Maven: org.controlsfx:controlsfx:11.0.0" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-media:11" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-web:11" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-web:win:11" level="project" />
-    <orderEntry type="library" name="Maven: org.kordamp.ikonli:ikonli-fontawesome-pack:11.3.4" level="project" />
-    <orderEntry type="library" name="Maven: org.kordamp.ikonli:ikonli-core:11.3.4" level="project" />
     <orderEntry type="library" name="Maven: org.kordamp.ikonli:ikonli-javafx:11.3.4" level="project" />
     <orderEntry type="library" name="Maven: de.muspellheim:eventbus:1.1.0" level="project" />
     <orderEntry type="library" name="Maven: org.controlsfx:controlsfx:11.0.0" level="project" />

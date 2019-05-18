@@ -1,6 +1,6 @@
-package events;
+package ch.picturex.events;
 
-import ch.supsi.ThumbnailContainer;
+import ch.picturex.ThumbnailContainer;
 
 public class EventImageChanged {
 

@@ -1,4 +1,4 @@
-package ch.supsi;
+package ch.picturex;
 
 public class Main   {
     public static void main(String[] args) {

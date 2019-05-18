@@ -1,13 +1,12 @@
-package filters;
+package ch.picturex.filters;
 
 
-import ch.supsi.IFilter;
-import ch.supsi.ThumbnailContainer;
+import ch.picturex.IFilter;
+import ch.picturex.ThumbnailContainer;
 import ij.ImagePlus;
 import ij.process.ImageConverter;
 import javax.imageio.ImageIO;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 public class BlackAndWhite implements IFilter {
@@ -20,8 +19,7 @@ public class BlackAndWhite implements IFilter {
             ImageConverter ic = new ImageConverter(imp);
             ic.convertToGray8();
             imp.updateAndDraw();
-            ImageIO.write(imp.getBufferedImage(), tc.getImageWrapper().getExtension(), tc.getImageWrapper().getFile());
-            tc.getImageWrapper().set(tc.getImageWrapper().getFile());
+            tc.getImageWrapper().set(imp.getBufferedImage());
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -1,4 +1,4 @@
-package ch.supsi;
+package ch.picturex;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -11,7 +11,7 @@ public class FXApp extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/sample.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/main.fxml"));
         primaryStage.setTitle("PictureX");
         primaryStage.setScene(new Scene(root, 1040, 700));
         primaryStage.getIcons().add(new Image("/icons/icon.png"));

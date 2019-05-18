@@ -1,8 +1,5 @@
-package ch.supsi;
+package ch.picturex;
 
-import ch.supsi.ThumbnailContainer;
-
-import java.util.HashMap;
 import java.util.Map;
 
 public interface IFilter {

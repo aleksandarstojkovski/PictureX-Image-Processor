@@ -1,4 +1,4 @@
-package events;
+package ch.picturex.events;
 
 import java.io.File;
 

@@ -1,4 +1,4 @@
-package ch.supsi;
+package ch.picturex;
 
 import com.drew.metadata.Tag;
 
@@ -8,7 +8,7 @@ public class MetadataWrapper {
     String value;
     String type;
 
-    MetadataWrapper(Tag tag){
+    public MetadataWrapper(Tag tag){
         this.name=tag.getTagName();
         this.value =tag.getDescription();
         this.type=tag.getDirectoryName();

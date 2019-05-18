@@ -1,7 +1,5 @@
-package ch.supsi;
+package ch.picturex;
 
-import ij.ImagePlus;
-import ij.process.ImageConverter;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javax.imageio.ImageIO;
@@ -26,10 +24,10 @@ public class ImageWrapper {
 
 
     public ImageWrapper(File file) {
-        set(file);
+        init(file);
     }
 
-    public void set(File file){
+    private void init(File file){
         this.file=file;
         name=file.getName();
         thumbnail = new Image(file.toURI().toString(),
@@ -48,6 +46,17 @@ public class ImageWrapper {
             tooltipString=String.format("Name:\t%s\nSize:\t\t%d MB", this.getName(), this.getSizeInMegaBytes());
         }
     }
+
+    public void set(BufferedImage bufferedImage){
+        saveVersion();
+        try {
+            ImageIO.write(bufferedImage, getExtension(), getFile());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        init(file);
+    }
+
     public File getFile() {
         return file;
     }
@@ -93,34 +102,35 @@ public class ImageWrapper {
         return thumbnailImageView;
     }
 
+    public BufferedImage getBufferedImage(){
+        BufferedImage img = null;
+        try {
+            img = ImageIO.read(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return img;
+    }
+
     public String getExtension(){
         return file.getName().substring(file.getName().lastIndexOf(".")).substring(1);
     }
 
-    public void undoChange(){
+    public void undo(){
         if (index > 0){
             index--;
             try {
-                ImageIO.write(versionHistory.get(index), this.getExtension(), file);
+                ImageIO.write(versionHistory.get(index), getExtension(), getFile());
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            set(file);
+            init(file);
         }
     }
 
-    private boolean saveVersion(){
-        BufferedImage image = null;
-        try {
-            image = ImageIO.read(file);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if(image==null)
-            return false; // null pointer eliminato per file non immagine
-        versionHistory.add(image);
+    private void saveVersion(){
+        versionHistory.add(getBufferedImage());
         index++;
-        return true;
     }
 
 }

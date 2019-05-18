@@ -1,13 +1,18 @@
-package ch.supsi;
+package ch.picturex.controller;
 
+import ch.picturex.ImageWrapper;
+import ch.picturex.MetadataWrapper;
+import ch.picturex.Severity;
+import ch.picturex.ThumbnailContainer;
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
 import de.muspellheim.eventbus.EventBus;
-import events.EventLog;
-import events.EventImageChanged;
+import ch.picturex.events.EventLog;
+import ch.picturex.events.EventImageChanged;
+import ch.picturex.events.EventUpdateBottomToolBar;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -21,36 +26,31 @@ import javafx.scene.layout.*;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import org.controlsfx.control.Notifications;
-import java.io.File;
-import java.io.IOException;
+
+import java.io.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.prefs.Preferences;
 
-public class Controller{
+public class MainController {
 
     public HBox buttonContainerMenu;
     private final boolean DEBUG = true;
-    private ArrayList<ThumbnailContainer> selectedThumbnailContainers = new ArrayList<>();
+    static ArrayList<ThumbnailContainer> selectedThumbnailContainers = new ArrayList<>();
     private ArrayList<ThumbnailContainer> allThumbnailContainers = new ArrayList<>();
     private File chosenDirectory;
     private List<ImageWrapper> listOfImageWrappers;
     private long lastTime = 1;
     public static EventBus bus;
+    private static final DateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
 
-    @FXML
-    private Label browseTextField;
     @FXML
     private AnchorPane mainAnchorPane;
     @FXML
     private TilePane tilePane;
     @FXML
     private ScrollPane scrollPane;
-    @FXML
-    private AnchorPane bottonPane;
-    @FXML
-    private Label numberOfFilesLabel;
-    @FXML
-    private Label totalSizeLabel;
     @FXML
     private SplitPane orizontalSplitPane;
     @FXML
@@ -61,32 +61,10 @@ public class Controller{
     private TableView tableView;
     @FXML
     private TextField globingTextField;
-    @FXML
-    private ButtonContainerMenuController buttonContainerMenuController;
 
     @FXML
     public void initialize() {
         configureBus();
-
-        buttonContainerMenuController.zoomInButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->{
-            printDebug("zoom in");
-        });
-        buttonContainerMenuController.bNButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->{
-            printDebug("black and white filters");
-            Filters.apply(selectedThumbnailContainers,"BlackAndWhite",null);
-        });
-        buttonContainerMenuController.undoButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->{
-            printDebug("undoChange");
-            //Filters.undo();
-        });
-        buttonContainerMenuController.rotateSXButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->{
-            printDebug("rotate left filters");
-            Filters.apply(selectedThumbnailContainers,"Rotate", Map.of("direction", "left"));
-        });
-        buttonContainerMenuController.rotateDXButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->{
-            printDebug("rotate right filter");
-            Filters.apply(selectedThumbnailContainers,"Rotate", Map.of("direction", "right"));
-        });
 
         // init list of images
         listOfImageWrappers = new ArrayList<>();
@@ -128,7 +106,6 @@ public class Controller{
         //alla partenza se il programma è già stato usato fa partire tutto dall'ultimo path
         if(getLastDirectoryPreferences() != null){
             chosenDirectory = getLastDirectoryPreferences();
-            browseTextField.setText(chosenDirectory.getAbsolutePath());
             directoryChosenAction(null);
         }
 
@@ -138,7 +115,7 @@ public class Controller{
 
     public void configureBus(){
         bus = new EventBus();
-        bus.subscribe(EventLog.class, e -> log(e.getText()));
+        bus.subscribe(EventLog.class, e -> log(e.getText(), e.getSeverity()));
         bus.subscribe(EventImageChanged.class, e -> {
             imageViewPreview.setImage(e.getThubnailContainer().getImageWrapper().getPreviewImageView());
             if(selectedThumbnailContainers.size()==1)displayMetadata(selectedThumbnailContainers.get(0).getImageWrapper().getFile()); //update exif table
@@ -163,7 +140,6 @@ public class Controller{
         chosenDirectory = dirChoser.showDialog(stage);
 
         if (chosenDirectory != null){
-            browseTextField.setText(chosenDirectory.getAbsolutePath());
             directoryChosenAction(null);
         }
 
@@ -173,7 +149,7 @@ public class Controller{
         setLastDirectoryPreferences(chosenDirectory); //aggiorna ad ogni selezione il path nelle preferenze
         initUI();
         populateListOfFiles(fileNamePart);
-        populateBottomPane();
+        BottomToolBarController.bus.publish(new EventUpdateBottomToolBar(listOfImageWrappers, chosenDirectory));
         displayThumbnails();
     }
 
@@ -212,14 +188,6 @@ public class Controller{
             }
         }
 
-    }
-
-    private void populateBottomPane(){
-        numberOfFilesLabel.setText(listOfImageWrappers.size() + " elementi");
-        if (ImageWrapper.getTotalSizeInMegaBytes() <= 1)
-            totalSizeLabel.setText(ImageWrapper.getTotalSizeInBytes() + " Bytes");
-        else
-            totalSizeLabel.setText(ImageWrapper.getTotalSizeInMegaBytes() + " MB");
     }
 
     private void displayThumbnails(){
@@ -337,7 +305,7 @@ public class Controller{
     }
 
     private File getLastDirectoryPreferences(){
-        Preferences preference = Preferences.userNodeForPackage(Controller.class);
+        Preferences preference = Preferences.userNodeForPackage(MainController.class);
         String filePath = preference.get("filePath", null);
         if(filePath != null){
             return new File(filePath);
@@ -346,7 +314,7 @@ public class Controller{
     }
 
     private void setLastDirectoryPreferences(File file){
-        Preferences preference = Preferences.userNodeForPackage(Controller.class);
+        Preferences preference = Preferences.userNodeForPackage(MainController.class);
         if (file != null) {
             preference.put("filePath", file.getPath());
         }
@@ -371,11 +339,23 @@ public class Controller{
             }
         }
     }
+    
     private void printDebug(String msg){
         if(DEBUG) System.out.println(msg);
     }
 
-    private void log(String text){
-        // TODO
+    private void log(String text, Severity severity){
+        Date date = new Date();
+        FileWriter fr;
+        PrintWriter out = null;
+        try {
+            fr = new FileWriter(chosenDirectory+ File.separator + "log.txt", true);
+            BufferedWriter br = new BufferedWriter(fr);
+            out = new PrintWriter(br);
+            out.println("[" + sdf.format(date) + "]" + " " + severity + " : " + text);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        out.close();
     }
 }
