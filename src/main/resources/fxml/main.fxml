@@ -27,7 +27,7 @@
          <children>
               <MenuBar useSystemMenuBar="true">
                   <menus>
-                      <Menu mnemonicParsing="false" text="NomeApplicazione">
+                      <Menu mnemonicParsing="false" text="PictureX">
                           <items>
                               <MenuItem mnemonicParsing="false" text="Close" />
                           </items>
@@ -37,27 +37,22 @@
                               <MenuItem mnemonicParsing="false" text="File" />
                           </items>
                       </Menu>
-                      <Menu mnemonicParsing="false" text="Edit">
+                      <Menu mnemonicParsing="false" text="%menu.modifica">
                           <items>
                               <MenuItem mnemonicParsing="false" text="Edit" />
                           </items>
                       </Menu>
-                      <Menu mnemonicParsing="false" text="Format">
-                          <items>
-                              <MenuItem mnemonicParsing="false" text="Format" />
-                          </items>
-                      </Menu>
-                      <Menu mnemonicParsing="false" text="View">
+                      <Menu mnemonicParsing="false" text="%menu.vista">
                           <items>
                               <MenuItem mnemonicParsing="false" text="View" />
                           </items>
                       </Menu>
-                      <Menu mnemonicParsing="false" text="Window">
+                      <Menu mnemonicParsing="false" text="%menu.finestra">
                           <items>
                               <MenuItem mnemonicParsing="false" text="Window" />
                           </items>
                       </Menu>
-                      <Menu mnemonicParsing="false" text="Help">
+                      <Menu mnemonicParsing="false" text="%menu.aiuto">
                           <items>
                               <MenuItem mnemonicParsing="false" text="Help" />
                           </items>
@@ -72,7 +67,7 @@
                       </graphic>
                   </Button>
                   <Pane HBox.hgrow="ALWAYS" minWidth="130"></Pane>
-                  <CustomTextField fx:id="globingTextField" styleClass="searchField" minWidth="285">
+                  <CustomTextField fx:id="globingTextField" styleClass="searchField" minWidth="220">
                       <left>
                           <Label styleClass="searchBoxLabel">
                               <graphic>
