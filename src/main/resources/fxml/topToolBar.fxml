@@ -6,6 +6,7 @@
 <?import javafx.scene.layout.HBox?>
 
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.BorderPane?>
 <HBox xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.picturex.controller.TopToolBarController">
    <children>
       <Pane minWidth="4"></Pane>
@@ -78,6 +79,8 @@
             </ImageView>
          </graphic>
       </Button>
+      <Pane minWidth="10"></Pane>
+      <BorderPane minWidth="60" fx:id="i18nButton"></BorderPane>
       <Pane minWidth="4"></Pane>
    </children>
 </HBox>
