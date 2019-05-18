@@ -45,6 +45,7 @@ public class TopToolBarController {
 
     @FXML
     public BorderPane i18nButton;
+    
 
     public ResourceBundle resourceBundleService;
     Preferences preference;
