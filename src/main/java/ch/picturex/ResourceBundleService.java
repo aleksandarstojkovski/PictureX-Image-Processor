@@ -17,7 +17,7 @@ public class ResourceBundleService {
     public static ResourceBundle getInstance(){
         if (resourceBundle == null){
             Preferences preference = Preferences.userNodeForPackage(ResourceBundleService.class);
-            String language = preference.get("language", null);
+            String language = preference.get("language", "en");
             if(language.equals("en")){
                 locale = Locale.ENGLISH;
             } else {
