@@ -20,9 +20,7 @@ public class BlackAndWhite implements IFilter {
             ic.convertToGray8();
             imp.updateAndDraw();
             tc.getImageWrapper().set(imp.getBufferedImage());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        } catch (IOException ignored) {}
     }
 
 

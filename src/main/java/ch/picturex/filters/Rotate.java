@@ -6,6 +6,7 @@ import ij.ImagePlus;
 
 import javax.imageio.ImageIO;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
 public class Rotate implements IFilter {
@@ -23,9 +24,7 @@ public class Rotate implements IFilter {
             }
             imp.updateAndDraw();
             tc.getImageWrapper().set(imp.getBufferedImage());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        } catch (IOException ignored){}
     }
 
 }

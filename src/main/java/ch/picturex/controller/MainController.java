@@ -1,9 +1,6 @@
 package ch.picturex.controller;
 
-import ch.picturex.ImageWrapper;
-import ch.picturex.MetadataWrapper;
-import ch.picturex.Severity;
-import ch.picturex.ThumbnailContainer;
+import ch.picturex.*;
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Directory;
@@ -25,7 +22,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
-import org.controlsfx.control.Notifications;
 
 import java.io.*;
 import java.text.DateFormat;
@@ -35,20 +31,18 @@ import java.util.prefs.Preferences;
 
 public class MainController {
 
-    public HBox buttonContainerMenu;
-    private final boolean DEBUG = true;
+    private final boolean DEBUG = false;
     static ArrayList<ThumbnailContainer> selectedThumbnailContainers = new ArrayList<>();
     private ArrayList<ThumbnailContainer> allThumbnailContainers = new ArrayList<>();
+    private List<ImageWrapper> listOfImageWrappers = new ArrayList<>();;
     private File chosenDirectory;
-    private List<ImageWrapper> listOfImageWrappers;
     private long lastTime = 1;
-    public static EventBus bus;
+    private static EventBus bus = SingleEventBus.getInstance();
     private static final DateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+    private TilePane tilePane;
 
     @FXML
     private AnchorPane mainAnchorPane;
-    @FXML
-    private TilePane tilePane;
     @FXML
     private ScrollPane scrollPane;
     @FXML
@@ -66,9 +60,6 @@ public class MainController {
     public void initialize() {
         configureBus();
 
-        // init list of images
-        listOfImageWrappers = new ArrayList<>();
-
         // tilePane used inside the scroll pane
         tilePane = new TilePane();
         tilePane.setPadding(new Insets(5));
@@ -77,21 +68,14 @@ public class MainController {
         tilePane.setAlignment(Pos.TOP_LEFT);
 
         // make scrollPane resizable
-        scrollPane.setFitToHeight(true);
-        scrollPane.setFitToWidth(true);
         scrollPane.setContent(tilePane);
-
-        // set tableview
-        tableView.setEditable(true);
 
         TableColumn<String,String> firstColumn = new TableColumn<>("type");
         firstColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
         firstColumn.prefWidthProperty().bind(tableView.widthProperty().divide(4));
-
         TableColumn<String,String> secondColumn = new TableColumn<>("name");
         secondColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         secondColumn.prefWidthProperty().bind(tableView.widthProperty().divide(2));
-
         TableColumn<String,String> thirdColumn = new TableColumn<>("value");
         thirdColumn.setCellValueFactory(new PropertyValueFactory<>("value"));
         thirdColumn.prefWidthProperty().bind(tableView.widthProperty().divide(4));
@@ -106,15 +90,14 @@ public class MainController {
         //alla partenza se il programma è già stato usato fa partire tutto dall'ultimo path
         if(getLastDirectoryPreferences() != null){
             chosenDirectory = getLastDirectoryPreferences();
-            directoryChosenAction(null);
+            directoryChosenAction();
         }
 
         imageViewPreview.fitWidthProperty().bind(previewPanel.widthProperty()); //make resizable imageViewPreview
         imageViewPreview.fitHeightProperty().bind(previewPanel.heightProperty()); //make resizable imageViewPreview
     }
 
-    public void configureBus(){
-        bus = new EventBus();
+    private void configureBus(){
         bus.subscribe(EventLog.class, e -> log(e.getText(), e.getSeverity()));
         bus.subscribe(EventImageChanged.class, e -> {
             imageViewPreview.setImage(e.getThubnailContainer().getImageWrapper().getPreviewImageView());
@@ -124,7 +107,6 @@ public class MainController {
 
     @FXML
     public void handleBrowseButton(ActionEvent event){
-
         // default Windows directory choser
         final DirectoryChooser dirChoser = new DirectoryChooser();
 
@@ -140,16 +122,16 @@ public class MainController {
         chosenDirectory = dirChoser.showDialog(stage);
 
         if (chosenDirectory != null){
-            directoryChosenAction(null);
+            directoryChosenAction();
         }
 
     }
 
-    private void directoryChosenAction(String fileNamePart){
+    private void directoryChosenAction(){
         setLastDirectoryPreferences(chosenDirectory); //aggiorna ad ogni selezione il path nelle preferenze
         initUI();
-        populateListOfFiles(fileNamePart);
-        BottomToolBarController.bus.publish(new EventUpdateBottomToolBar(listOfImageWrappers, chosenDirectory));
+        populateListOfFiles();
+        bus.publish(new EventUpdateBottomToolBar(listOfImageWrappers, chosenDirectory));
         displayThumbnails();
     }
 
@@ -160,8 +142,7 @@ public class MainController {
         ImageWrapper.clear();
     }
 
-    private void populateListOfFiles(String fileNamePart) {
-        if (fileNamePart == null){
+    private void populateListOfFiles() {
             String[] validExtensions = {".jpg",".png",".jpeg"};
             for (File f : Objects.requireNonNull(chosenDirectory.listFiles())) {
                 if (f.isFile()) {
@@ -173,25 +154,9 @@ public class MainController {
                     }
                 }
             }
-        }
-        else{
-            String[] validExtensions = {".jpg",".png",".jpeg"};
-            for (File f : Objects.requireNonNull(chosenDirectory.listFiles())) {
-                if (f.isFile()) {
-                    for (String extension : validExtensions) {
-                        if (f.getName().toLowerCase().endsWith(extension) && f.getName().toLowerCase().contains(fileNamePart.toLowerCase())) {
-                            listOfImageWrappers.add(new ImageWrapper(f));
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-
     }
 
     private void displayThumbnails(){
-
         for(ImageWrapper imgWrp : listOfImageWrappers){
             ThumbnailContainer thumbnailContainer = new ThumbnailContainer(imgWrp);
             thumbnailContainer.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> { //aggiunta listener ad immagini
@@ -284,7 +249,7 @@ public class MainController {
                 for(ThumbnailContainer v : toBeAddedTC){
                     try{
                         tilePane.getChildren().add(v);
-                    }catch (IllegalArgumentException e){}
+                    }catch (IllegalArgumentException ignored){}
                 }
             }
             tilePane.getChildren().removeAll(toBeRemovedTC);
@@ -325,10 +290,6 @@ public class MainController {
         try {
             metadata = ImageMetadataReader.readMetadata(file);
         } catch (ImageProcessingException | IOException e) {
-            Notifications.create()
-                    .title("Warning")
-                    .text("The filetype is not supported.")
-                    .showWarning();
             return;
         }
         tableView.getItems().clear();
@@ -356,6 +317,8 @@ public class MainController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        out.close();
+        if (out != null) {
+            out.close();
+        }
     }
 }
