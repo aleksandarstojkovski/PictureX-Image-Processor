@@ -13,7 +13,7 @@ public class FXApp extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        ResourceBundle resourceBundle = ResourceBundleService.getInstance();
+        ResourceBundle resourceBundle = SingleResourceBundle.getInstance();
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/main.fxml"),resourceBundle);
         primaryStage.setTitle("PictureX");
         primaryStage.setScene(new Scene(root, 1040, 700));

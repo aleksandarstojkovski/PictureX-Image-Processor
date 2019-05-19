@@ -1,9 +1,6 @@
 package ch.picturex.controller;
 
-import ch.picturex.ImageWrapper;
-import ch.picturex.MetadataWrapper;
-import ch.picturex.Severity;
-import ch.picturex.ThumbnailContainer;
+import ch.picturex.*;
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Directory;
@@ -35,20 +32,18 @@ import java.util.prefs.Preferences;
 
 public class MainController {
 
-    public HBox buttonContainerMenu;
-    private final boolean DEBUG = true;
+    private final boolean DEBUG = false;
     static ArrayList<ThumbnailContainer> selectedThumbnailContainers = new ArrayList<>();
     private ArrayList<ThumbnailContainer> allThumbnailContainers = new ArrayList<>();
+    private List<ImageWrapper> listOfImageWrappers = new ArrayList<>();;
     private File chosenDirectory;
-    private List<ImageWrapper> listOfImageWrappers;
     private long lastTime = 1;
-    public static EventBus bus;
+    public static EventBus bus = SingleEventBus.getInstance();
     private static final DateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+    private TilePane tilePane;
 
     @FXML
     private AnchorPane mainAnchorPane;
-    @FXML
-    private TilePane tilePane;
     @FXML
     private ScrollPane scrollPane;
     @FXML
@@ -66,9 +61,6 @@ public class MainController {
     public void initialize() {
         configureBus();
 
-        // init list of images
-        listOfImageWrappers = new ArrayList<>();
-
         // tilePane used inside the scroll pane
         tilePane = new TilePane();
         tilePane.setPadding(new Insets(5));
@@ -77,21 +69,14 @@ public class MainController {
         tilePane.setAlignment(Pos.TOP_LEFT);
 
         // make scrollPane resizable
-        scrollPane.setFitToHeight(true);
-        scrollPane.setFitToWidth(true);
         scrollPane.setContent(tilePane);
-
-        // set tableview
-        tableView.setEditable(true);
 
         TableColumn<String,String> firstColumn = new TableColumn<>("type");
         firstColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
         firstColumn.prefWidthProperty().bind(tableView.widthProperty().divide(4));
-
         TableColumn<String,String> secondColumn = new TableColumn<>("name");
         secondColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         secondColumn.prefWidthProperty().bind(tableView.widthProperty().divide(2));
-
         TableColumn<String,String> thirdColumn = new TableColumn<>("value");
         thirdColumn.setCellValueFactory(new PropertyValueFactory<>("value"));
         thirdColumn.prefWidthProperty().bind(tableView.widthProperty().divide(4));
@@ -114,7 +99,6 @@ public class MainController {
     }
 
     public void configureBus(){
-        bus = new EventBus();
         bus.subscribe(EventLog.class, e -> log(e.getText(), e.getSeverity()));
         bus.subscribe(EventImageChanged.class, e -> {
             imageViewPreview.setImage(e.getThubnailContainer().getImageWrapper().getPreviewImageView());
@@ -124,7 +108,6 @@ public class MainController {
 
     @FXML
     public void handleBrowseButton(ActionEvent event){
-
         // default Windows directory choser
         final DirectoryChooser dirChoser = new DirectoryChooser();
 
@@ -149,7 +132,7 @@ public class MainController {
         setLastDirectoryPreferences(chosenDirectory); //aggiorna ad ogni selezione il path nelle preferenze
         initUI();
         populateListOfFiles(fileNamePart);
-        BottomToolBarController.bus.publish(new EventUpdateBottomToolBar(listOfImageWrappers, chosenDirectory));
+        bus.publish(new EventUpdateBottomToolBar(listOfImageWrappers, chosenDirectory));
         displayThumbnails();
     }
 
@@ -191,7 +174,6 @@ public class MainController {
     }
 
     private void displayThumbnails(){
-
         for(ImageWrapper imgWrp : listOfImageWrappers){
             ThumbnailContainer thumbnailContainer = new ThumbnailContainer(imgWrp);
             thumbnailContainer.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> { //aggiunta listener ad immagini

@@ -2,7 +2,8 @@ package ch.picturex.controller;
 
 
 import ch.picturex.ImageWrapper;
-import ch.picturex.ResourceBundleService;
+import ch.picturex.SingleResourceBundle;
+import ch.picturex.SingleEventBus;
 import de.muspellheim.eventbus.EventBus;
 import ch.picturex.events.EventUpdateBottomToolBar;
 import javafx.fxml.FXML;
@@ -25,8 +26,8 @@ public class BottomToolBarController {
     private ResourceBundle resourceBundle;
 
     public void initialize() {
-        resourceBundle = ResourceBundleService.getInstance();
-        bus = new EventBus();
+        resourceBundle = SingleResourceBundle.getInstance();
+        bus = SingleEventBus.getInstance();
         bus.subscribe(EventUpdateBottomToolBar.class, e->populateBottomPane(e.getListOfImageWrappers(), e.getFile()));
     }
 

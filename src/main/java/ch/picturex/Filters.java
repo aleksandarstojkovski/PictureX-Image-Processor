@@ -1,11 +1,9 @@
 package ch.picturex;
 
-import ch.picturex.controller.MainController;
 import ch.picturex.events.EventImageChanged;
 import ch.picturex.events.EventLog;
+import de.muspellheim.eventbus.EventBus;
 import org.controlsfx.control.Notifications;
-
-import javax.management.Notification;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -16,8 +14,9 @@ import java.util.ResourceBundle;
 
 public class Filters {
 
-    private static ResourceBundle resourceBundle = ResourceBundleService.getInstance();
+    private static ResourceBundle resourceBundle = SingleResourceBundle.getInstance();
     private static List<ArrayList<ThumbnailContainer>> selectionHistory = new ArrayList<>();
+    private static EventBus bus = SingleEventBus.getInstance();
 
     public static void apply(ArrayList<ThumbnailContainer> thumbnailContainers, String filterName, Map<String, Object> parameters) {
         saveSelection(thumbnailContainers);
@@ -35,10 +34,10 @@ public class Filters {
                         .text(resourceBundle.getString("notifica.formatononsupport.testo"))
                         .showWarning();
             }
-            MainController.bus.publish(new EventLog("Filter "+ filterName + " applied on image: " + tc.getImageWrapper().getName(), Severity.INFO));
+            bus.publish(new EventLog("Filter "+ filterName + " applied on image: " + tc.getImageWrapper().getName(), Severity.INFO));
         }
         if(thumbnailContainers.size()==1)
-            MainController.bus.publish(new EventImageChanged(thumbnailContainers.get(0)));
+            bus.publish(new EventImageChanged(thumbnailContainers.get(0)));
     }
 
     public static void saveSelection(List<ThumbnailContainer> thumbnailContainers){
@@ -51,7 +50,7 @@ public class Filters {
             for (ThumbnailContainer tc : lastSelection){
                 tc.getImageWrapper().undo();
             }
-            MainController.bus.publish(new EventImageChanged(lastSelection.get(0)));
+            bus.publish(new EventImageChanged(lastSelection.get(0)));
             selectionHistory.remove(selectionHistory.size()-1);
         }
     }

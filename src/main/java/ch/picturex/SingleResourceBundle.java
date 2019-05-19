@@ -1,22 +1,19 @@
 package ch.picturex;
 
-import ch.picturex.controller.MainController;
-
-import java.io.File;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
 
-public class ResourceBundleService {
+public class SingleResourceBundle {
 
     private static ResourceBundle resourceBundle=null;
     private static Locale locale;
 
-    private ResourceBundleService(){}
+    private SingleResourceBundle(){}
 
     public static ResourceBundle getInstance(){
         if (resourceBundle == null){
-            Preferences preference = Preferences.userNodeForPackage(ResourceBundleService.class);
+            Preferences preference = Preferences.userNodeForPackage(SingleResourceBundle.class);
             String language = preference.get("language", "en");
             if(language.equals("en")){
                 locale = Locale.ENGLISH;

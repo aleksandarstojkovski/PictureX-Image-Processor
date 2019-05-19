@@ -1,7 +1,7 @@
 package ch.picturex.controller;
 
 import ch.picturex.Filters;
-import ch.picturex.ResourceBundleService;
+import ch.picturex.SingleResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -53,8 +53,8 @@ public class TopToolBarController {
     @FXML
     public void initialize() {
 
-        resourceBundleService = ResourceBundleService.getInstance();
-        preference = Preferences.userNodeForPackage(ResourceBundleService.class);
+        resourceBundleService = SingleResourceBundle.getInstance();
+        preference = Preferences.userNodeForPackage(SingleResourceBundle.class);
 
         zoomInButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->{
             // TODO: Filters.
@@ -80,7 +80,7 @@ public class TopToolBarController {
         ObservableList<Locale> options = FXCollections.observableArrayList(Locale.ENGLISH, Locale.ITALIAN);
         comboBox.setItems(options);
         comboBox.setCellFactory(p -> new LanguageListCell());
-        comboBox.getSelectionModel().select(ResourceBundleService.getLocale());
+        comboBox.getSelectionModel().select(SingleResourceBundle.getLocale());
         comboBox.setOnAction(event -> {
             preference.put("language",comboBox.getSelectionModel().getSelectedItem().getLanguage());
             Notifications.create()
