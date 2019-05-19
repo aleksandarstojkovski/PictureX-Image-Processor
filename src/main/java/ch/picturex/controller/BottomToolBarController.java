@@ -22,12 +22,11 @@ public class BottomToolBarController {
     @FXML
     private Label browseTextField;
 
-    public static EventBus bus;
     private ResourceBundle resourceBundle;
 
     public void initialize() {
         resourceBundle = SingleResourceBundle.getInstance();
-        bus = SingleEventBus.getInstance();
+        EventBus bus = SingleEventBus.getInstance();
         bus.subscribe(EventUpdateBottomToolBar.class, e->populateBottomPane(e.getListOfImageWrappers(), e.getFile()));
     }
 

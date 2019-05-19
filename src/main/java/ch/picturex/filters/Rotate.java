@@ -24,7 +24,7 @@ public class Rotate implements IFilter {
             }
             imp.updateAndDraw();
             tc.getImageWrapper().set(imp.getBufferedImage());
-        } catch (IOException e){}
+        } catch (IOException ignored){}
     }
 
 }

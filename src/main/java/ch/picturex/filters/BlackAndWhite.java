@@ -17,12 +17,10 @@ public class BlackAndWhite implements IFilter {
         try {
             imp = new ImagePlus(tc.getImageWrapper().getFile().getName(),  ImageIO.read(tc.getImageWrapper().getFile()));
             ImageConverter ic = new ImageConverter(imp);
-            if (ic != null) {
-                ic.convertToGray8();
-                imp.updateAndDraw();
-                tc.getImageWrapper().set(imp.getBufferedImage());
-            }
-        } catch (IOException e) {}
+            ic.convertToGray8();
+            imp.updateAndDraw();
+            tc.getImageWrapper().set(imp.getBufferedImage());
+        } catch (IOException ignored) {}
     }
 
 

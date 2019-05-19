@@ -18,7 +18,6 @@ public class ImageWrapper {
     private static long totalSizeInBytes = 0;
     private String tooltipString;
     private ImageView thumbnailImageView = new ImageView();
-    private Image previewImageView;
     private List<BufferedImage> versionHistory = new ArrayList<>();
     private int index = 0;
 
@@ -62,8 +61,7 @@ public class ImageWrapper {
     }
 
     public Image getPreviewImageView() {
-        previewImageView=new Image(file.toURI().toString());
-        return previewImageView;
+        return new Image(file.toURI().toString());
     }
 
     public Image getThumbnail() {

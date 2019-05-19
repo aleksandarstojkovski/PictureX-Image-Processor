@@ -22,7 +22,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
-import org.controlsfx.control.Notifications;
 
 import java.io.*;
 import java.text.DateFormat;
@@ -38,7 +37,7 @@ public class MainController {
     private List<ImageWrapper> listOfImageWrappers = new ArrayList<>();;
     private File chosenDirectory;
     private long lastTime = 1;
-    public static EventBus bus = SingleEventBus.getInstance();
+    private static EventBus bus = SingleEventBus.getInstance();
     private static final DateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
     private TilePane tilePane;
 
@@ -91,14 +90,14 @@ public class MainController {
         //alla partenza se il programma è già stato usato fa partire tutto dall'ultimo path
         if(getLastDirectoryPreferences() != null){
             chosenDirectory = getLastDirectoryPreferences();
-            directoryChosenAction(null);
+            directoryChosenAction();
         }
 
         imageViewPreview.fitWidthProperty().bind(previewPanel.widthProperty()); //make resizable imageViewPreview
         imageViewPreview.fitHeightProperty().bind(previewPanel.heightProperty()); //make resizable imageViewPreview
     }
 
-    public void configureBus(){
+    private void configureBus(){
         bus.subscribe(EventLog.class, e -> log(e.getText(), e.getSeverity()));
         bus.subscribe(EventImageChanged.class, e -> {
             imageViewPreview.setImage(e.getThubnailContainer().getImageWrapper().getPreviewImageView());
@@ -123,15 +122,15 @@ public class MainController {
         chosenDirectory = dirChoser.showDialog(stage);
 
         if (chosenDirectory != null){
-            directoryChosenAction(null);
+            directoryChosenAction();
         }
 
     }
 
-    private void directoryChosenAction(String fileNamePart){
+    private void directoryChosenAction(){
         setLastDirectoryPreferences(chosenDirectory); //aggiorna ad ogni selezione il path nelle preferenze
         initUI();
-        populateListOfFiles(fileNamePart);
+        populateListOfFiles();
         bus.publish(new EventUpdateBottomToolBar(listOfImageWrappers, chosenDirectory));
         displayThumbnails();
     }
@@ -143,8 +142,7 @@ public class MainController {
         ImageWrapper.clear();
     }
 
-    private void populateListOfFiles(String fileNamePart) {
-        if (fileNamePart == null){
+    private void populateListOfFiles() {
             String[] validExtensions = {".jpg",".png",".jpeg"};
             for (File f : Objects.requireNonNull(chosenDirectory.listFiles())) {
                 if (f.isFile()) {
@@ -156,21 +154,6 @@ public class MainController {
                     }
                 }
             }
-        }
-        else{
-            String[] validExtensions = {".jpg",".png",".jpeg"};
-            for (File f : Objects.requireNonNull(chosenDirectory.listFiles())) {
-                if (f.isFile()) {
-                    for (String extension : validExtensions) {
-                        if (f.getName().toLowerCase().endsWith(extension) && f.getName().toLowerCase().contains(fileNamePart.toLowerCase())) {
-                            listOfImageWrappers.add(new ImageWrapper(f));
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-
     }
 
     private void displayThumbnails(){
@@ -266,7 +249,7 @@ public class MainController {
                 for(ThumbnailContainer v : toBeAddedTC){
                     try{
                         tilePane.getChildren().add(v);
-                    }catch (IllegalArgumentException e){}
+                    }catch (IllegalArgumentException ignored){}
                 }
             }
             tilePane.getChildren().removeAll(toBeRemovedTC);
@@ -334,6 +317,8 @@ public class MainController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        out.close();
+        if (out != null) {
+            out.close();
+        }
     }
 }
