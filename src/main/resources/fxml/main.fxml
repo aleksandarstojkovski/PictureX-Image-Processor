@@ -25,21 +25,30 @@
     <children>
       <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-              <MenuBar useSystemMenuBar="true">
+              <MenuBar fx:id="menuBar" useSystemMenuBar="true">
                   <menus>
                       <Menu mnemonicParsing="false" text="PictureX">
                           <items>
-                              <MenuItem mnemonicParsing="false" text="Close" />
+                              <MenuItem onAction="#handleCloseButtonAction" mnemonicParsing="false" text="%menu.Close" />
                           </items>
                       </Menu>
-                      <Menu mnemonicParsing="false" text="File">
+                      <Menu fx:id="menuFile" mnemonicParsing="false" text="File">
                           <items>
-                              <MenuItem mnemonicParsing="false" text="File" />
+                              <MenuItem fx:id="menuBarBrowser" mnemonicParsing="false" onAction="#handleBrowseButton" text="%menu.Browser" />
                           </items>
                       </Menu>
                       <Menu mnemonicParsing="false" text="%menu.modifica">
                           <items>
-                              <MenuItem mnemonicParsing="false" text="Edit" />
+                              <MenuItem mnemonicParsing="false" onAction="#undo" text="%menu.Undo" />
+
+                              <Menu mnemonicParsing="false" text="%menu.Filters">
+                                  <items>
+                                      <MenuItem fx:id="filterBN" mnemonicParsing="false" onAction="#BNFilterMetod" text="%menu.BNFilter" />
+                                      <MenuItem fx:id="rotateDX" mnemonicParsing="false" onAction="#rotateDXMetod" text="%menu.RotateDX" />
+                                      <MenuItem fx:id="rotateSX" mnemonicParsing="false" onAction="#rotateSXMetod" text="%menu.RotateSX" />
+                                  </items>
+                              </Menu>
+
                           </items>
                       </Menu>
                       <Menu mnemonicParsing="false" text="%menu.vista">

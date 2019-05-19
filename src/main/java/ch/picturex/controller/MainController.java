@@ -41,6 +41,8 @@ public class MainController {
     private static final DateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
     private TilePane tilePane;
 
+
+
     @FXML
     private AnchorPane mainAnchorPane;
     @FXML
@@ -55,6 +57,12 @@ public class MainController {
     private TableView tableView;
     @FXML
     private TextField globingTextField;
+    @FXML
+    private MenuBar menuBar; //
+    @FXML
+    private Menu menuFile; //
+    @FXML
+    private MenuItem menuBarBrowser; //
 
     @FXML
     public void initialize() {
@@ -104,6 +112,8 @@ public class MainController {
             if(selectedThumbnailContainers.size()==1)displayMetadata(selectedThumbnailContainers.get(0).getImageWrapper().getFile()); //update exif table
         });
     }
+
+
 
     @FXML
     public void handleBrowseButton(ActionEvent event){
@@ -321,4 +331,21 @@ public class MainController {
             out.close();
         }
     }
+    public void BNFilterMetod(){
+        Filters.apply(MainController.selectedThumbnailContainers,"BlackAndWhite",null);
+    }
+    public void rotateSXMetod() {
+        Filters.apply(MainController.selectedThumbnailContainers, "Rotate", Map.of("direction", "left"));
+    }
+    public void rotateDXMetod() {
+        Filters.apply(MainController.selectedThumbnailContainers, "Rotate", Map.of("direction", "right"));
+    }
+    public void undo() {
+        Filters.undo();
+    }
+    public void handleCloseButtonAction() {
+        Stage stage = (Stage) menuBar.getScene().getWindow();
+        stage.close();
+    }
+
 }
