@@ -1,16 +1,13 @@
 package ch.picturex.controller;
 
 import ch.picturex.*;
+import ch.picturex.events.*;
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
 import de.muspellheim.eventbus.EventBus;
-import ch.picturex.events.EventLog;
-import ch.picturex.events.EventImageChanged;
-import ch.picturex.events.EventUpdateBottomToolBar;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -24,27 +21,20 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
 import java.io.*;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.prefs.Preferences;
 
 public class MainController {
 
-    private final boolean DEBUG = false;
     static ArrayList<ThumbnailContainer> selectedThumbnailContainers = new ArrayList<>();
     private ArrayList<ThumbnailContainer> allThumbnailContainers = new ArrayList<>();
-    private List<ImageWrapper> listOfImageWrappers = new ArrayList<>();;
-    private File chosenDirectory;
+    private List<ImageWrapper> listOfImageWrappers = new ArrayList<>();
     private long lastTime = 1;
     private static EventBus bus = SingleEventBus.getInstance();
-    private static final DateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
     private TilePane tilePane;
-
-
+    private Model model;
 
     @FXML
-    private AnchorPane mainAnchorPane;
+    public static AnchorPane mainAnchorPane;
     @FXML
     private ScrollPane scrollPane;
     @FXML
@@ -57,16 +47,12 @@ public class MainController {
     private TableView tableView;
     @FXML
     private TextField globingTextField;
-    @FXML
-    private MenuBar menuBar; //
-    @FXML
-    private Menu menuFile; //
-    @FXML
-    private MenuItem menuBarBrowser; //
 
     @FXML
     public void initialize() {
         configureBus();
+
+        model = Model.getInstance();
 
         // tilePane used inside the scroll pane
         tilePane = new TilePane();
@@ -96,8 +82,7 @@ public class MainController {
         setGlobingListener(globingTextField);
 
         //alla partenza se il programma è già stato usato fa partire tutto dall'ultimo path
-        if(getLastDirectoryPreferences() != null){
-            chosenDirectory = getLastDirectoryPreferences();
+        if(model.getChosenDirectory() != null){
             directoryChosenAction();
         }
 
@@ -105,43 +90,19 @@ public class MainController {
         imageViewPreview.fitHeightProperty().bind(previewPanel.heightProperty()); //make resizable imageViewPreview
     }
 
+
     private void configureBus(){
-        bus.subscribe(EventLog.class, e -> log(e.getText(), e.getSeverity()));
         bus.subscribe(EventImageChanged.class, e -> {
             imageViewPreview.setImage(e.getThubnailContainer().getImageWrapper().getPreviewImageView());
             if(selectedThumbnailContainers.size()==1)displayMetadata(selectedThumbnailContainers.get(0).getImageWrapper().getFile()); //update exif table
         });
-    }
-
-
-
-    @FXML
-    public void handleBrowseButton(ActionEvent event){
-        // default Windows directory choser
-        final DirectoryChooser dirChoser = new DirectoryChooser();
-
-        // get main stage
-        Stage stage = (Stage)mainAnchorPane.getScene().getWindow();
-
-        // if program has been already opened, load previous directry
-        if(getLastDirectoryPreferences() != null){
-            dirChoser.setInitialDirectory(getLastDirectoryPreferences());
-        }
-
-        // display Windows directory choser
-        chosenDirectory = dirChoser.showDialog(stage);
-
-        if (chosenDirectory != null){
-            directoryChosenAction();
-        }
-
+        bus.subscribe(EventBrowseButtonPressed.class, e->handleBrowseButton());
     }
 
     private void directoryChosenAction(){
-        setLastDirectoryPreferences(chosenDirectory); //aggiorna ad ogni selezione il path nelle preferenze
         initUI();
         populateListOfFiles();
-        bus.publish(new EventUpdateBottomToolBar(listOfImageWrappers, chosenDirectory));
+        bus.publish(new EventUpdateBottomToolBar(listOfImageWrappers, model.getChosenDirectory()));
         displayThumbnails();
     }
 
@@ -154,7 +115,7 @@ public class MainController {
 
     private void populateListOfFiles() {
             String[] validExtensions = {".jpg",".png",".jpeg"};
-            for (File f : Objects.requireNonNull(chosenDirectory.listFiles())) {
+            for (File f : Objects.requireNonNull(model.getChosenDirectory().listFiles())) {
                 if (f.isFile()) {
                     for (String extension : validExtensions) {
                         if (f.getName().toLowerCase().endsWith(extension)) {
@@ -237,8 +198,6 @@ public class MainController {
 
     private void setGlobingListener (TextField globingTextField){
         globingTextField.textProperty().addListener((observableValue, s, t1) -> {
-            printDebug("s= " + s);
-            printDebug("t1= " + t1);
             ArrayList<ThumbnailContainer> toBeRemovedTC = new ArrayList<>();
             ArrayList<ThumbnailContainer> toBeAddedTC = new ArrayList<>();
             for(ThumbnailContainer v : allThumbnailContainers){
@@ -278,21 +237,27 @@ public class MainController {
             }
         }
     }
+    @FXML
+    public void handleBrowseButton(){
+        // default Windows directory choser
+        final DirectoryChooser dirChoser = new DirectoryChooser();
 
-    private File getLastDirectoryPreferences(){
-        Preferences preference = Preferences.userNodeForPackage(MainController.class);
-        String filePath = preference.get("filePath", null);
-        if(filePath != null){
-            return new File(filePath);
-        }
-        return null;
-    }
+        // get main stage
+        Stage stage = (Stage)MainController.mainAnchorPane.getScene().getWindow();
 
-    private void setLastDirectoryPreferences(File file){
-        Preferences preference = Preferences.userNodeForPackage(MainController.class);
-        if (file != null) {
-            preference.put("filePath", file.getPath());
+        // if program has been already opened, load previous directry
+        if(model.getChosenDirectory() != null){
+            dirChoser.setInitialDirectory(model.getChosenDirectory());
         }
+
+        // display Windows directory choser
+        File test = dirChoser.showDialog(stage);
+        bus.publish(new EventDirectoryChanged(test));
+
+        if (model.getChosenDirectory() != null){
+            bus.publish(new EventDirectoryChosen(model.getChosenDirectory()));
+        }
+
     }
 
     private void displayMetadata(File file){
@@ -309,43 +274,6 @@ public class MainController {
                 tableView.getItems().add(mw);
             }
         }
-    }
-    
-    private void printDebug(String msg){
-        if(DEBUG) System.out.println(msg);
-    }
-
-    private void log(String text, Severity severity){
-        Date date = new Date();
-        FileWriter fr;
-        PrintWriter out = null;
-        try {
-            fr = new FileWriter(chosenDirectory+ File.separator + "log.txt", true);
-            BufferedWriter br = new BufferedWriter(fr);
-            out = new PrintWriter(br);
-            out.println("[" + sdf.format(date) + "]" + " " + severity + " : " + text);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if (out != null) {
-            out.close();
-        }
-    }
-    public void BNFilterMetod(){
-        Filters.apply(MainController.selectedThumbnailContainers,"BlackAndWhite",null);
-    }
-    public void rotateSXMetod() {
-        Filters.apply(MainController.selectedThumbnailContainers, "Rotate", Map.of("direction", "left"));
-    }
-    public void rotateDXMetod() {
-        Filters.apply(MainController.selectedThumbnailContainers, "Rotate", Map.of("direction", "right"));
-    }
-    public void undo() {
-        Filters.undo();
-    }
-    public void handleCloseButtonAction() {
-        Stage stage = (Stage) menuBar.getScene().getWindow();
-        stage.close();
     }
 
 }

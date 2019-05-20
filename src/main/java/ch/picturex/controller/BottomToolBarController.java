@@ -2,6 +2,7 @@ package ch.picturex.controller;
 
 
 import ch.picturex.ImageWrapper;
+import ch.picturex.Model;
 import ch.picturex.SingleResourceBundle;
 import ch.picturex.SingleEventBus;
 import de.muspellheim.eventbus.EventBus;
@@ -23,10 +24,13 @@ public class BottomToolBarController {
     private Label browseTextField;
 
     private ResourceBundle resourceBundle;
+    private Model model;
+    private EventBus bus;
 
     public void initialize() {
         resourceBundle = SingleResourceBundle.getInstance();
-        EventBus bus = SingleEventBus.getInstance();
+        bus = SingleEventBus.getInstance();
+        model = Model.getInstance();
         bus.subscribe(EventUpdateBottomToolBar.class, e->populateBottomPane(e.getListOfImageWrappers(), e.getFile()));
     }
 

@@ -1,6 +1,7 @@
 package ch.picturex.controller;
 
 import ch.picturex.Filters;
+import ch.picturex.Model;
 import ch.picturex.SingleResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -48,11 +49,13 @@ public class TopToolBarController {
 
     private ResourceBundle resourceBundleService;
     private Preferences preference;
+    private Model model;
 
     @FXML
     public void initialize() {
 
         resourceBundleService = SingleResourceBundle.getInstance();
+        model = Model.getInstance();
         preference = Preferences.userNodeForPackage(SingleResourceBundle.class);
 
         zoomInButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->{

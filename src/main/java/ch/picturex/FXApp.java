@@ -13,7 +13,9 @@ public class FXApp extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        Model model = Model.getInstance();
         ResourceBundle resourceBundle = SingleResourceBundle.getInstance();
+        LogService logService = new LogService();
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/main.fxml"),resourceBundle);
         primaryStage.setTitle("PictureX");
         primaryStage.setScene(new Scene(root, 1040, 700));

@@ -25,49 +25,7 @@
     <children>
       <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-              <MenuBar fx:id="menuBar" useSystemMenuBar="true">
-                  <menus>
-                      <Menu mnemonicParsing="false" text="PictureX">
-                          <items>
-                              <MenuItem onAction="#handleCloseButtonAction" mnemonicParsing="false" text="%menu.Close" />
-                          </items>
-                      </Menu>
-                      <Menu fx:id="menuFile" mnemonicParsing="false" text="File">
-                          <items>
-                              <MenuItem fx:id="menuBarBrowser" mnemonicParsing="false" onAction="#handleBrowseButton" text="%menu.Browser" />
-                          </items>
-                      </Menu>
-                      <Menu mnemonicParsing="false" text="%menu.modifica">
-                          <items>
-                              <MenuItem mnemonicParsing="false" onAction="#undo" text="%menu.Undo" />
-
-                              <Menu mnemonicParsing="false" text="%menu.Filters">
-                                  <items>
-                                      <MenuItem fx:id="filterBN" mnemonicParsing="false" onAction="#BNFilterMetod" text="%menu.BNFilter" />
-                                      <MenuItem fx:id="rotateDX" mnemonicParsing="false" onAction="#rotateDXMetod" text="%menu.RotateDX" />
-                                      <MenuItem fx:id="rotateSX" mnemonicParsing="false" onAction="#rotateSXMetod" text="%menu.RotateSX" />
-                                  </items>
-                              </Menu>
-
-                          </items>
-                      </Menu>
-                      <Menu mnemonicParsing="false" text="%menu.vista">
-                          <items>
-                              <MenuItem mnemonicParsing="false" text="View" />
-                          </items>
-                      </Menu>
-                      <Menu mnemonicParsing="false" text="%menu.finestra">
-                          <items>
-                              <MenuItem mnemonicParsing="false" text="Window" />
-                          </items>
-                      </Menu>
-                      <Menu mnemonicParsing="false" text="%menu.aiuto">
-                          <items>
-                              <MenuItem mnemonicParsing="false" text="Help" />
-                          </items>
-                      </Menu>
-                  </menus>
-              </MenuBar>
+             <fx:include fx:id="menuBar" source="menuBar.fxml" />
             <ToolBar>
               <items>
                   <Button mnemonicParsing="false" onAction="#handleBrowseButton" text="Browse">
