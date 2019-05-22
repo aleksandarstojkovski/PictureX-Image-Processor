@@ -163,6 +163,7 @@ public class MainController {
         populateListOfFiles();
         bus.publish(new EventUpdateBottomToolBar(listOfImageWrappers, chosenDirectory));
         displayThumbnails();
+        Filters.clearHistory();
     }
 
     private void initUI(){

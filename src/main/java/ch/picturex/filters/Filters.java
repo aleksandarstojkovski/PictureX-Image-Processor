@@ -35,6 +35,7 @@ public class Filters {
                         .text(resourceBundle.getString("notifica.formatononsupport.testo"))
                         .showWarning();
                 bus.publish(new EventLog("Unable to apply filter " + filterName + " to image: " + tc.getImageWrapper().getName(),Severity.ERROR));
+                e.printStackTrace();
             }
         }
         if(thumbnailContainers.size()==1)
@@ -54,6 +55,10 @@ public class Filters {
             bus.publish(new EventImageChanged(lastSelection.get(0)));
             selectionHistory.remove(selectionHistory.size()-1);
         }
+    }
+
+    public static void clearHistory(){
+        selectionHistory.clear();
     }
 
 }

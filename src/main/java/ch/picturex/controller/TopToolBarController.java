@@ -46,6 +46,8 @@ public class TopToolBarController {
     public Button undoButton;
     @FXML
     public BorderPane i18nButton;
+    @FXML
+    public Button resizeButton;
 
     private ResourceBundle resourceBundleService;
     private Preferences preference;
@@ -73,6 +75,9 @@ public class TopToolBarController {
         });
         rotateDXButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->{
             Filters.apply(MainController.selectedThumbnailContainers,"Rotate", Map.of("direction", "right"));
+        });
+        resizeButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->{
+            Filters.apply(MainController.selectedThumbnailContainers,"Resize", Map.of("width", 50, "height", 50));
         });
         setI18NComboBox();
 
