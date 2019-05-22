@@ -5,7 +5,6 @@ import ch.picturex.events.EventImageChanged;
 import ch.picturex.events.EventLog;
 import ch.picturex.model.Severity;
 import ch.picturex.model.ThumbnailContainer;
-import de.muspellheim.eventbus.EventBus;
 import org.controlsfx.control.Notifications;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -13,14 +12,11 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.ResourceBundle;
 
 public class Filters {
 
-
-    private static ResourceBundle resourceBundle = SingleResourceBundle.getInstance();
+    private static Model model = Model.getInstance();
     private static List<ArrayList<ThumbnailContainer>> selectionHistory = new ArrayList<>();
-    private static EventBus bus = SingleEventBus.getInstance();
 
     @SuppressWarnings("unchecked")
 
@@ -36,14 +32,14 @@ public class Filters {
                 method.invoke(instanceOfIFilter,tc, parameters);
             } catch (ClassNotFoundException | InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
                 Notifications.create()
-                        .title(resourceBundle.getString("notifica.formatononsupport.titolo"))
-                        .text(resourceBundle.getString("notifica.formatononsupport.testo"))
+                        .title(model.getResourceBundle().getString("notifica.formatononsupport.titolo"))
+                        .text(model.getResourceBundle().getString("notifica.formatononsupport.testo"))
                         .showWarning();
-                bus.publish(new EventLog("Unable to apply filter " + filterName + " to image: " + tc.getImageWrapper().getName(), Severity.ERROR));
+                model.publish(new EventLog("Unable to apply filter " + filterName + " to image: " + tc.getImageWrapper().getName(), Severity.ERROR));
             }
         }
         if(thumbnailContainers.size()==1)
-            bus.publish(new EventImageChanged(thumbnailContainers.get(0)));
+            model.publish(new EventImageChanged(thumbnailContainers.get(0)));
     }
 
     private static void saveSelection(List<ThumbnailContainer> thumbnailContainers){
@@ -56,7 +52,7 @@ public class Filters {
             for (ThumbnailContainer tc : lastSelection){
                 tc.getImageWrapper().undo();
             }
-            bus.publish(new EventImageChanged(lastSelection.get(0)));
+            model.publish(new EventImageChanged(lastSelection.get(0)));
             selectionHistory.remove(selectionHistory.size()-1);
         }
     }

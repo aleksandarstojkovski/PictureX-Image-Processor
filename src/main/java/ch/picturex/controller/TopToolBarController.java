@@ -1,16 +1,20 @@
 package ch.picturex.controller;
 
+import ch.picturex.Model;
+import ch.picturex.events.*;
 import ch.picturex.filters.Filters;
-import ch.picturex.SingleResourceBundle;
+import ch.picturex.model.Direction;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import org.controlsfx.control.Notifications;
+import java.net.URL;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -25,18 +29,18 @@ class LanguageListCell extends ListCell<Locale> {
     }
 }
 
-public class TopToolBarController {
+public class TopToolBarController implements Initializable {
 
     @FXML
     public Button zoomInButton;
     @FXML
     public Button zoomOutButton;
     @FXML
-    public Button bNButton;
+    public Button blackAndWhiteButton;
     @FXML
-    public Button rotateSXButton;
+    public Button rotateLeftButton;
     @FXML
-    public Button rotateDXButton;
+    public Button rotateRightButton;
     @FXML
     public Button undoButton;
     @FXML
@@ -44,35 +48,44 @@ public class TopToolBarController {
     @FXML
     public Button resizeButton;
 
-    private ResourceBundle resourceBundleService = SingleResourceBundle.getInstance();
-    private Preferences preference = Preferences.userNodeForPackage(SingleResourceBundle.class);
+    private Preferences preference = Preferences.userNodeForPackage(Model.class);
+    private Model model = Model.getInstance();
 
-    @FXML
-    public void initialize() {
-
-        zoomInButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->
-            Filters.apply(MainController.selectedThumbnailContainers,"Zoom",Map.of("direction","in")));
-
-        zoomOutButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->
-            Filters.apply(MainController.selectedThumbnailContainers,"Zoom",Map.of("direction","out")));
-
-        bNButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->
-            Filters.apply(MainController.selectedThumbnailContainers,"BlackAndWhite",null));
-
-        undoButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->
-            Filters.undo());
-
-        rotateSXButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->
-            Filters.apply(MainController.selectedThumbnailContainers,"Rotate", Map.of("direction", "left")));
-
-        rotateDXButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->
-            Filters.apply(MainController.selectedThumbnailContainers,"Rotate", Map.of("direction", "right")));
-
-        resizeButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->
-            Filters.apply(MainController.selectedThumbnailContainers,"Resize", Map.of("width", 50, "height", 50)));
-
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        configureBus();
+        setHandelers();
         setI18NComboBox();
+    }
 
+    private void setHandelers(){
+        zoomInButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e-> model.publish(new EventFilterZoom(Direction.IN)));
+        zoomOutButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e-> model.publish(new EventFilterZoom(Direction.OUT)));
+        blackAndWhiteButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e-> model.publish(new EventFilterBlackAndWhite()));
+        undoButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e-> model.publish(new EventFilterUndo()));
+        rotateLeftButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e-> model.publish(new EventFilterRotate(Direction.LEFT)));
+        rotateRightButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e-> model.publish(new EventFilterRotate(Direction.RIGHT)));
+        resizeButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e-> model.publish(new EventFilterResize()));
+    }
+
+    private void configureBus(){
+        model.subscribe(EventFilterRotate.class, e->{
+            if (e.getDirection() == Direction.LEFT){
+                rotateLeft();
+            } else {
+                rotateRight();
+            }
+        });
+        model.subscribe(EventFilterZoom.class, e->{
+            if (e.getDirection() == Direction.IN){
+                zoomInButton();
+            } else {
+                zoomOutButton();
+            }
+        });
+        model.subscribe(EventFilterUndo.class, e->undoButton());
+        model.subscribe(EventFilterBlackAndWhite.class, e->blackAndWhiteButton());
+        model.subscribe(EventFilterResize.class, e->resizeButton());
     }
 
     private void setI18NComboBox(){
@@ -80,15 +93,44 @@ public class TopToolBarController {
         ObservableList<Locale> options = FXCollections.observableArrayList(Locale.ENGLISH, Locale.ITALIAN);
         comboBox.setItems(options);
         comboBox.setCellFactory(p -> new LanguageListCell());
-        comboBox.getSelectionModel().select(SingleResourceBundle.getLocale());
+        comboBox.getSelectionModel().select(model.getLocale());
         comboBox.setOnAction(event -> {
             preference.put("language",comboBox.getSelectionModel().getSelectedItem().getLanguage());
             Notifications.create()
-                    .title(resourceBundleService.getString("notifica.cambiolingua.titolo"))
-                    .text(resourceBundleService.getString("notifica.cambiolingua.testo"))
+                    .title(model.getResourceBundle().getString("notifica.cambiolingua.titolo"))
+                    .text(model.getResourceBundle().getString("notifica.cambiolingua.testo"))
                     .showInformation();
         });
         i18nButton.setCenter(comboBox);
     }
+
+    private void zoomInButton(){
+        Filters.apply(model.getSelectedThumbnailContainers(),"Zoom",Map.of("direction","in"));
+    }
+
+    private void zoomOutButton(){
+        Filters.apply(model.getSelectedThumbnailContainers(),"Zoom",Map.of("direction","out"));
+    }
+
+    private void blackAndWhiteButton(){
+        Filters.apply(model.getSelectedThumbnailContainers(),"BlackAndWhite",null);
+    }
+
+    private void undoButton(){
+        Filters.undo();
+    }
+
+    private void rotateLeft(){
+        Filters.apply(model.getSelectedThumbnailContainers(),"Rotate", Map.of("direction", "left"));
+    }
+
+    private void rotateRight(){
+        Filters.apply(model.getSelectedThumbnailContainers(),"Rotate", Map.of("direction", "right"));
+    }
+
+    private void resizeButton(){
+        Filters.apply(model.getSelectedThumbnailContainers(),"Resize", Map.of("width", 50, "height", 50));
+    }
+
 
 }

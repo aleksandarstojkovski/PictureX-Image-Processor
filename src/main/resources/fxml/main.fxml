@@ -2,9 +2,6 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableView?>
@@ -24,37 +21,7 @@
             fx:controller="ch.picturex.controller.MainController">
     <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
           AnchorPane.topAnchor="0.0">
-        <MenuBar fx:id="menuBar" useSystemMenuBar="true">
-            <Menu mnemonicParsing="false" text="PictureX">
-                <MenuItem onAction="#handleCloseButtonAction" mnemonicParsing="false" text="%menu.Close"/>
-            </Menu>
-            <Menu fx:id="menuFile" mnemonicParsing="false" text="File">
-                <MenuItem fx:id="menuBarBrowser" mnemonicParsing="false" onAction="#handleBrowseButton"
-                          text="%menu.Browser"/>
-            </Menu>
-            <Menu mnemonicParsing="false" text="%menu.modifica">
-                <MenuItem mnemonicParsing="false" onAction="#undo" text="%menu.Undo"/>
-
-                <Menu mnemonicParsing="false" text="%menu.Filters">
-                    <MenuItem fx:id="filterBN" mnemonicParsing="false" onAction="#BNFilterMetod"
-                              text="%menu.BNFilter"/>
-                    <MenuItem fx:id="rotateDX" mnemonicParsing="false" onAction="#rotateDXMetod"
-                              text="%menu.RotateDX"/>
-                    <MenuItem fx:id="rotateSX" mnemonicParsing="false" onAction="#rotateSXMetod"
-                              text="%menu.RotateSX"/>
-                </Menu>
-
-            </Menu>
-            <Menu mnemonicParsing="false" text="%menu.vista">
-                <MenuItem mnemonicParsing="false" text="View"/>
-            </Menu>
-            <Menu mnemonicParsing="false" text="%menu.finestra">
-                <MenuItem mnemonicParsing="false" text="Window"/>
-            </Menu>
-            <Menu mnemonicParsing="false" text="%menu.aiuto">
-                <MenuItem mnemonicParsing="false" text="Help"/>
-            </Menu>
-        </MenuBar>
+        <fx:include source="menuBar.fxml"/>
         <ToolBar>
             <Button mnemonicParsing="false" onAction="#handleBrowseButton" text="Browse">
                 <graphic>
@@ -62,51 +29,47 @@
                 </graphic>
             </Button>
             <Pane HBox.hgrow="ALWAYS" minWidth="130"/>
-            <CustomTextField fx:id="globingTextField" styleClass="searchField" minWidth="210">
+            <CustomTextField fx:id="globingTextField" minWidth="210">
                 <left>
-                    <Label styleClass="searchBoxLabel">
+                    <Label>
                         <graphic>
                             <FontIcon iconLiteral="fa-search"/>
                         </graphic>
                     </Label>
                 </left>
             </CustomTextField>
-            <StackPane fx:id="buttonMenu" prefHeight="29.0" prefWidth="200.0" AnchorPane.rightAnchor="0.0">
-                <fx:include fx:id="buttonContainerMenu" source="topToolBar.fxml"/>
+            <StackPane prefHeight="29.0" prefWidth="200.0" AnchorPane.rightAnchor="0.0">
+                <fx:include source="topToolBar.fxml"/>
             </StackPane>
         </ToolBar>
         <SplitPane fx:id="orizontalSplitPane" dividerPositions="0.36608863198458574" prefHeight="604.0"
                    prefWidth="1040.0" VBox.vgrow="ALWAYS">
-            <AnchorPane fx:id="splitPaneHorizzontalChild1" minHeight="0.0" minWidth="260.0" prefHeight="160.0"
+            <AnchorPane minHeight="0.0" minWidth="260.0" prefHeight="160.0"
                         prefWidth="100.0">
-                <children>
-                    <SplitPane dividerPositions="0.5" layoutX="6.0" orientation="VERTICAL" prefHeight="584.0"
-                               prefWidth="367.0" AnchorPane.bottomAnchor="3.3999999999999773"
-                               AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="4.0"
-                               AnchorPane.topAnchor="15.0">
-                        <items>
-                            <GridPane fx:id="previewPanel" minHeight="200" alignment="CENTER">
-                                <ScrollPane fitToWidth="true" fitToHeight="true" GridPane.halignment="CENTER"
-                                            GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER"
-                                            GridPane.vgrow="ALWAYS">
-                                    <StackPane>
-                                        <ImageView fx:id="imageViewPreview" fitHeight="288.0" fitWidth="283.0"
-                                                   pickOnBounds="true" preserveRatio="true"/>
-                                    </StackPane>
-                                </ScrollPane>
-                            </GridPane>
-                            <AnchorPane fx:id="splitPaneVerticalChild1" minHeight="200.0" minWidth="0.0"
-                                        prefHeight="22.0" prefWidth="335.0">
-                                <TableView fx:id="tableView" editable="true" layoutX="14.0" layoutY="14.0"
-                                           prefHeight="292.0" prefWidth="329.0"
-                                           AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0"
-                                           AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="1.0"/>
-                            </AnchorPane>
-                        </items>
-                    </SplitPane>
-                </children>
+                <SplitPane dividerPositions="0.5" layoutX="6.0" orientation="VERTICAL" prefHeight="584.0"
+                           prefWidth="367.0" AnchorPane.bottomAnchor="3.3999999999999773"
+                           AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="4.0"
+                           AnchorPane.topAnchor="15.0">
+                    <GridPane fx:id="previewPanel" minHeight="200" alignment="CENTER">
+                        <ScrollPane fitToWidth="true" fitToHeight="true" GridPane.halignment="CENTER"
+                                    GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER"
+                                    GridPane.vgrow="ALWAYS">
+                            <StackPane>
+                                <ImageView fx:id="imageViewPreview" fitHeight="288.0" fitWidth="283.0"
+                                           pickOnBounds="true" preserveRatio="true"/>
+                            </StackPane>
+                        </ScrollPane>
+                    </GridPane>
+                    <AnchorPane minHeight="200.0" minWidth="0.0"
+                                prefHeight="22.0" prefWidth="335.0">
+                        <TableView fx:id="tableView" editable="true" layoutX="14.0" layoutY="14.0"
+                                   prefHeight="292.0" prefWidth="329.0"
+                                   AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0"
+                                   AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="1.0"/>
+                    </AnchorPane>
+                </SplitPane>
             </AnchorPane>
-            <AnchorPane fx:id="splitPaneHorizzontalChild2" minHeight="0.0" minWidth="260.0" prefHeight="160.0"
+            <AnchorPane minHeight="0.0" minWidth="260.0" prefHeight="160.0"
                         prefWidth="100.0">
                 <ScrollPane fitToHeight="true" fitToWidth="true" fx:id="scrollPane" layoutX="14.0"
                             layoutY="14.0" prefHeight="579.0" prefWidth="611.0"
@@ -115,6 +78,6 @@
                             AnchorPane.topAnchor="14.0"/>
             </AnchorPane>
         </SplitPane>
-        <fx:include fx:id="bottomToolBar" source="bottomToolBar.fxml"/>
+        <fx:include source="bottomToolBar.fxml"/>
     </VBox>
 </AnchorPane>

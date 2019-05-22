@@ -13,7 +13,7 @@
    <Button fx:id="zoomInButton" mnemonicParsing="false">
       <graphic>
          <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-            <Image url="@../icons/baseline_zoom_in_black_18dp.png"/>
+            <Image url="@../icons/zoom_in.png"/>
          </ImageView>
       </graphic>
    </Button>
@@ -21,31 +21,31 @@
    <Button fx:id="zoomOutButton" mnemonicParsing="false">
       <graphic>
          <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-            <Image url="@../icons/baseline_zoom_out_black_18dp.png"/>
+            <Image url="@../icons/zoom_out.png"/>
          </ImageView>
       </graphic>
    </Button>
    <Pane minWidth="10"/>
-   <Button fx:id="bNButton" mnemonicParsing="false">
+   <Button fx:id="blackAndWhiteButton" mnemonicParsing="false">
       <graphic>
          <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-            <Image url="@../icons/baseline_invert_colors_black_18dp.png"/>
+            <Image url="@../icons/black_and_white.png"/>
          </ImageView>
       </graphic>
    </Button>
    <Pane minWidth="10"/>
-   <Button fx:id="rotateSXButton" mnemonicParsing="false">
+   <Button fx:id="rotateLeftButton" mnemonicParsing="false">
       <graphic>
          <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-            <Image url="@../icons/baseline_rotate_left_black_18dp.png"/>
+            <Image url="@../icons/rotate_left.png"/>
          </ImageView>
       </graphic>
    </Button>
    <Pane minWidth="10"/>
-   <Button fx:id="rotateDXButton" mnemonicParsing="false">
+   <Button fx:id="rotateRightButton" mnemonicParsing="false">
       <graphic>
          <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-            <Image url="@../icons/baseline_rotate_right_black_18dp.png"/>
+            <Image url="@../icons/rotate_right.png"/>
          </ImageView>
       </graphic>
    </Button>
@@ -61,7 +61,7 @@
    <Button fx:id="undoButton" mnemonicParsing="false">
       <graphic>
          <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-            <Image url="@../icons/baseline_undo_black_18dp.png"/>
+            <Image url="@../icons/undo_18dp.png"/>
          </ImageView>
       </graphic>
    </Button>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+
+
+<MenuBar fx:id="menuBar" useSystemMenuBar="true" xmlns="http://javafx.com/javafx"
+         xmlns:fx="http://javafx.com/fxml"
+         fx:controller="ch.picturex.controller.MenuBarController">
+<Menu mnemonicParsing="false" text="PictureX">
+    <MenuItem onAction="#handleCloseButtonAction" mnemonicParsing="false" text="%menu.Close"/>
+</Menu>
+<Menu mnemonicParsing="false" text="File">
+    <MenuItem mnemonicParsing="false" onAction="#handleBrowseButton"
+              text="%menu.Browser"/>
+</Menu>
+<Menu mnemonicParsing="false" text="%menu.modifica">
+    <MenuItem mnemonicParsing="false" onAction="#undo" text="%menu.Undo"/>
+
+    <Menu mnemonicParsing="false" text="%menu.Filters">
+        <MenuItem mnemonicParsing="false" onAction="#BNFilterMetod"
+                  text="%menu.BNFilter"/>
+        <MenuItem mnemonicParsing="false" onAction="#rotateDXMetod"
+                  text="%menu.RotateDX"/>
+        <MenuItem mnemonicParsing="false" onAction="#rotateSXMetod"
+                  text="%menu.RotateSX"/>
+    </Menu>
+
+</Menu>
+<Menu mnemonicParsing="false" text="%menu.vista">
+    <MenuItem mnemonicParsing="false" text="View"/>
+</Menu>
+<Menu mnemonicParsing="false" text="%menu.finestra">
+    <MenuItem mnemonicParsing="false" text="Window"/>
+</Menu>
+<Menu mnemonicParsing="false" text="%menu.aiuto">
+    <MenuItem mnemonicParsing="false" text="Help"/>
+</Menu>
+</MenuBar>

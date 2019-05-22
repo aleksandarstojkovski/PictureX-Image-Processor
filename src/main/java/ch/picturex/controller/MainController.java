@@ -1,7 +1,7 @@
 package ch.picturex.controller;
 
 import ch.picturex.*;
-import ch.picturex.events.EventZoom;
+import ch.picturex.events.*;
 import ch.picturex.filters.Filters;
 import ch.picturex.model.ImageWrapper;
 import ch.picturex.model.MetadataWrapper;
@@ -12,11 +12,8 @@ import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
-import de.muspellheim.eventbus.EventBus;
-import ch.picturex.events.EventLog;
-import ch.picturex.events.EventImageChanged;
-import ch.picturex.events.EventUpdateBottomToolBar;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -27,6 +24,7 @@ import javafx.scene.layout.*;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import java.io.*;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -34,16 +32,16 @@ import java.util.prefs.Preferences;
 
 @SuppressWarnings({"unused", "unchecked"})
 
-public class MainController {
+public class MainController  implements Initializable {
 
-    static ArrayList<ThumbnailContainer> selectedThumbnailContainers = new ArrayList<>();
+    private ArrayList<ThumbnailContainer> selectedThumbnailContainers = new ArrayList<>();
     private ArrayList<ThumbnailContainer> allThumbnailContainers = new ArrayList<>();
     private List<ImageWrapper> listOfImageWrappers = new ArrayList<>();
     private File chosenDirectory;
     private long lastTime = 1;
-    private static EventBus bus = SingleEventBus.getInstance();
     private static final DateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
     private TilePane tilePane;
+    private Model model = Model.getInstance();
 
     @FXML
     private AnchorPane mainAnchorPane;
@@ -62,9 +60,11 @@ public class MainController {
     @FXML
     private MenuBar menuBar;
 
-    @FXML
-    public void initialize() {
-        configureBus();
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        configuremodel();
+
+        model.publish(new EventSelectedThumbnailContainers(selectedThumbnailContainers));
 
         // tilePane used inside the scroll pane
         tilePane = new TilePane();
@@ -113,19 +113,20 @@ public class MainController {
         imageViewPreview.setFitHeight(imageViewPreview.getFitHeight()-100);
     }
 
-    private void configureBus(){
-        bus.subscribe(EventLog.class, e -> log(e.getText(), e.getSeverity()));
-        bus.subscribe(EventImageChanged.class, e -> {
+    private void configuremodel(){
+        model.subscribe(EventLog.class, e -> log(e.getText(), e.getSeverity()));
+        model.subscribe(EventImageChanged.class, e -> {
             imageViewPreview.setImage(e.getThubnailContainer().getImageWrapper().getPreviewImageView());
             if(selectedThumbnailContainers.size()==1)displayMetadata(selectedThumbnailContainers.get(0).getImageWrapper().getFile()); //update exif table
         });
-        bus.subscribe(EventZoom.class, e->{
+        model.subscribe(EventZoom.class, e->{
             if (e.getDirection().equals("in")){
                 zoomIn();
             } else {
                 zoomOut();
             }
         });
+        model.subscribe(EventBrowseButton.class, e->handleBrowseButton());
     }
 
 
@@ -148,6 +149,7 @@ public class MainController {
 
         if (chosenDirectory != null){
             directoryChosenAction();
+            model.publish(new EventDirectoryChanged(chosenDirectory));
         }
 
     }
@@ -157,7 +159,7 @@ public class MainController {
         setLastDirectoryPreferences(chosenDirectory);
         clearUI();
         populateListOfFiles();
-        bus.publish(new EventUpdateBottomToolBar(listOfImageWrappers, chosenDirectory));
+        model.publish(new EventUpdateBottomToolBar(listOfImageWrappers, chosenDirectory));
         displayThumbnails();
         Filters.clearHistory();
     }
@@ -170,17 +172,17 @@ public class MainController {
     }
 
     private void populateListOfFiles() {
-            String[] validExtensions = {".jpg",".png",".jpeg"};
-            for (File f : Objects.requireNonNull(chosenDirectory.listFiles())) {
-                if (f.isFile()) {
-                    for (String extension : validExtensions) {
-                        if (f.getName().toLowerCase().endsWith(extension)) {
-                            listOfImageWrappers.add(new ImageWrapper(f));
-                            break;
-                        }
+        String[] validExtensions = {".jpg",".png",".jpeg"};
+        for (File f : Objects.requireNonNull(chosenDirectory.listFiles())) {
+            if (f.isFile()) {
+                for (String extension : validExtensions) {
+                    if (f.getName().toLowerCase().endsWith(extension)) {
+                        listOfImageWrappers.add(new ImageWrapper(f));
+                        break;
                     }
                 }
             }
+        }
     }
 
     private void displayThumbnails(){
@@ -263,8 +265,8 @@ public class MainController {
     }
 
     private File getLastDirectoryPreferences(){
-        Preferences preference = Preferences.userNodeForPackage(MainController.class);
-        String filePath = preference.get("filePath", null);
+        Preferences preference = Preferences.userNodeForPackage(Model.class);
+        String filePath = preference.get("directory", null);
         if(filePath != null){
             return new File(filePath);
         }
@@ -272,9 +274,9 @@ public class MainController {
     }
 
     private void setLastDirectoryPreferences(File file){
-        Preferences preference = Preferences.userNodeForPackage(MainController.class);
+        Preferences preference = Preferences.userNodeForPackage(Model.class);
         if (file != null) {
-            preference.put("filePath", file.getPath());
+            preference.put("directory", file.getPath());
         }
     }
 
@@ -309,27 +311,6 @@ public class MainController {
         if (out != null) {
             out.close();
         }
-    }
-
-    public void BNFilterMetod(){
-        Filters.apply(MainController.selectedThumbnailContainers,"BlackAndWhite",null);
-    }
-
-    public void rotateSXMetod() {
-        Filters.apply(MainController.selectedThumbnailContainers, "Rotate", Map.of("direction", "left"));
-    }
-
-    public void rotateDXMetod() {
-        Filters.apply(MainController.selectedThumbnailContainers, "Rotate", Map.of("direction", "right"));
-    }
-
-    public void undo() {
-        Filters.undo();
-    }
-
-    public void handleCloseButtonAction() {
-        Stage stage = (Stage) menuBar.getScene().getWindow();
-        stage.close();
     }
 
 }
