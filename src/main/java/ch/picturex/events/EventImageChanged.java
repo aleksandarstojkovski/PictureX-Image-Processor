@@ -1,6 +1,6 @@
 package ch.picturex.events;
 
-import ch.picturex.ThumbnailContainer;
+import ch.picturex.model.ThumbnailContainer;
 
 public class EventImageChanged {
 

@@ -1,4 +1,4 @@
-package ch.picturex;
+package ch.picturex.model;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+@SuppressWarnings("unused")
 
 public class ImageWrapper {
 
@@ -68,11 +70,11 @@ public class ImageWrapper {
         return thumbnail;
     }
 
-    public long getSizeInBytes() {
+    private long getSizeInBytes() {
         return sizeInBytes;
     }
 
-    public long getSizeInMegaBytes() {
+    private long getSizeInMegaBytes() {
         return sizeInBytes/1024;
     }
 
@@ -92,15 +94,15 @@ public class ImageWrapper {
         totalSizeInBytes=0;
     }
 
-    public String getTooltipString() {
+    String getTooltipString() {
         return tooltipString;
     }
 
-    public ImageView getThumbnailImageView() {
+    ImageView getThumbnailImageView() {
         return thumbnailImageView;
     }
 
-    public BufferedImage getBufferedImage(){
+    private BufferedImage getBufferedImage(){
         BufferedImage img = null;
         try {
             img = ImageIO.read(file);
@@ -110,7 +112,7 @@ public class ImageWrapper {
         return img;
     }
 
-    public String getExtension(){
+    private String getExtension(){
         return file.getName().substring(file.getName().lastIndexOf(".")).substring(1);
     }
 

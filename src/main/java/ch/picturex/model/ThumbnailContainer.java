@@ -1,10 +1,9 @@
-package ch.picturex;
+package ch.picturex.model;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.VBox;
-
 
 public class ThumbnailContainer extends VBox{
 

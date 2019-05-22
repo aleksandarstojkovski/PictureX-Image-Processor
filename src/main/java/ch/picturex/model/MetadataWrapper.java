@@ -1,12 +1,14 @@
-package ch.picturex;
+package ch.picturex.model;
 
 import com.drew.metadata.Tag;
 
+@SuppressWarnings("unused")
+
 public class MetadataWrapper {
 
-    String name;
-    String value;
-    String type;
+    private String name;
+    private String value;
+    private String type;
 
     public MetadataWrapper(Tag tag){
         this.name=tag.getTagName();

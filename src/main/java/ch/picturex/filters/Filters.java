@@ -1,8 +1,10 @@
-package ch.picturex;
+package ch.picturex.filters;
 
+import ch.picturex.*;
 import ch.picturex.events.EventImageChanged;
 import ch.picturex.events.EventLog;
-import de.muspellheim.eventbus.EventBus;
+import ch.picturex.model.Severity;
+import ch.picturex.model.ThumbnailContainer;
 import org.controlsfx.control.Notifications;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -10,18 +12,18 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.ResourceBundle;
 
 public class Filters {
 
-    private static ResourceBundle resourceBundle = SingleResourceBundle.getInstance();
+    private static Model model = Model.getInstance();
     private static List<ArrayList<ThumbnailContainer>> selectionHistory = new ArrayList<>();
-    private static EventBus bus = SingleEventBus.getInstance();
+
+    @SuppressWarnings("unchecked")
 
     public static void apply(ArrayList<ThumbnailContainer> thumbnailContainers, String filterName, Map<String, Object> parameters) {
         saveSelection(thumbnailContainers);
         for (ThumbnailContainer tc : thumbnailContainers) {
-            Class<IFilter> cls = null;
+            Class<IFilter> cls;
             try {
                 cls = (Class<IFilter>) Class.forName("ch.picturex.filters." + filterName);
                 Constructor<IFilter> constructor = cls.getConstructor();
@@ -30,17 +32,17 @@ public class Filters {
                 method.invoke(instanceOfIFilter,tc, parameters);
             } catch (ClassNotFoundException | InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
                 Notifications.create()
-                        .title(resourceBundle.getString("notifica.formatononsupport.titolo"))
-                        .text(resourceBundle.getString("notifica.formatononsupport.testo"))
+                        .title(model.getResourceBundle().getString("notifica.formatononsupport.titolo"))
+                        .text(model.getResourceBundle().getString("notifica.formatononsupport.testo"))
                         .showWarning();
+                model.publish(new EventLog("Unable to apply filter " + filterName + " to image: " + tc.getImageWrapper().getName(), Severity.ERROR));
             }
-            bus.publish(new EventLog("Filter "+ filterName + " applied on image: " + tc.getImageWrapper().getName(), Severity.INFO));
         }
         if(thumbnailContainers.size()==1)
-            bus.publish(new EventImageChanged(thumbnailContainers.get(0)));
+            model.publish(new EventImageChanged(thumbnailContainers.get(0)));
     }
 
-    public static void saveSelection(List<ThumbnailContainer> thumbnailContainers){
+    private static void saveSelection(List<ThumbnailContainer> thumbnailContainers){
         selectionHistory.add(new ArrayList<>(thumbnailContainers));
     }
 
@@ -50,9 +52,13 @@ public class Filters {
             for (ThumbnailContainer tc : lastSelection){
                 tc.getImageWrapper().undo();
             }
-            bus.publish(new EventImageChanged(lastSelection.get(0)));
+            model.publish(new EventImageChanged(lastSelection.get(0)));
             selectionHistory.remove(selectionHistory.size()-1);
         }
+    }
+
+    public static void clearHistory(){
+        selectionHistory.clear();
     }
 
 }

@@ -1,6 +1,6 @@
 package ch.picturex.events;
 
-import ch.picturex.Severity;
+import ch.picturex.model.Severity;
 
 public class EventLog {
 
