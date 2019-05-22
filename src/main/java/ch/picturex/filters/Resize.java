@@ -19,10 +19,8 @@ public class Resize implements IFilter {
         try {
             imp = new ImagePlus(tc.getImageWrapper().getFile().getName(), ImageIO.read(tc.getImageWrapper().getFile()));
             ip = imp.getProcessor();
-            ip.resize((int)parameters.get("width"), (int)parameters.get("height"));
-            System.out.println((int)parameters.get("width") +" "+ (int)parameters.get("height"));
+            ip = ip.resize((int)parameters.get("width"), (int)parameters.get("height"));
             imp.setProcessor(ip);
-            imp.updateAndDraw();
             tc.getImageWrapper().set(imp.getBufferedImage());
         } catch (IOException ignored){}
     }

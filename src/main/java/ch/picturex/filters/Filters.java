@@ -35,7 +35,6 @@ public class Filters {
                         .text(resourceBundle.getString("notifica.formatononsupport.testo"))
                         .showWarning();
                 bus.publish(new EventLog("Unable to apply filter " + filterName + " to image: " + tc.getImageWrapper().getName(),Severity.ERROR));
-                e.printStackTrace();
             }
         }
         if(thumbnailContainers.size()==1)
