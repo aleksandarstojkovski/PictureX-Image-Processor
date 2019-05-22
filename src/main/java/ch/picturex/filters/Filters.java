@@ -3,6 +3,8 @@ package ch.picturex.filters;
 import ch.picturex.*;
 import ch.picturex.events.EventImageChanged;
 import ch.picturex.events.EventLog;
+import ch.picturex.model.Severity;
+import ch.picturex.model.ThumbnailContainer;
 import de.muspellheim.eventbus.EventBus;
 import org.controlsfx.control.Notifications;
 import java.lang.reflect.Constructor;
@@ -37,7 +39,7 @@ public class Filters {
                         .title(resourceBundle.getString("notifica.formatononsupport.titolo"))
                         .text(resourceBundle.getString("notifica.formatononsupport.testo"))
                         .showWarning();
-                bus.publish(new EventLog("Unable to apply filter " + filterName + " to image: " + tc.getImageWrapper().getName(),Severity.ERROR));
+                bus.publish(new EventLog("Unable to apply filter " + filterName + " to image: " + tc.getImageWrapper().getName(), Severity.ERROR));
             }
         }
         if(thumbnailContainers.size()==1)

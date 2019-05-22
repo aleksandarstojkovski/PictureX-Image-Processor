@@ -1,6 +1,6 @@
 package ch.picturex.filters;
 
-import ch.picturex.ThumbnailContainer;
+import ch.picturex.model.ThumbnailContainer;
 
 import java.util.Map;
 

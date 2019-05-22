@@ -1,6 +1,6 @@
 package ch.picturex.events;
 
-import ch.picturex.ImageWrapper;
+import ch.picturex.model.ImageWrapper;
 
 import java.io.File;
 import java.util.List;

@@ -1,7 +1,7 @@
 package ch.picturex.filters;
 
 import ch.picturex.SingleEventBus;
-import ch.picturex.ThumbnailContainer;
+import ch.picturex.model.ThumbnailContainer;
 import ch.picturex.events.EventZoom;
 import de.muspellheim.eventbus.EventBus;
 import java.util.Map;

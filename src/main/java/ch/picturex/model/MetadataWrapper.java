@@ -1,4 +1,4 @@
-package ch.picturex;
+package ch.picturex.model;
 
 import com.drew.metadata.Tag;
 

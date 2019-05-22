@@ -1,5 +1,6 @@
-package ch.picturex;
+package ch.picturex.model;
 
+import ch.picturex.model.ImageWrapper;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;

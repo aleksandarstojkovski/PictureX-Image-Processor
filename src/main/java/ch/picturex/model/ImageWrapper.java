@@ -1,4 +1,4 @@
-package ch.picturex;
+package ch.picturex.model;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;

@@ -1,6 +1,6 @@
 package ch.picturex.filters;
 
-import ch.picturex.ThumbnailContainer;
+import ch.picturex.model.ThumbnailContainer;
 import ij.ImagePlus;
 import ij.process.ImageConverter;
 import javax.imageio.ImageIO;

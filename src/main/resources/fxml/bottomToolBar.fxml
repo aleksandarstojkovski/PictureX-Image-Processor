@@ -1,24 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
 
-<ToolBar xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="ch.picturex.controller.BottomToolBarController" prefHeight="10.0">
-    <items>
-        <HBox HBox.hgrow="ALWAYS" minWidth="340"></HBox>
-        <HBox HBox.hgrow="ALWAYS" prefHeight="10" alignment="CENTER_RIGHT">
-            <Label fx:id="browseTextField" prefHeight="10.0" prefWidth="400.0"/>
-        </HBox>
-        <HBox HBox.hgrow="ALWAYS" prefHeight="10" alignment="BASELINE_LEFT">
-            <Label fx:id="numberOfFilesLabel" prefHeight="10.0" prefWidth="100.0"/>
-        </HBox>
-        <HBox HBox.hgrow="ALWAYS" prefHeight="10" alignment="BASELINE_LEFT">
-            <Label fx:id="totalSizeLabel" prefHeight="10.0" prefWidth="100.0"/>
-        </HBox>
-    </items>
+<ToolBar xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+         fx:controller="ch.picturex.controller.BottomToolBarController" prefHeight="10.0">
+    <HBox HBox.hgrow="ALWAYS" minWidth="340"/>
+    <HBox HBox.hgrow="ALWAYS" prefHeight="10" alignment="CENTER_RIGHT">
+        <Label fx:id="browseTextField" prefHeight="10.0" prefWidth="400.0"/>
+    </HBox>
+    <HBox HBox.hgrow="ALWAYS" prefHeight="10" alignment="BASELINE_LEFT">
+        <Label fx:id="numberOfFilesLabel" prefHeight="10.0" prefWidth="100.0"/>
+    </HBox>
+    <HBox HBox.hgrow="ALWAYS" prefHeight="10" alignment="BASELINE_LEFT">
+        <Label fx:id="totalSizeLabel" prefHeight="10.0" prefWidth="100.0"/>
+    </HBox>
 </ToolBar>
 

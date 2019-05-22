@@ -4,83 +4,68 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
-
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.BorderPane?>
-<HBox xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.picturex.controller.TopToolBarController">
-   <children>
-      <Pane minWidth="4"></Pane>
-      <Button fx:id="zoomInButton" mnemonicParsing="false">
-         <graphic>
-            <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../icons/baseline_zoom_in_black_18dp.png" />
-               </image>
-            </ImageView>
-         </graphic>
-      </Button>
-      <Pane minWidth="10"></Pane>
-      <Button fx:id="zoomOutButton" mnemonicParsing="false">
-         <graphic>
-            <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../icons/baseline_zoom_out_black_18dp.png" />
-               </image>
-            </ImageView>
-         </graphic>
-      </Button>
-      <Pane minWidth="10"></Pane>
-      <Button fx:id="bNButton" mnemonicParsing="false">
-         <graphic>
-            <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../icons/baseline_invert_colors_black_18dp.png" />
-               </image>
-            </ImageView>
-         </graphic>
-      </Button>
-      <Pane minWidth="10"></Pane>
-      <Button fx:id="rotateSXButton" mnemonicParsing="false">
-         <graphic>
-            <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../icons/baseline_rotate_left_black_18dp.png" />
-               </image>
-            </ImageView>
-         </graphic>
-      </Button>
-      <Pane minWidth="10"></Pane>
-      <Button fx:id="rotateDXButton" mnemonicParsing="false">
-         <graphic>
-            <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../icons/baseline_rotate_right_black_18dp.png" />
-               </image>
-            </ImageView>
-         </graphic>
-      </Button>
-      <Pane minWidth="10"></Pane>
-      <Button fx:id="resizeButton" mnemonicParsing="false">
-         <graphic>
-            <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../icons/resize.png" />
-               </image>
-            </ImageView>
-         </graphic>
-      </Button>
-      <Pane minWidth="10"></Pane>
-      <Button fx:id="undoButton" mnemonicParsing="false">
-         <graphic>
-            <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../icons/baseline_undo_black_18dp.png" />
-               </image>
-            </ImageView>
-         </graphic>
-      </Button>
-      <Pane minWidth="10"></Pane>
-      <BorderPane minWidth="60" fx:id="i18nButton"></BorderPane>
-      <Pane minWidth="4"></Pane>
-   </children>
+
+<HBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/"
+      fx:controller="ch.picturex.controller.TopToolBarController">
+   <Pane minWidth="4"/>
+   <Button fx:id="zoomInButton" mnemonicParsing="false">
+      <graphic>
+         <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+            <Image url="@../icons/baseline_zoom_in_black_18dp.png"/>
+         </ImageView>
+      </graphic>
+   </Button>
+   <Pane minWidth="10"/>
+   <Button fx:id="zoomOutButton" mnemonicParsing="false">
+      <graphic>
+         <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+            <Image url="@../icons/baseline_zoom_out_black_18dp.png"/>
+         </ImageView>
+      </graphic>
+   </Button>
+   <Pane minWidth="10"/>
+   <Button fx:id="bNButton" mnemonicParsing="false">
+      <graphic>
+         <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+            <Image url="@../icons/baseline_invert_colors_black_18dp.png"/>
+         </ImageView>
+      </graphic>
+   </Button>
+   <Pane minWidth="10"/>
+   <Button fx:id="rotateSXButton" mnemonicParsing="false">
+      <graphic>
+         <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+            <Image url="@../icons/baseline_rotate_left_black_18dp.png"/>
+         </ImageView>
+      </graphic>
+   </Button>
+   <Pane minWidth="10"/>
+   <Button fx:id="rotateDXButton" mnemonicParsing="false">
+      <graphic>
+         <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+            <Image url="@../icons/baseline_rotate_right_black_18dp.png"/>
+         </ImageView>
+      </graphic>
+   </Button>
+   <Pane minWidth="10"/>
+   <Button fx:id="resizeButton" mnemonicParsing="false">
+      <graphic>
+         <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+            <Image url="@../icons/resize.png"/>
+         </ImageView>
+      </graphic>
+   </Button>
+   <Pane minWidth="10"/>
+   <Button fx:id="undoButton" mnemonicParsing="false">
+      <graphic>
+         <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+            <Image url="@../icons/baseline_undo_black_18dp.png"/>
+         </ImageView>
+      </graphic>
+   </Button>
+   <Pane minWidth="10"/>
+   <BorderPane minWidth="60" fx:id="i18nButton"/>
+   <Pane minWidth="4"/>
 </HBox>

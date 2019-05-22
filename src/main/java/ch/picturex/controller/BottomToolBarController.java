@@ -1,6 +1,6 @@
 package ch.picturex.controller;
 
-import ch.picturex.ImageWrapper;
+import ch.picturex.model.ImageWrapper;
 import ch.picturex.SingleResourceBundle;
 import ch.picturex.SingleEventBus;
 import de.muspellheim.eventbus.EventBus;
