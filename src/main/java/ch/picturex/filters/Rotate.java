@@ -1,12 +1,10 @@
 package ch.picturex.filters;
 
-import ch.picturex.IFilter;
 import ch.picturex.ThumbnailContainer;
 import ij.ImagePlus;
 
 import javax.imageio.ImageIO;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
 public class Rotate implements IFilter {

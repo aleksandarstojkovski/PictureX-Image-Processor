@@ -1,6 +1,7 @@
 package ch.picturex.controller;
 
-import ch.picturex.Filters;
+import ch.picturex.ThumbnailContainer;
+import ch.picturex.filters.Filters;
 import ch.picturex.SingleResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,6 +12,8 @@ import javafx.scene.control.ListCell;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import org.controlsfx.control.Notifications;
+
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -41,10 +44,8 @@ public class TopToolBarController {
     public Button shareButton;
     @FXML
     public Button undoButton;
-
     @FXML
     public BorderPane i18nButton;
-    
 
     private ResourceBundle resourceBundleService;
     private Preferences preference;
@@ -56,7 +57,10 @@ public class TopToolBarController {
         preference = Preferences.userNodeForPackage(SingleResourceBundle.class);
 
         zoomInButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->{
-            // TODO: Filters.
+            Filters.apply(MainController.selectedThumbnailContainers,"Zoom",Map.of("direction","in"));
+        });
+        zoomOutButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->{
+            Filters.apply(MainController.selectedThumbnailContainers,"Zoom",Map.of("direction","out"));
         });
         bNButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->{
             Filters.apply(MainController.selectedThumbnailContainers,"BlackAndWhite",null);

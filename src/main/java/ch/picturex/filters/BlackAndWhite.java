@@ -1,7 +1,6 @@
 package ch.picturex.filters;
 
 
-import ch.picturex.IFilter;
 import ch.picturex.ThumbnailContainer;
 import ij.ImagePlus;
 import ij.process.ImageConverter;

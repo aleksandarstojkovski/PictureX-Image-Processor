@@ -1,5 +1,6 @@
-package ch.picturex;
+package ch.picturex.filters;
 
+import ch.picturex.*;
 import ch.picturex.events.EventImageChanged;
 import ch.picturex.events.EventLog;
 import de.muspellheim.eventbus.EventBus;

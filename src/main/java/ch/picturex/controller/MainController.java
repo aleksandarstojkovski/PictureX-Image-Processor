@@ -1,6 +1,8 @@
 package ch.picturex.controller;
 
 import ch.picturex.*;
+import ch.picturex.events.EventZoom;
+import ch.picturex.filters.Filters;
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Directory;
@@ -10,6 +12,8 @@ import de.muspellheim.eventbus.EventBus;
 import ch.picturex.events.EventLog;
 import ch.picturex.events.EventImageChanged;
 import ch.picturex.events.EventUpdateBottomToolBar;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -41,8 +45,6 @@ public class MainController {
     private static final DateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
     private TilePane tilePane;
 
-
-
     @FXML
     private AnchorPane mainAnchorPane;
     @FXML
@@ -58,11 +60,7 @@ public class MainController {
     @FXML
     private TextField globingTextField;
     @FXML
-    private MenuBar menuBar; //
-    @FXML
-    private Menu menuFile; //
-    @FXML
-    private MenuItem menuBarBrowser; //
+    private MenuBar menuBar;
 
     @FXML
     public void initialize() {
@@ -103,6 +101,21 @@ public class MainController {
 
         imageViewPreview.fitWidthProperty().bind(previewPanel.widthProperty()); //make resizable imageViewPreview
         imageViewPreview.fitHeightProperty().bind(previewPanel.heightProperty()); //make resizable imageViewPreview
+
+    }
+
+    private void zoomIn(){
+        imageViewPreview.fitHeightProperty().unbind();
+        imageViewPreview.fitWidthProperty().unbind();
+        imageViewPreview.setFitWidth(imageViewPreview.getFitWidth()+100);
+        imageViewPreview.setFitHeight(imageViewPreview.getFitHeight()+100);
+    }
+
+    private void zoomOut(){
+        imageViewPreview.fitHeightProperty().unbind();
+        imageViewPreview.fitWidthProperty().unbind();
+        imageViewPreview.setFitWidth(imageViewPreview.getFitWidth()-100);
+        imageViewPreview.setFitHeight(imageViewPreview.getFitHeight()-100);
     }
 
     private void configureBus(){
@@ -110,6 +123,13 @@ public class MainController {
         bus.subscribe(EventImageChanged.class, e -> {
             imageViewPreview.setImage(e.getThubnailContainer().getImageWrapper().getPreviewImageView());
             if(selectedThumbnailContainers.size()==1)displayMetadata(selectedThumbnailContainers.get(0).getImageWrapper().getFile()); //update exif table
+        });
+        bus.subscribe(EventZoom.class, e->{
+            if (e.getDirection().equals("in")){
+                zoomIn();
+            } else {
+                zoomOut();
+            }
         });
     }
 
@@ -331,18 +351,23 @@ public class MainController {
             out.close();
         }
     }
+
     public void BNFilterMetod(){
         Filters.apply(MainController.selectedThumbnailContainers,"BlackAndWhite",null);
     }
+
     public void rotateSXMetod() {
         Filters.apply(MainController.selectedThumbnailContainers, "Rotate", Map.of("direction", "left"));
     }
+
     public void rotateDXMetod() {
         Filters.apply(MainController.selectedThumbnailContainers, "Rotate", Map.of("direction", "right"));
     }
+
     public void undo() {
         Filters.undo();
     }
+
     public void handleCloseButtonAction() {
         Stage stage = (Stage) menuBar.getScene().getWindow();
         stage.close();
