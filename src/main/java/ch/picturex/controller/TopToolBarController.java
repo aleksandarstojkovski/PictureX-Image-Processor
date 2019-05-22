@@ -1,6 +1,5 @@
 package ch.picturex.controller;
 
-import ch.picturex.ThumbnailContainer;
 import ch.picturex.filters.Filters;
 import ch.picturex.SingleResourceBundle;
 import javafx.collections.FXCollections;
@@ -12,8 +11,6 @@ import javafx.scene.control.ListCell;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import org.controlsfx.control.Notifications;
-
-import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -41,44 +38,39 @@ public class TopToolBarController {
     @FXML
     public Button rotateDXButton;
     @FXML
-    public Button shareButton;
-    @FXML
     public Button undoButton;
     @FXML
     public BorderPane i18nButton;
     @FXML
     public Button resizeButton;
 
-    private ResourceBundle resourceBundleService;
-    private Preferences preference;
+    private ResourceBundle resourceBundleService = SingleResourceBundle.getInstance();
+    private Preferences preference = Preferences.userNodeForPackage(SingleResourceBundle.class);
 
     @FXML
     public void initialize() {
 
-        resourceBundleService = SingleResourceBundle.getInstance();
-        preference = Preferences.userNodeForPackage(SingleResourceBundle.class);
+        zoomInButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->
+            Filters.apply(MainController.selectedThumbnailContainers,"Zoom",Map.of("direction","in")));
 
-        zoomInButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->{
-            Filters.apply(MainController.selectedThumbnailContainers,"Zoom",Map.of("direction","in"));
-        });
-        zoomOutButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->{
-            Filters.apply(MainController.selectedThumbnailContainers,"Zoom",Map.of("direction","out"));
-        });
-        bNButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->{
-            Filters.apply(MainController.selectedThumbnailContainers,"BlackAndWhite",null);
-        });
-        undoButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->{
-            Filters.undo();
-        });
-        rotateSXButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->{
-            Filters.apply(MainController.selectedThumbnailContainers,"Rotate", Map.of("direction", "left"));
-        });
-        rotateDXButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->{
-            Filters.apply(MainController.selectedThumbnailContainers,"Rotate", Map.of("direction", "right"));
-        });
-        resizeButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->{
-            Filters.apply(MainController.selectedThumbnailContainers,"Resize", Map.of("width", 50, "height", 50));
-        });
+        zoomOutButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->
+            Filters.apply(MainController.selectedThumbnailContainers,"Zoom",Map.of("direction","out")));
+
+        bNButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->
+            Filters.apply(MainController.selectedThumbnailContainers,"BlackAndWhite",null));
+
+        undoButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->
+            Filters.undo());
+
+        rotateSXButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->
+            Filters.apply(MainController.selectedThumbnailContainers,"Rotate", Map.of("direction", "left")));
+
+        rotateDXButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->
+            Filters.apply(MainController.selectedThumbnailContainers,"Rotate", Map.of("direction", "right")));
+
+        resizeButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e->
+            Filters.apply(MainController.selectedThumbnailContainers,"Resize", Map.of("width", 50, "height", 50)));
+
         setI18NComboBox();
 
     }

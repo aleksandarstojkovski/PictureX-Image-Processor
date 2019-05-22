@@ -15,14 +15,17 @@ import java.util.ResourceBundle;
 
 public class Filters {
 
+
     private static ResourceBundle resourceBundle = SingleResourceBundle.getInstance();
     private static List<ArrayList<ThumbnailContainer>> selectionHistory = new ArrayList<>();
     private static EventBus bus = SingleEventBus.getInstance();
 
+    @SuppressWarnings("unchecked")
+
     public static void apply(ArrayList<ThumbnailContainer> thumbnailContainers, String filterName, Map<String, Object> parameters) {
         saveSelection(thumbnailContainers);
         for (ThumbnailContainer tc : thumbnailContainers) {
-            Class<IFilter> cls = null;
+            Class<IFilter> cls;
             try {
                 cls = (Class<IFilter>) Class.forName("ch.picturex.filters." + filterName);
                 Constructor<IFilter> constructor = cls.getConstructor();
@@ -41,7 +44,7 @@ public class Filters {
             bus.publish(new EventImageChanged(thumbnailContainers.get(0)));
     }
 
-    public static void saveSelection(List<ThumbnailContainer> thumbnailContainers){
+    private static void saveSelection(List<ThumbnailContainer> thumbnailContainers){
         selectionHistory.add(new ArrayList<>(thumbnailContainers));
     }
 

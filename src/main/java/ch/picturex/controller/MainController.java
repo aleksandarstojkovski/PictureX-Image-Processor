@@ -12,10 +12,6 @@ import de.muspellheim.eventbus.EventBus;
 import ch.picturex.events.EventLog;
 import ch.picturex.events.EventImageChanged;
 import ch.picturex.events.EventUpdateBottomToolBar;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -26,19 +22,19 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
-
 import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.prefs.Preferences;
 
+@SuppressWarnings({"unused", "unchecked"})
+
 public class MainController {
 
-    private final boolean DEBUG = false;
     static ArrayList<ThumbnailContainer> selectedThumbnailContainers = new ArrayList<>();
     private ArrayList<ThumbnailContainer> allThumbnailContainers = new ArrayList<>();
-    private List<ImageWrapper> listOfImageWrappers = new ArrayList<>();;
+    private List<ImageWrapper> listOfImageWrappers = new ArrayList<>();
     private File chosenDirectory;
     private long lastTime = 1;
     private static EventBus bus = SingleEventBus.getInstance();
@@ -72,7 +68,6 @@ public class MainController {
         tilePane.setVgap(10);
         tilePane.setHgap(10);
         tilePane.setAlignment(Pos.TOP_LEFT);
-
         // make scrollPane resizable
         scrollPane.setContent(tilePane);
 
@@ -85,13 +80,9 @@ public class MainController {
         TableColumn<String,String> thirdColumn = new TableColumn<>("value");
         thirdColumn.setCellValueFactory(new PropertyValueFactory<>("value"));
         thirdColumn.prefWidthProperty().bind(tableView.widthProperty().divide(4));
-
         tableView.getColumns().addAll(firstColumn,secondColumn,thirdColumn);
 
-        //aggiunta listener ad alla preview di sinistra
-        setClickListenerImageViewPreview(imageViewPreview);
-
-        setGlobingListener(globingTextField);
+        setSearchBarListener(globingTextField);
 
         //alla partenza se il programma è già stato usato fa partire tutto dall'ultimo path
         if(getLastDirectoryPreferences() != null){
@@ -136,7 +127,7 @@ public class MainController {
 
 
     @FXML
-    public void handleBrowseButton(ActionEvent event){
+    public void handleBrowseButton(){
         // default Windows directory choser
         final DirectoryChooser dirChoser = new DirectoryChooser();
 
@@ -158,15 +149,16 @@ public class MainController {
     }
 
     private void directoryChosenAction(){
-        setLastDirectoryPreferences(chosenDirectory); //aggiorna ad ogni selezione il path nelle preferenze
-        initUI();
+        // aggiorna ad ogni selezione il path nelle preferenze
+        setLastDirectoryPreferences(chosenDirectory);
+        clearUI();
         populateListOfFiles();
         bus.publish(new EventUpdateBottomToolBar(listOfImageWrappers, chosenDirectory));
         displayThumbnails();
         Filters.clearHistory();
     }
 
-    private void initUI(){
+    private void clearUI(){
         allThumbnailContainers.clear();
         tilePane.getChildren().clear();
         listOfImageWrappers.clear();
@@ -204,13 +196,11 @@ public class MainController {
                         diff=currentTime-lastTime;
 
                         if(diff<=215) {
-                            isDoubleClicked = true;
                             displayMetadata(imgWrp.getFile());
                             orizontalSplitPane.setDividerPosition(0, 1);
                             //buttonMenu.setVisible(true);
                         }
                         else {
-                            isDoubleClicked = false;
                             displayMetadata(imgWrp.getFile());
                             selectedThumbnailContainers.clear();
                             selectedThumbnailContainers.add(thumbnailContainer);
@@ -226,40 +216,8 @@ public class MainController {
         }
     }
 
-    private void setClickListenerImageViewPreview(ImageView imageViewPreview) {//aggiunta listener ad immagini
-        EventHandler<MouseEvent> myHandler = mouseEvent -> {
-            long diff = 0;
-            boolean isDoubleClicked = false;
-            final long currentTime = System.currentTimeMillis();
-
-            if(currentTime!=0){
-                diff=currentTime-lastTime;
-                if(diff<=215) {
-                    isDoubleClicked = true;
-                    double x = orizontalSplitPane.getDividerPositions()[0];
-                    if(orizontalSplitPane.getDividerPositions()[0]>0.9){
-                        orizontalSplitPane.setDividerPosition(0, 0.5);
-                        //buttonMenu.setVisible(false);
-                    }
-                    else {
-                        orizontalSplitPane.setDividerPosition(0, 1);
-                        //buttonMenu.setVisible(true);
-                    }
-                }
-                else {
-                    isDoubleClicked = false;
-                }
-            }
-            lastTime=currentTime;
-            mouseEvent.consume();
-        };
-        imageViewPreview.addEventHandler(MouseEvent.MOUSE_CLICKED, myHandler);
-    }
-
-    private void setGlobingListener (TextField globingTextField){
-        globingTextField.textProperty().addListener((observableValue, s, t1) -> {
-            printDebug("s= " + s);
-            printDebug("t1= " + t1);
+    private void setSearchBarListener(TextField searchBarTextField){
+        searchBarTextField.textProperty().addListener((observableValue, s, t1) -> {
             ArrayList<ThumbnailContainer> toBeRemovedTC = new ArrayList<>();
             ArrayList<ThumbnailContainer> toBeAddedTC = new ArrayList<>();
             for(ThumbnailContainer v : allThumbnailContainers){
@@ -317,7 +275,7 @@ public class MainController {
     }
 
     private void displayMetadata(File file){
-        Metadata metadata = null;
+        Metadata metadata;
         try {
             metadata = ImageMetadataReader.readMetadata(file);
         } catch (ImageProcessingException | IOException e) {
@@ -330,10 +288,6 @@ public class MainController {
                 tableView.getItems().add(mw);
             }
         }
-    }
-    
-    private void printDebug(String msg){
-        if(DEBUG) System.out.println(msg);
     }
 
     private void log(String text, Severity severity){

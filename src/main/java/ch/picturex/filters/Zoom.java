@@ -6,6 +6,8 @@ import ch.picturex.events.EventZoom;
 import de.muspellheim.eventbus.EventBus;
 import java.util.Map;
 
+@SuppressWarnings("unused")
+
 public class Zoom implements IFilter {
 
     private EventBus bus = SingleEventBus.getInstance();
