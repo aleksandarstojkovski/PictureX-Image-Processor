@@ -34,8 +34,8 @@ public class Filters {
                         .title(resourceBundle.getString("notifica.formatononsupport.titolo"))
                         .text(resourceBundle.getString("notifica.formatononsupport.testo"))
                         .showWarning();
+                bus.publish(new EventLog("Unable to apply filter " + filterName + " to image: " + tc.getImageWrapper().getName(),Severity.ERROR));
             }
-            bus.publish(new EventLog("Filter "+ filterName + " applied on image: " + tc.getImageWrapper().getName(), Severity.INFO));
         }
         if(thumbnailContainers.size()==1)
             bus.publish(new EventImageChanged(thumbnailContainers.get(0)));
