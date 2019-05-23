@@ -11,10 +11,12 @@ import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
@@ -22,6 +24,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+import javafx.util.Pair;
+
 import java.io.*;
 import java.net.URL;
 import java.util.*;
@@ -124,7 +128,9 @@ public class MainController  implements Initializable {
         model.subscribe(EventBrowseButton.class, e->handleBrowseButton());
     }
 
+    public void handleResizeButton(){
 
+    }
 
     @FXML
     public void handleBrowseButton(){
