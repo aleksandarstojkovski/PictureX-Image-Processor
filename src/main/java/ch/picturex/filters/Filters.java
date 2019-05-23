@@ -41,8 +41,8 @@ public class Filters {
                 model.publish(new EventLog("Filter " + filterName + " applied on image: " + tc.getImageWrapper().getName(),Severity.INFO));
             } else {
                 Notifications.create()
-                        .title(model.getResourceBundle().getString("notifica.formatononsupport.titolo"))
-                        .text(model.getResourceBundle().getString("notifica.formatononsupport.testo"))
+                        .title(model.getResourceBundle().getString("notify.notSupportedFormat.title"))
+                        .text(model.getResourceBundle().getString("notify.notSupportedFormat.text"))
                         .showWarning();
                 model.publish(new EventLog("Unable to apply filter " + filterName + " to image: " + tc.getImageWrapper().getName(), Severity.ERROR));
             }

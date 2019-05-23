@@ -13,7 +13,7 @@
     <MenuItem mnemonicParsing="false" onAction="#handleBrowseButton"
               text="%menu.Browser"/>
 </Menu>
-<Menu mnemonicParsing="false" text="%menu.modifica">
+<Menu mnemonicParsing="false" text="%menu.modify">
     <MenuItem mnemonicParsing="false" onAction="#undo" text="%menu.Undo"/>
 
     <Menu mnemonicParsing="false" text="%menu.Filters">
@@ -23,16 +23,18 @@
                   text="%menu.RotateDX"/>
         <MenuItem mnemonicParsing="false" onAction="#rotateSXMetod"
                   text="%menu.RotateSX"/>
+        <MenuItem mnemonicParsing="false" onAction="#resizeMetod"
+                  text="%menu.Resize"/>
     </Menu>
 
 </Menu>
-<Menu mnemonicParsing="false" text="%menu.vista">
+<Menu mnemonicParsing="false" text="%menu.view">
     <MenuItem mnemonicParsing="false" text="View"/>
 </Menu>
-<Menu mnemonicParsing="false" text="%menu.finestra">
+<Menu mnemonicParsing="false" text="%menu.window">
     <MenuItem mnemonicParsing="false" text="Window"/>
 </Menu>
-<Menu mnemonicParsing="false" text="%menu.aiuto">
+<Menu mnemonicParsing="false" text="%menu.help">
     <MenuItem mnemonicParsing="false" text="Help"/>
 </Menu>
 </MenuBar>

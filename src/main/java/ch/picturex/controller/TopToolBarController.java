@@ -145,7 +145,6 @@ public class TopToolBarController implements Initializable {
     }
 
     private void resizeButton(){
-        //Filters.apply(model.getSelectedThumbnailContainers(),"Resize", Map.of("width", 50, "height", 50));
         Dialog<Pair<Integer, Integer>> dialog = new Dialog<>();
         dialog.setTitle(model.getResourceBundle().getString("dialog.title"));
         dialog.setHeaderText(model.getResourceBundle().getString("dialog.text"));
@@ -154,8 +153,8 @@ public class TopToolBarController implements Initializable {
         //dialog.setGraphic(new ImageView(this.getClass().getResource("icons/resize.png").toString()));
 
 // Set the button types.
-        ButtonType loginButtonType = new ButtonType("Modifica", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
+        ButtonType modifyButton = new ButtonType(model.getResourceBundle().getString("dialog.title"), ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(modifyButton, ButtonType.CANCEL);
 
 // Create the username and password labels and fields.
         GridPane grid = new GridPane();
@@ -163,8 +162,6 @@ public class TopToolBarController implements Initializable {
         grid.setVgap(10);
         grid.setPadding(new Insets(20, 150, 10, 10));
 
-        //TextField height = new TextField();
-        //height.setPromptText("Username");
         String INITAL_VALUE = "100";
         NumberFormat format = NumberFormat.getIntegerInstance();
         UnaryOperator<TextFormatter.Change> filter = c -> {
@@ -180,7 +177,7 @@ public class TopToolBarController implements Initializable {
             }
             return c;
         };
-        TextFormatter<Integer> widthFormatter = new TextFormatter<Integer>(
+        TextFormatter<Integer> widthFormatter = new TextFormatter<>(
                 new IntegerStringConverter(), 0, filter);
         Spinner<Integer> widthSpinner = new Spinner<>();
         widthSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(
@@ -188,7 +185,7 @@ public class TopToolBarController implements Initializable {
         widthSpinner.setEditable(true);
         widthSpinner.getEditor().setTextFormatter(widthFormatter);
 
-        TextFormatter<Integer> heightFormatter = new TextFormatter<Integer>(
+        TextFormatter<Integer> heightFormatter = new TextFormatter<>(
                 new IntegerStringConverter(), 0, filter);
         Spinner<Integer> heightSpinner = new Spinner<>();
         heightSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(
@@ -196,33 +193,27 @@ public class TopToolBarController implements Initializable {
         heightSpinner.setEditable(true);
         heightSpinner.getEditor().setTextFormatter(heightFormatter);
 
-
-
-        grid.add(new Label("Altezza:"), 0, 0);
-        //grid.add(height, 1, 0);
+        grid.add(new Label(model.getResourceBundle().getString("dialog.heightLabel")), 0, 0);
         grid.add(widthSpinner, 1, 0);
-        grid.add(new Label("Larghezza:"), 0, 1);
+        grid.add(new Label(model.getResourceBundle().getString("dialog.widthLabel")), 0, 1);
         grid.add(heightSpinner, 1, 1);
-
 
         dialog.getDialogPane().setContent(grid);
 
-// Request focus on the username field by default.
         Platform.runLater(() -> widthSpinner.requestFocus());
 
-// Convert the result to a username-password-pair when the login button is clicked.
         dialog.setResultConverter(dialogButton -> {
-            if (dialogButton == loginButtonType) {
-                return new Pair<Integer, Integer>(Integer.valueOf(widthSpinner.getValue()), Integer.valueOf(heightSpinner.getValue()));
+            if (dialogButton == modifyButton) {
+                return new Pair<>(widthSpinner.getValue(), heightSpinner.getValue());
             }
             return null;
         });
 
         Optional<Pair<Integer, Integer>> result = dialog.showAndWait();
 
-        result.ifPresent(usernamePassword -> {
+        result.ifPresent(e -> {
             Filters.apply(model.getSelectedThumbnailContainers(),"Resize", Map.of("width", result.get().getKey(), "height", result.get().getValue()));
-            System.out.println("Username=" + usernamePassword.getValue() + ", Password=" + usernamePassword.getValue());
+            System.out.println("width=" + e.getValue() + ", height=" + e.getValue());
         });
     }
 
