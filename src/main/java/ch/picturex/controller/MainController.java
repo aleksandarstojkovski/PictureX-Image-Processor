@@ -5,7 +5,6 @@ import ch.picturex.events.*;
 import ch.picturex.filters.Filters;
 import ch.picturex.model.ImageWrapper;
 import ch.picturex.model.MetadataWrapper;
-import ch.picturex.model.Severity;
 import ch.picturex.model.ThumbnailContainer;
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
@@ -25,8 +24,6 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import java.io.*;
 import java.net.URL;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.prefs.Preferences;
 
@@ -39,7 +36,6 @@ public class MainController  implements Initializable {
     private List<ImageWrapper> listOfImageWrappers = new ArrayList<>();
     private File chosenDirectory;
     private long lastTime = 1;
-    private static final DateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
     private TilePane tilePane;
     private Model model = Model.getInstance();
 
@@ -62,7 +58,7 @@ public class MainController  implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        configuremodel();
+        configureBus();
 
         model.publish(new EventSelectedThumbnailContainers(selectedThumbnailContainers));
 
@@ -113,8 +109,7 @@ public class MainController  implements Initializable {
         imageViewPreview.setFitHeight(imageViewPreview.getFitHeight()-100);
     }
 
-    private void configuremodel(){
-        model.subscribe(EventLog.class, e -> log(e.getText(), e.getSeverity()));
+    private void configureBus(){
         model.subscribe(EventImageChanged.class, e -> {
             imageViewPreview.setImage(e.getThubnailContainer().getImageWrapper().getPreviewImageView());
             if(selectedThumbnailContainers.size()==1)displayMetadata(selectedThumbnailContainers.get(0).getImageWrapper().getFile()); //update exif table
@@ -293,23 +288,6 @@ public class MainController  implements Initializable {
                 MetadataWrapper mw = new MetadataWrapper(tag);
                 tableView.getItems().add(mw);
             }
-        }
-    }
-
-    private void log(String text, Severity severity){
-        Date date = new Date();
-        FileWriter fr;
-        PrintWriter out = null;
-        try {
-            fr = new FileWriter(chosenDirectory+ File.separator + "log.txt", true);
-            BufferedWriter br = new BufferedWriter(fr);
-            out = new PrintWriter(br);
-            out.println("[" + sdf.format(date) + "]" + " " + severity + " : " + text);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if (out != null) {
-            out.close();
         }
     }
 

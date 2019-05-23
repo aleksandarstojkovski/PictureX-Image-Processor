@@ -6,6 +6,7 @@ import ch.picturex.events.EventFilterBlackAndWhite;
 import ch.picturex.events.EventFilterRotate;
 import ch.picturex.filters.Filters;
 import ch.picturex.model.Direction;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.MenuBar;
@@ -42,8 +43,9 @@ public class MenuBarController implements Initializable {
     }
 
     public void handleCloseButtonAction() {
-        Stage stage = (Stage) menuBar.getScene().getWindow();
-        stage.close();
+        //Stage stage = (Stage) menuBar.getScene().getWindow();
+        //stage.close();
+        Platform.exit();
     }
 
     @FXML

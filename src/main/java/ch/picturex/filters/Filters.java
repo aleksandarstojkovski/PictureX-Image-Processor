@@ -17,10 +17,12 @@ public class Filters {
 
     private static Model model = Model.getInstance();
     private static List<ArrayList<ThumbnailContainer>> selectionHistory = new ArrayList<>();
+    private static boolean success;
 
     @SuppressWarnings("unchecked")
 
     public static void apply(ArrayList<ThumbnailContainer> thumbnailContainers, String filterName, Map<String, Object> parameters) {
+        success=true;
         saveSelection(thumbnailContainers);
         for (ThumbnailContainer tc : thumbnailContainers) {
             Class<IFilter> cls;
@@ -31,6 +33,13 @@ public class Filters {
                 Method method = cls.getMethod("apply", ThumbnailContainer.class, Map.class);
                 method.invoke(instanceOfIFilter,tc, parameters);
             } catch (ClassNotFoundException | InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
+                success=false;
+            }
+            if (success){
+                if(thumbnailContainers.size()==1)
+                    model.publish(new EventImageChanged(thumbnailContainers.get(0)));
+                model.publish(new EventLog("Filter " + filterName + " applied on image: " + tc.getImageWrapper().getName(),Severity.INFO));
+            } else {
                 Notifications.create()
                         .title(model.getResourceBundle().getString("notifica.formatononsupport.titolo"))
                         .text(model.getResourceBundle().getString("notifica.formatononsupport.testo"))
@@ -38,8 +47,6 @@ public class Filters {
                 model.publish(new EventLog("Unable to apply filter " + filterName + " to image: " + tc.getImageWrapper().getName(), Severity.ERROR));
             }
         }
-        if(thumbnailContainers.size()==1)
-            model.publish(new EventImageChanged(thumbnailContainers.get(0)));
     }
 
     private static void saveSelection(List<ThumbnailContainer> thumbnailContainers){

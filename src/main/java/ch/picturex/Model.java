@@ -3,6 +3,7 @@ package ch.picturex;
 import ch.picturex.events.EventDirectoryChanged;
 import ch.picturex.events.EventSelectedThumbnailContainers;
 import ch.picturex.model.ThumbnailContainer;
+import ch.picturex.service.LogService;
 import de.muspellheim.eventbus.EventBus;
 import java.io.File;
 import java.util.ArrayList;
@@ -16,18 +17,20 @@ import java.util.prefs.Preferences;
 public class Model {
 
     private static Model model = null;
-    private static EventBus bus = null;
+    private EventBus bus = null;
+    private LogService logService = null;
     private File chosenDirectory = null;
     private ArrayList<ThumbnailContainer> selectedThumbnailContainers = null;
     private ResourceBundle resourceBundle = null;
-    private Locale locale;
+    private Locale locale = null;
 
     private Model(){}
 
     public static Model getInstance(){
         if (model == null){
             model=new Model();
-            bus=new EventBus();
+            model.bus=new EventBus();
+            model.logService=new LogService();
             configureBus();
             setPreferences();
             setResourceBundle();
@@ -36,11 +39,11 @@ public class Model {
     }
 
     private static void configureBus(){
-        bus.subscribe(EventDirectoryChanged.class, e->{
+        model.bus.subscribe(EventDirectoryChanged.class, e->{
             model.chosenDirectory = e.getFile();
             model.setLastDirectoryPreferences(e.getFile());
         });
-        bus.subscribe(EventSelectedThumbnailContainers.class, e->
+        model.bus.subscribe(EventSelectedThumbnailContainers.class, e->
             model.selectedThumbnailContainers = e.getSelectedThumbnailContainers()
         );
     }
@@ -84,15 +87,19 @@ public class Model {
     }
 
     public <T> void subscribe(Class<? extends T> eventType, Consumer<T> subscriber){
-        bus.subscribe(eventType,subscriber);
+        model.bus.subscribe(eventType,subscriber);
     }
 
     public void publish(Object event){
-        bus.publish(event);
+        model.bus.publish(event);
     }
 
     public ResourceBundle getResourceBundle() {
         return model.resourceBundle;
+    }
+
+    void destroy(){
+        model.logService.close();
     }
 
 }
