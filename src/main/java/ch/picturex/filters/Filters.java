@@ -43,7 +43,8 @@ public class Filters {
     }
 
     private static void saveSelection(List<ThumbnailContainer> thumbnailContainers){
-        selectionHistory.add(new ArrayList<>(thumbnailContainers));
+        if (thumbnailContainers.size()>0)
+            selectionHistory.add(new ArrayList<>(thumbnailContainers));
     }
 
     public static void undo(){
