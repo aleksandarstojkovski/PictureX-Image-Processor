@@ -11,6 +11,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import org.controlsfx.control.Notifications;
@@ -54,11 +55,22 @@ public class TopToolBarController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         configureBus();
-        setHandelers();
+        installTooltips();
+        setHandlers();
         setI18NComboBox();
     }
 
-    private void setHandelers(){
+    private void installTooltips(){
+        Tooltip.install(zoomInButton, new Tooltip("Zoom In"));
+        Tooltip.install(zoomOutButton, new Tooltip("Zoom Out"));
+        Tooltip.install(blackAndWhiteButton, new Tooltip("Black And White Filter"));
+        Tooltip.install(rotateLeftButton, new Tooltip("Rotate Left"));
+        Tooltip.install(rotateRightButton, new Tooltip("Rotate Right"));
+        Tooltip.install(undoButton, new Tooltip("Undo"));
+        Tooltip.install(i18nButton, new Tooltip("Language"));
+    }
+
+    private void setHandlers(){
         zoomInButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e-> model.publish(new EventFilterZoom(Direction.IN)));
         zoomOutButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e-> model.publish(new EventFilterZoom(Direction.OUT)));
         blackAndWhiteButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e-> model.publish(new EventFilterBlackAndWhite()));
