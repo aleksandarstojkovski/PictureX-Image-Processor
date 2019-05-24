@@ -10,10 +10,8 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -182,19 +180,16 @@ public class TopToolBarController implements Initializable {
             }
             return c;
         };
-        TextFormatter<Integer> widthFormatter = new TextFormatter<>(
-                new IntegerStringConverter(), 0, filter);
+
+        TextFormatter<Integer> widthFormatter = new TextFormatter<>(new IntegerStringConverter(), 0, filter);
         Spinner<Integer> widthSpinner = new Spinner<>();
-        widthSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(
-                0, 10000, Integer.parseInt(INITAL_VALUE)));
+        TextFormatter<Integer> heightFormatter = new TextFormatter<>(new IntegerStringConverter(), 0, filter);
+        Spinner<Integer> heightSpinner = new Spinner<>();
+
+        widthSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 10000, Integer.parseInt(INITAL_VALUE)));
         widthSpinner.setEditable(true);
         widthSpinner.getEditor().setTextFormatter(widthFormatter);
-
-        TextFormatter<Integer> heightFormatter = new TextFormatter<>(
-                new IntegerStringConverter(), 0, filter);
-        Spinner<Integer> heightSpinner = new Spinner<>();
-        heightSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(
-                0, 10000, Integer.parseInt(INITAL_VALUE)));
+        heightSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 10000, Integer.parseInt(INITAL_VALUE)));
         heightSpinner.setEditable(true);
         heightSpinner.getEditor().setTextFormatter(heightFormatter);
 
@@ -205,7 +200,7 @@ public class TopToolBarController implements Initializable {
 
         dialog.getDialogPane().setContent(grid);
 
-        Platform.runLater(() -> widthSpinner.requestFocus());
+        Platform.runLater(widthSpinner::requestFocus);
 
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == modifyButton) {
