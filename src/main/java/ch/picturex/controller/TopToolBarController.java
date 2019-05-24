@@ -113,10 +113,7 @@ public class TopToolBarController implements Initializable {
         comboBox.getSelectionModel().select(model.getLocale());
         comboBox.setOnAction(event -> {
             preference.put("language",comboBox.getSelectionModel().getSelectedItem().getLanguage());
-            Notifications.create()
-                    .title(model.getResourceBundle().getString("notify.changeLanguage.title"))
-                    .text(model.getResourceBundle().getString("notify.changeLanguage.text"))
-                    .showInformation();
+            model.publish(new EventLanguageChange());
         });
         i18nButton.setCenter(comboBox);
     }

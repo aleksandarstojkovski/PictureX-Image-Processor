@@ -100,6 +100,7 @@ public class Model {
 
     void destroy(){
         model.logService.close();
+        model = null;
     }
 
 }
