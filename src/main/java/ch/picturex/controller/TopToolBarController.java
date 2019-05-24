@@ -11,7 +11,6 @@ import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.util.Pair;
@@ -24,6 +23,7 @@ import java.util.function.UnaryOperator;
 import java.util.prefs.Preferences;
 
 @SuppressWarnings("unused")
+
 public class TopToolBarController implements Initializable {
 
     @FXML
@@ -39,9 +39,9 @@ public class TopToolBarController implements Initializable {
     @FXML
     public Button undoButton;
     @FXML
-    private BorderPane i18nButton;
-    @FXML
     public Button resizeButton;
+    @FXML
+    public Button zoomResetButton;
 
     private Preferences preference = Preferences.userNodeForPackage(Model.class);
     private Model model = Model.getInstance();
@@ -60,7 +60,7 @@ public class TopToolBarController implements Initializable {
         Tooltip.install(rotateLeftButton, new Tooltip("Rotate Left"));
         Tooltip.install(rotateRightButton, new Tooltip("Rotate Right"));
         Tooltip.install(undoButton, new Tooltip("Undo"));
-        Tooltip.install(i18nButton, new Tooltip("Language"));
+        Tooltip.install(zoomResetButton, new Tooltip("Reset Zoom"));
     }
 
     private void setHandlers(){
@@ -71,6 +71,7 @@ public class TopToolBarController implements Initializable {
         rotateLeftButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e-> model.publish(new EventFilterRotate(Direction.LEFT)));
         rotateRightButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e-> model.publish(new EventFilterRotate(Direction.RIGHT)));
         resizeButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e-> model.publish(new EventOpenDialogResize()));
+        zoomResetButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e-> model.publish(new EventFilterZoom(Direction.RESET)));
     }
 
     private void configureBus(){
@@ -84,8 +85,10 @@ public class TopToolBarController implements Initializable {
         model.subscribe(EventFilterZoom.class, e->{
             if (e.getDirection() == Direction.IN){
                 zoomInButton();
-            } else {
+            } else if (e.getDirection() == Direction.OUT){
                 zoomOutButton();
+            } else {
+                zoomResetButton();
             }
         });
         model.subscribe(EventFilterUndo.class, e->undoButton());
@@ -95,6 +98,10 @@ public class TopToolBarController implements Initializable {
 
     private void zoomInButton(){
         Filters.apply(model.getSelectedThumbnailContainers(),"Zoom",Map.of("direction","in"));
+    }
+
+    private void zoomResetButton(){
+        Filters.apply(model.getSelectedThumbnailContainers(),"Zoom",Map.of("direction","reset"));
     }
 
     private void zoomOutButton(){

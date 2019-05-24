@@ -9,6 +9,14 @@
 <HBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/"
       fx:controller="ch.picturex.controller.TopToolBarController">
    <Pane minWidth="4"/>
+   <Button fx:id="zoomResetButton" mnemonicParsing="false">
+      <graphic>
+         <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+            <Image url="@../icons/zoom_reset.png"/>
+         </ImageView>
+      </graphic>
+   </Button>
+   <Pane minWidth="4"/>
    <Button fx:id="zoomInButton" mnemonicParsing="false">
       <graphic>
          <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">

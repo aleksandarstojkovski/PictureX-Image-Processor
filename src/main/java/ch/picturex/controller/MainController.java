@@ -21,15 +21,12 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
 import java.io.*;
 import java.net.URL;
 import java.util.*;
-import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 @SuppressWarnings({"unused", "unchecked"})
@@ -120,6 +117,11 @@ public class MainController  implements Initializable {
         imageViewPreview.setFitHeight(imageViewPreview.getFitHeight()-100);
     }
 
+    private void zoomReset(){
+        imageViewPreview.fitWidthProperty().bind(previewPanel.widthProperty()); //make resizable imageViewPreview
+        imageViewPreview.fitHeightProperty().bind(previewPanel.heightProperty()); //make resizable imageViewPreview
+    }
+
     private void configureBus(){
         model.subscribe(EventImageChanged.class, e -> {
             imageViewPreview.setImage(e.getThubnailContainer().getImageWrapper().getPreviewImageView());
@@ -128,16 +130,14 @@ public class MainController  implements Initializable {
         model.subscribe(EventZoom.class, e->{
             if (e.getDirection().equals("in")){
                 zoomIn();
-            } else {
+            } else if (e.getDirection().equals("out")){
                 zoomOut();
+            } else {
+                zoomReset();
             }
         });
         model.subscribe(EventBrowseButton.class, e->handleBrowseButton());
         model.publish(new EventSelectedThumbnailContainers(selectedThumbnailContainers));
-    }
-
-    public void handleResizeButton(){
-
     }
 
     @FXML
