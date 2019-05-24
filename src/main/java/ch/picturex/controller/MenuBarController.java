@@ -1,10 +1,7 @@
 package ch.picturex.controller;
 
 import ch.picturex.Model;
-import ch.picturex.events.EventBrowseButton;
-import ch.picturex.events.EventFilterBlackAndWhite;
-import ch.picturex.events.EventFilterRotate;
-import ch.picturex.events.EventOpenDialogResize;
+import ch.picturex.events.*;
 import ch.picturex.filters.Filters;
 import ch.picturex.model.Direction;
 import javafx.application.Platform;
@@ -13,10 +10,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.MenuBar;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.prefs.Preferences;
 
 public class MenuBarController implements Initializable {
 
     private Model model = Model.getInstance();
+    private Preferences preference = Preferences.userNodeForPackage(Model.class);
 
     @FXML
     MenuBar menuBar;
@@ -54,5 +53,18 @@ public class MenuBarController implements Initializable {
     private void handleBrowseButton(){
         model.publish(new EventBrowseButton());
     }
+
+    @FXML
+    private void setItaLanguage(){
+        preference.put("language","it");
+        model.publish(new EventLanguageChange());
+    }
+
+    @FXML
+    private void setEngLanguage(){
+        preference.put("language","en");
+        model.publish(new EventLanguageChange());
+    }
+
 
 }

@@ -5,8 +5,6 @@ import ch.picturex.events.*;
 import ch.picturex.filters.Filters;
 import ch.picturex.model.Direction;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
@@ -18,7 +16,6 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 import javafx.util.converter.IntegerStringConverter;
-import org.controlsfx.control.Notifications;
 import java.net.URL;
 import java.text.NumberFormat;
 import java.text.ParsePosition;
@@ -26,15 +23,7 @@ import java.util.*;
 import java.util.function.UnaryOperator;
 import java.util.prefs.Preferences;
 
-class LanguageListCell extends ListCell<Locale> {
-    @Override protected void updateItem(Locale item, boolean empty) {
-        super.updateItem(item, empty);
-        if (item != null) {
-            setText(item.getLanguage());
-        }
-    }
-}
-
+@SuppressWarnings("unused")
 public class TopToolBarController implements Initializable {
 
     @FXML
@@ -50,7 +39,7 @@ public class TopToolBarController implements Initializable {
     @FXML
     public Button undoButton;
     @FXML
-    public BorderPane i18nButton;
+    private BorderPane i18nButton;
     @FXML
     public Button resizeButton;
 
@@ -62,7 +51,6 @@ public class TopToolBarController implements Initializable {
         configureBus();
         installTooltips();
         setHandlers();
-        setI18NComboBox();
     }
 
     private void installTooltips(){
@@ -105,19 +93,6 @@ public class TopToolBarController implements Initializable {
         model.subscribe(EventOpenDialogResize.class, e->resizeButton());
     }
 
-    private void setI18NComboBox(){
-        ComboBox<Locale> comboBox = new ComboBox<>();
-        ObservableList<Locale> options = FXCollections.observableArrayList(Locale.ENGLISH, Locale.ITALIAN);
-        comboBox.setItems(options);
-        comboBox.setCellFactory(p -> new LanguageListCell());
-        comboBox.getSelectionModel().select(model.getLocale());
-        comboBox.setOnAction(event -> {
-            preference.put("language",comboBox.getSelectionModel().getSelectedItem().getLanguage());
-            model.publish(new EventLanguageChange());
-        });
-        i18nButton.setCenter(comboBox);
-    }
-
     private void zoomInButton(){
         Filters.apply(model.getSelectedThumbnailContainers(),"Zoom",Map.of("direction","in"));
     }
@@ -147,16 +122,16 @@ public class TopToolBarController implements Initializable {
         dialog.setTitle(model.getResourceBundle().getString("dialog.title"));
         dialog.setHeaderText(model.getResourceBundle().getString("dialog.text"));
 
-// Set the icon (must be included in the project).
+        // Set the icon (must be included in the project).
         Stage stage = (Stage)dialog.getDialogPane().getScene().getWindow();
         stage.getIcons().add(new Image("/icons/icon.png"));
 
 
-// Set the button types.
+        // Set the button types.
         ButtonType modifyButton = new ButtonType(model.getResourceBundle().getString("dialog.title"), ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(modifyButton, ButtonType.CANCEL);
 
-// Create the username and password labels and fields.
+        // Create the username and password labels and fields.
         GridPane grid = new GridPane();
         grid.setHgap(20);
         grid.setVgap(10);

@@ -29,7 +29,12 @@
 
 </Menu>
 <Menu mnemonicParsing="false" text="%menu.view">
-    <MenuItem mnemonicParsing="false" text="View"/>
+    <Menu mnemonicParsing="false" text="%menu.language">
+    <MenuItem mnemonicParsing="false" onAction="#setItaLanguage"
+              text="%menu.italian"/>
+    <MenuItem mnemonicParsing="false" onAction="#setEngLanguage"
+              text="%menu.english"/>
+    </Menu>
 </Menu>
 <Menu mnemonicParsing="false" text="%menu.window">
     <MenuItem mnemonicParsing="false" text="Window"/>
