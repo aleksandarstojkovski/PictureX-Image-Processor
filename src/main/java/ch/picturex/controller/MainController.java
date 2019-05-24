@@ -11,6 +11,7 @@ import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
+import javafx.animation.*;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
@@ -20,25 +21,20 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.*;
 import java.net.URL;
 import java.util.*;
+import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 @SuppressWarnings({"unused", "unchecked"})
 
 public class MainController  implements Initializable {
-
-    private ArrayList<ThumbnailContainer> selectedThumbnailContainers = new ArrayList<>();
-    private ArrayList<ThumbnailContainer> allThumbnailContainers = new ArrayList<>();
-    private List<ImageWrapper> listOfImageWrappers = new ArrayList<>();
-    private File chosenDirectory;
-    private long lastTime = 1;
-    private TilePane tilePane;
-    private Model model = Model.getInstance();
 
     @FXML
     private AnchorPane mainAnchorPane;
@@ -56,12 +52,22 @@ public class MainController  implements Initializable {
     private TextField globingTextField;
     @FXML
     private MenuBar menuBar;
+    @FXML
+    private Button browseButton;
+
+    private ArrayList<ThumbnailContainer> selectedThumbnailContainers = new ArrayList<>();
+    private ArrayList<ThumbnailContainer> allThumbnailContainers = new ArrayList<>();
+    private List<ImageWrapper> listOfImageWrappers = new ArrayList<>();
+    private File chosenDirectory;
+    private long lastTime = 1;
+    private TilePane tilePane;
+    private Model model = Model.getInstance();
+    private Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1.0), evt -> browseButton.requestFocus()), new KeyFrame(Duration.seconds(1.5), evt -> mainAnchorPane.requestFocus()));
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        configureBus();
 
-        model.publish(new EventSelectedThumbnailContainers(selectedThumbnailContainers));
+        configureBus();
 
         // tilePane used inside the scroll pane
         tilePane = new TilePane();
@@ -89,6 +95,10 @@ public class MainController  implements Initializable {
         if(getLastDirectoryPreferences() != null){
             chosenDirectory = getLastDirectoryPreferences();
             directoryChosenAction();
+        } else {
+            timeline = new Timeline(new KeyFrame(Duration.seconds(1.0), evt -> browseButton.requestFocus()), new KeyFrame(Duration.seconds(1.5), evt -> mainAnchorPane.requestFocus()));
+            timeline.setCycleCount(Animation.INDEFINITE);
+            timeline.play();
         }
 
         imageViewPreview.fitWidthProperty().bind(previewPanel.widthProperty()); //make resizable imageViewPreview
@@ -123,6 +133,7 @@ public class MainController  implements Initializable {
             }
         });
         model.subscribe(EventBrowseButton.class, e->handleBrowseButton());
+        model.publish(new EventSelectedThumbnailContainers(selectedThumbnailContainers));
     }
 
     public void handleResizeButton(){
@@ -146,6 +157,8 @@ public class MainController  implements Initializable {
         chosenDirectory = dirChoser.showDialog(stage);
 
         if (chosenDirectory != null){
+            timeline.stop();
+            mainAnchorPane.requestFocus();
             directoryChosenAction();
             model.publish(new EventDirectoryChanged(chosenDirectory));
         }

@@ -33,6 +33,7 @@ public class FXApp extends Application {
         primaryStage.setScene(new Scene(root, 1040, 700));
         primaryStage.getIcons().add(new Image(appIcon));
         primaryStage.show();
+        root.requestFocus();
     }
 
     @Override
