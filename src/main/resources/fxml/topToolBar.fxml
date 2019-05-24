@@ -16,7 +16,7 @@
          </ImageView>
       </graphic>
    </Button>
-   <Pane minWidth="4"/>
+   <Pane minWidth="10"/>
    <Button fx:id="zoomInButton" mnemonicParsing="false">
       <graphic>
          <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
