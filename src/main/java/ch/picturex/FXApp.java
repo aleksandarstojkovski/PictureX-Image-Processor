@@ -6,9 +6,13 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import java.io.IOException;
+import java.util.Optional;
 
 @SuppressWarnings("FieldCanBeLocal")
 
@@ -41,16 +45,38 @@ public class FXApp extends Application {
     }
 
     private void reloadUI(){
-        primaryStage.close();
-        model.destroy();
-        model = Model.getInstance();
-        try {
-            primaryStage.setScene(new Scene(FXMLLoader.load(getClass().getResource(mainFxml),model.getResourceBundle()), 1040, 700));
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (closeWindowEvent(new WindowEvent(primaryStage,WindowEvent.WINDOW_CLOSE_REQUEST),primaryStage)) {
+            model.destroy();
+            model = Model.getInstance();
+            try {
+                primaryStage.setScene(new Scene(FXMLLoader.load(getClass().getResource(mainFxml), model.getResourceBundle()), 1040, 700));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Platform.runLater(() -> primaryStage.show());
+            configureBus();
         }
-        Platform.runLater(()->primaryStage.show());
-        configureBus();
+    }
+
+    private boolean closeWindowEvent(WindowEvent event, Stage primaryStage) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.getButtonTypes().remove(ButtonType.OK);
+        alert.getButtonTypes().add(ButtonType.CANCEL);
+        alert.getButtonTypes().add(ButtonType.YES);
+        alert.setTitle(model.getResourceBundle().getString("alert.title"));
+        alert.setContentText(model.getResourceBundle().getString("alert.text"));
+        alert.initOwner(primaryStage.getOwner());
+        Stage stage = (Stage)alert.getDialogPane().getScene().getWindow();
+        stage.setResizable(true);
+        stage.getIcons().add(new Image(appIcon));
+        Optional<ButtonType> res = alert.showAndWait();
+        if(res.isPresent()) {
+            if(res.get().equals(ButtonType.CANCEL)) {
+                event.consume();
+                return false;
+            }
+        }
+        return true;
     }
 
     public static void main(String[] args) {
