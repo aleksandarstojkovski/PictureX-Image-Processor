@@ -12,9 +12,12 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 import javafx.util.Pair;
 import javafx.util.converter.IntegerStringConverter;
 import org.controlsfx.control.Notifications;
@@ -150,7 +153,9 @@ public class TopToolBarController implements Initializable {
         dialog.setHeaderText(model.getResourceBundle().getString("dialog.text"));
 
 // Set the icon (must be included in the project).
-        //dialog.setGraphic(new ImageView(this.getClass().getResource("icons/resize.png").toString()));
+        Stage stage = (Stage)dialog.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(new Image("/icons/icon.png"));
+
 
 // Set the button types.
         ButtonType modifyButton = new ButtonType(model.getResourceBundle().getString("dialog.title"), ButtonBar.ButtonData.OK_DONE);
