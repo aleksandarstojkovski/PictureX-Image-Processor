@@ -53,7 +53,7 @@
                     <GridPane fx:id="previewPanel" minHeight="200" alignment="CENTER">
                         <ScrollPane fitToWidth="true" fitToHeight="true" GridPane.halignment="CENTER"
                                     GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER"
-                                    GridPane.vgrow="ALWAYS">
+                                    GridPane.vgrow="ALWAYS" pannable="true" style="-fx-cursor: hand">
                             <StackPane>
                                 <ImageView fx:id="imageViewPreview" fitHeight="288.0" fitWidth="283.0"
                                            pickOnBounds="true" preserveRatio="true"/>
