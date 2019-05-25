@@ -12,6 +12,7 @@ import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
 import javafx.animation.*;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
@@ -27,6 +28,7 @@ import javafx.util.Duration;
 import java.io.*;
 import java.net.URL;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
 import java.util.prefs.Preferences;
 
 @SuppressWarnings({"unused", "unchecked"})
@@ -128,12 +130,16 @@ public class MainController  implements Initializable {
             if(selectedThumbnailContainers.size()==1)displayMetadata(selectedThumbnailContainers.get(0).getImageWrapper().getFile()); //update exif table
         });
         model.subscribe(EventZoom.class, e->{
-            if (e.getDirection().equals("in")){
-                zoomIn();
-            } else if (e.getDirection().equals("out")){
-                zoomOut();
-            } else {
-                zoomReset();
+            switch (e.getDirection()) {
+                case "in":
+                    zoomIn();
+                    break;
+                case "out":
+                    zoomOut();
+                    break;
+                default:
+                    zoomReset();
+                    break;
             }
         });
         model.subscribe(EventBrowseButton.class, e->handleBrowseButton());
@@ -197,39 +203,40 @@ public class MainController  implements Initializable {
     }
 
     private void displayThumbnails(){
+        ExecutorService executorService = model.getExecutorService();
         for(ImageWrapper imgWrp : listOfImageWrappers){
-            ThumbnailContainer thumbnailContainer = new ThumbnailContainer(imgWrp);
-            thumbnailContainer.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> { //aggiunta listener ad immagini
-                long diff;
-                boolean isDoubleClicked = false;
-                final long currentTime = System.currentTimeMillis();
-                if (mouseEvent.isShiftDown() || mouseEvent.isControlDown()){
-                    selectedThumbnailContainers.add(thumbnailContainer);
-                    colorVBoxImageView();
-                }
-                else{
-                    imageViewPreview.setImage(imgWrp.getPreviewImageView());
-                    if(currentTime!=0){//lastTime!=0 && creava bug al primo click
-                        diff=currentTime-lastTime;
+            executorService.execute(()-> {
+                ThumbnailContainer thumbnailContainer = new ThumbnailContainer(imgWrp);
+                thumbnailContainer.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> { //aggiunta listener ad immagini
+                    long diff;
+                    boolean isDoubleClicked = false;
+                    final long currentTime = System.currentTimeMillis();
+                    if (mouseEvent.isShiftDown() || mouseEvent.isControlDown()) {
+                        selectedThumbnailContainers.add(thumbnailContainer);
+                        colorVBoxImageView();
+                    } else {
+                        imageViewPreview.setImage(imgWrp.getPreviewImageView());
+                        if (currentTime != 0) {//lastTime!=0 && creava bug al primo click
+                            diff = currentTime - lastTime;
 
-                        if(diff<=215) {
-                            displayMetadata(imgWrp.getFile());
-                            orizontalSplitPane.setDividerPosition(0, 1);
-                            //buttonMenu.setVisible(true);
+                            if (diff <= 215) {
+                                displayMetadata(imgWrp.getFile());
+                                orizontalSplitPane.setDividerPosition(0, 1);
+                                //buttonMenu.setVisible(true);
+                            } else {
+                                displayMetadata(imgWrp.getFile());
+                                selectedThumbnailContainers.clear();
+                                selectedThumbnailContainers.add(thumbnailContainer);
+                            }
                         }
-                        else {
-                            displayMetadata(imgWrp.getFile());
-                            selectedThumbnailContainers.clear();
-                            selectedThumbnailContainers.add(thumbnailContainer);
-                        }
+                        lastTime = currentTime;
+                        colorVBoxImageView();
                     }
-                    lastTime=currentTime;
-                    colorVBoxImageView();
-                }
-                mouseEvent.consume();
+                    mouseEvent.consume();
+                });
+                Platform.runLater(()->allThumbnailContainers.add(thumbnailContainer));
+                Platform.runLater(()->tilePane.getChildren().add(thumbnailContainer));
             });
-            allThumbnailContainers.add(thumbnailContainer);
-            tilePane.getChildren().add(thumbnailContainer);
         }
     }
 

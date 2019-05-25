@@ -70,7 +70,7 @@ public class ImageWrapper {
         return thumbnail;
     }
 
-    private long getSizeInBytes() {
+    public long getSizeInBytes() {
         return sizeInBytes;
     }
 

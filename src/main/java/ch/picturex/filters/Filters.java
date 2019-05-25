@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@SuppressWarnings("unchecked")
 
 public class Filters {
 
@@ -29,15 +30,51 @@ public class Filters {
     private static boolean success=true;
     private static double progressCount;
 
-    @SuppressWarnings("unchecked")
-
     public static void apply(ArrayList<ThumbnailContainer> thumbnailContainers, String filterName, Map<String, Object> parameters) {
+        if ((thumbnailContainers.size()==1 && thumbnailContainers.get(0).getImageWrapper().getSizeInBytes()<1000) || filterName.equals("Zoom")){
+            applyWithoutDialog(thumbnailContainers,filterName,parameters);
+        } else {
+            applyWithDialog(thumbnailContainers,filterName,parameters);
+        }
+    }
+
+    private static void applyWithoutDialog(ArrayList<ThumbnailContainer> thumbnailContainers, String filterName, Map<String, Object> parameters){
+        saveSelection(thumbnailContainers);
+        for (ThumbnailContainer tc : thumbnailContainers) {
+            success=true;
+                try {
+                    Class<IFilter> cls;
+                    cls = (Class<IFilter>) Class.forName("ch.picturex.filters." + filterName);
+                    Constructor<IFilter> constructor = cls.getConstructor();
+                    IFilter instanceOfIFilter = constructor.newInstance();
+                    Method method = cls.getMethod("apply", ThumbnailContainer.class, Map.class);
+                    method.invoke(instanceOfIFilter, tc, parameters);
+                } catch (Exception e){
+                    success=false;
+                }
+                if (success){
+                    if (thumbnailContainers.size() == 1) {
+                        model.publish(new EventImageChanged(thumbnailContainers.get(0)));
+                    }
+                    model.publish(new EventLog("Filter " + filterName + " applied on image: " + tc.getImageWrapper().getName(), Severity.INFO));
+                }else {
+                    Notifications.create()
+                            .title(model.getResourceBundle().getString("notify.notSupportedFormat.title"))
+                            .text(model.getResourceBundle().getString("notify.notSupportedFormat.text"))
+                            .showWarning();
+                    model.publish(new EventLog("Unable to apply filter " + filterName + " to image: " + tc.getImageWrapper().getName(), Severity.ERROR));
+                }
+        }
+    }
+
+    private static void applyWithDialog(ArrayList<ThumbnailContainer> thumbnailContainers, String filterName, Map<String, Object> parameters){
         ExecutorService executorService = model.getExecutorService();
         saveSelection(thumbnailContainers);
-        size = thumbnailContainers.size();
+        size = thumbnailContainers.size()*2;
         count.set(0);
         Alert progressAlert = displayProgressDialog(filterName, FXApp.primaryStage);
         ProgressBar tempPro = (ProgressBar) progressAlert.getGraphic();
+        Platform.runLater(()->tempPro.setProgress(0));
         for (ThumbnailContainer tc : thumbnailContainers) {
             success=true;
             executorService.execute(() -> {
@@ -47,14 +84,13 @@ public class Filters {
                     Constructor<IFilter> constructor = cls.getConstructor();
                     IFilter instanceOfIFilter = constructor.newInstance();
                     Method method = cls.getMethod("apply", ThumbnailContainer.class, Map.class);
+                    progressCount = ((double) count.incrementAndGet() / size);
+                    Platform.runLater(() -> tempPro.setProgress(progressCount));
                     method.invoke(instanceOfIFilter, tc, parameters);
-                    synchronized (tempPro) {
-                        count.incrementAndGet();
-                        progressCount = ((double) count.get() / size);
-                        Platform.runLater(() -> tempPro.setProgress(progressCount));
-                        if (count.get() >= size)
-                            Platform.runLater(() -> forcefullyHideDialog(progressAlert));
-                    }
+                    progressCount = ((double) count.incrementAndGet() / size);
+                    Platform.runLater(() -> tempPro.setProgress(progressCount));
+                    if (count.get() >= size)
+                        Platform.runLater(() -> forcefullyHideDialog(progressAlert));
                 } catch (Exception e){
                     success=false;
                 }
@@ -81,32 +117,30 @@ public class Filters {
     }
 
     public static void undo(){
-        Alert progressAlert = displayProgressDialog(null, FXApp.primaryStage);
-        model.getExecutorService().execute(() -> {
-            try {
-                if (selectionHistory.size() > 0) {
-                    List<ThumbnailContainer> lastSelection = selectionHistory.get(selectionHistory.size() - 1);
-
-                    long size = lastSelection.size();
-                    long count = 0;
-                    ProgressBar tempPro = (ProgressBar) progressAlert.getGraphic();
-
-                    for (ThumbnailContainer tc : lastSelection) {
-                        count++;
-                        final float progressCount = ((float)count / size);
-                        Platform.runLater(() ->tempPro.setProgress(progressCount));
+        if (selectionHistory.size() > 0) {
+            ExecutorService executorService = model.getExecutorService();
+            List<ThumbnailContainer> lastSelection = selectionHistory.get(selectionHistory.size() - 1);
+            size = lastSelection.size();
+            count.set(0);
+            Alert progressAlert = displayProgressDialog(null, FXApp.primaryStage);
+            ProgressBar tempPro = (ProgressBar) progressAlert.getGraphic();
+            Platform.runLater(()->tempPro.setProgress(0));
+            for (ThumbnailContainer tc : lastSelection) {
+                executorService.execute(()-> {
+                    try {
+                        progressCount = ((double) count.incrementAndGet() / size);
+                        Platform.runLater(() -> tempPro.setProgress(progressCount));
                         tc.getImageWrapper().undo();
+                        if (count.get() == size)
+                            Platform.runLater(() -> forcefullyHideDialog(progressAlert));
+                    } catch (Exception e){
+                        Platform.runLater(() -> forcefullyHideDialog(progressAlert));
                     }
-                    model.publish(new EventImageChanged(lastSelection.get(0)));
-                    selectionHistory.remove(selectionHistory.size() - 1);
-                }
-                Platform.runLater(() -> forcefullyHideDialog(progressAlert));
+                });
             }
-            catch (Exception e) {
-                //Do what ever handling you need here....
-                Platform.runLater(() -> forcefullyHideDialog(progressAlert));
-            }
-        });
+            model.publish(new EventImageChanged(lastSelection.get(0)));
+            selectionHistory.remove(selectionHistory.size() - 1);
+        }
     }
 
     public static void clearHistory(){
