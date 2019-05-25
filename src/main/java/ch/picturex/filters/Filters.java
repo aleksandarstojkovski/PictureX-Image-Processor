@@ -16,6 +16,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
@@ -25,17 +26,21 @@ public class Filters {
     private static List<ArrayList<ThumbnailContainer>> selectionHistory = new ArrayList<>();
     private static AtomicInteger count = new AtomicInteger(0);
     private static long size;
+    private static boolean success=true;
+    private static double progressCount;
 
     @SuppressWarnings("unchecked")
 
     public static void apply(ArrayList<ThumbnailContainer> thumbnailContainers, String filterName, Map<String, Object> parameters) {
+        ExecutorService executorService = model.getExecutorService();
         saveSelection(thumbnailContainers);
         size = thumbnailContainers.size();
         count.set(0);
         Alert progressAlert = displayProgressDialog(filterName, FXApp.primaryStage);
         ProgressBar tempPro = (ProgressBar) progressAlert.getGraphic();
         for (ThumbnailContainer tc : thumbnailContainers) {
-            model.getExecutorService().execute(() -> {
+            success=true;
+            executorService.execute(() -> {
                 try {
                     Class<IFilter> cls;
                     cls = (Class<IFilter>) Class.forName("ch.picturex.filters." + filterName);
@@ -45,12 +50,20 @@ public class Filters {
                     method.invoke(instanceOfIFilter, tc, parameters);
                     synchronized (tempPro) {
                         count.incrementAndGet();
-                        final float progressCount = ((float) count.get() / size);
+                        progressCount = ((double) count.get() / size);
                         Platform.runLater(() -> tempPro.setProgress(progressCount));
                         if (count.get() >= size)
                             Platform.runLater(() -> forcefullyHideDialog(progressAlert));
                     }
                 } catch (Exception e){
+                    success=false;
+                }
+                if (success){
+                    if (thumbnailContainers.size() == 1) {
+                        model.publish(new EventImageChanged(thumbnailContainers.get(0)));
+                    }
+                    model.publish(new EventLog("Filter " + filterName + " applied on image: " + tc.getImageWrapper().getName(), Severity.INFO));
+                }else {
                     Platform.runLater(() -> forcefullyHideDialog(progressAlert));
                     Platform.runLater(()-> Notifications.create()
                             .title(model.getResourceBundle().getString("notify.notSupportedFormat.title"))
