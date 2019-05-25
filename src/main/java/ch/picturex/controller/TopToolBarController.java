@@ -165,10 +165,10 @@ public class TopToolBarController implements Initializable {
         TextFormatter<Integer> heightFormatter = new TextFormatter<>(new IntegerStringConverter(), 0, filter);
         Spinner<Integer> heightSpinner = new Spinner<>();
 
-        widthSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 10000, Integer.parseInt(INITAL_VALUE)));
+        widthSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 10000, Integer.parseInt(INITAL_VALUE)));
         widthSpinner.setEditable(true);
         widthSpinner.getEditor().setTextFormatter(widthFormatter);
-        heightSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 10000, Integer.parseInt(INITAL_VALUE)));
+        heightSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 10000, Integer.parseInt(INITAL_VALUE)));
         heightSpinner.setEditable(true);
         heightSpinner.getEditor().setTextFormatter(heightFormatter);
 
@@ -192,7 +192,6 @@ public class TopToolBarController implements Initializable {
 
         result.ifPresent(e -> {
             Filters.apply(model.getSelectedThumbnailContainers(),"Resize", Map.of("width", result.get().getKey(), "height", result.get().getValue()));
-            System.out.println("width=" + e.getValue() + ", height=" + e.getValue());
         });
     }
 

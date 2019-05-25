@@ -19,7 +19,7 @@ import java.util.Optional;
 public class FXApp extends Application {
 
     private Model model = Model.getInstance();
-    private Stage primaryStage;
+    public static Stage primaryStage;
     private String appName="PictureX";
     private String mainFxml="/fxml/main.fxml";
     private String appIcon="/icons/icon.png";
