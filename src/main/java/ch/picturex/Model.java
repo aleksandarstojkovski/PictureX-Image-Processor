@@ -113,7 +113,7 @@ public class Model {
         if (! model.executorService.isTerminated()){
             shutdownExecutorService();
         }
-        model.executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+        model.executorService = Executors.newFixedThreadPool(1);
         return model.executorService;
     }
 
