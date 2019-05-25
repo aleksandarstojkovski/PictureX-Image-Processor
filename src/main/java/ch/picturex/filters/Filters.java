@@ -12,7 +12,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.controlsfx.control.Notifications;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,48 +23,40 @@ public class Filters {
 
     private static Model model = Model.getInstance();
     private static List<ArrayList<ThumbnailContainer>> selectionHistory = new ArrayList<>();
-    private static boolean success;
-    static AtomicInteger count = new AtomicInteger(0);
+    private static AtomicInteger count = new AtomicInteger(0);
+    private static long size;
 
     @SuppressWarnings("unchecked")
 
     public static void apply(ArrayList<ThumbnailContainer> thumbnailContainers, String filterName, Map<String, Object> parameters) {
-        success = true;
         saveSelection(thumbnailContainers);
-        Alert progressAlert = displayProgressDialog(filterName, FXApp.primaryStage);
-        long size = thumbnailContainers.size();
+        size = thumbnailContainers.size();
         count.set(0);
+        Alert progressAlert = displayProgressDialog(filterName, FXApp.primaryStage);
         ProgressBar tempPro = (ProgressBar) progressAlert.getGraphic();
         for (ThumbnailContainer tc : thumbnailContainers) {
-
             model.getExecutorService().execute(() -> {
-                Class<IFilter> cls;
                 try {
+                    Class<IFilter> cls;
                     cls = (Class<IFilter>) Class.forName("ch.picturex.filters." + filterName);
                     Constructor<IFilter> constructor = cls.getConstructor();
                     IFilter instanceOfIFilter = constructor.newInstance();
                     Method method = cls.getMethod("apply", ThumbnailContainer.class, Map.class);
                     method.invoke(instanceOfIFilter, tc, parameters);
-                } catch (ClassNotFoundException | InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
-                    success = false;
-                }
-                if (success) {
-                    if (thumbnailContainers.size() == 1)
-                        model.publish(new EventImageChanged(thumbnailContainers.get(0)));
-                    model.publish(new EventLog("Filter " + filterName + " applied on image: " + tc.getImageWrapper().getName(), Severity.INFO));
-                } else {
-                    Notifications.create()
+                    synchronized (tempPro) {
+                        count.incrementAndGet();
+                        final float progressCount = ((float) count.get() / size);
+                        Platform.runLater(() -> tempPro.setProgress(progressCount));
+                        if (count.get() >= size)
+                            Platform.runLater(() -> forcefullyHideDialog(progressAlert));
+                    }
+                } catch (Exception e){
+                    Platform.runLater(() -> forcefullyHideDialog(progressAlert));
+                    Platform.runLater(()-> Notifications.create()
                             .title(model.getResourceBundle().getString("notify.notSupportedFormat.title"))
                             .text(model.getResourceBundle().getString("notify.notSupportedFormat.text"))
-                            .showWarning();
+                            .showWarning());
                     model.publish(new EventLog("Unable to apply filter " + filterName + " to image: " + tc.getImageWrapper().getName(), Severity.ERROR));
-                }
-                synchronized (tempPro) {
-                    count.incrementAndGet();
-                    final float progressCount = ((float) count.get() / size);
-                    Platform.runLater(() -> tempPro.setProgress(progressCount));
-                    if (count.get() >= thumbnailContainers.size())
-                    Platform.runLater(() -> forcefullyHideDialog(progressAlert));
                 }
             });
         }

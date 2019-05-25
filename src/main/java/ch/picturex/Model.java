@@ -11,6 +11,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.prefs.Preferences;
 
@@ -109,6 +110,19 @@ public class Model {
     }
 
     public ExecutorService getExecutorService() {
+        if (! model.executorService.isTerminated()){
+            shutdownExecutorService();
+        }
+        model.executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
         return model.executorService;
+    }
+
+    private void shutdownExecutorService(){
+        model.executorService.shutdown();
+        try {
+            model.executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
