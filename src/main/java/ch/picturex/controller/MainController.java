@@ -13,6 +13,7 @@ import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
 import javafx.animation.*;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
@@ -20,6 +21,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.DirectoryChooser;
@@ -62,6 +64,8 @@ public class MainController  implements Initializable {
     private TilePane tilePane;
     private Model model = Model.getInstance();
     private Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1.0), evt -> browseButton.requestFocus()), new KeyFrame(Duration.seconds(1.5), evt -> mainAnchorPane.requestFocus()));
+
+    private int posiz = 0;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -236,6 +240,34 @@ public class MainController  implements Initializable {
                 });
                 Platform.runLater(()->allThumbnailContainers.add(thumbnailContainer));
                 Platform.runLater(()->tilePane.getChildren().add(thumbnailContainer));
+            });
+            mainAnchorPane.setOnKeyPressed(event -> {
+                switch (event.getCode()) {
+                    case UP: {
+                        posiz++;
+                    } break;
+                    case DOWN: {
+                        posiz--;
+                    } break;
+                    case LEFT: {
+                        posiz--;
+                    } break;
+                    case RIGHT: {
+                        posiz++;
+                    } break;
+                    //case SHIFT: running = true; break;
+                }
+                if(posiz>=allThumbnailContainers.size()){
+                    posiz = 0;
+                }
+                else if(posiz<0){
+                    posiz = allThumbnailContainers.size()-1;
+                }
+                displayMetadata(allThumbnailContainers.get(posiz).getImageWrapper().getFile());
+                selectedThumbnailContainers.clear();
+                selectedThumbnailContainers.add(allThumbnailContainers.get(posiz));
+                imageViewPreview.setImage(allThumbnailContainers.get(posiz).getImageWrapper().getPreviewImageView());
+                colorVBoxImageView();
             });
         }
     }
