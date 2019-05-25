@@ -17,7 +17,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Executors;
+
 
 public class Filters {
 
@@ -30,25 +30,18 @@ public class Filters {
     public static void apply(ArrayList<ThumbnailContainer> thumbnailContainers, String filterName, Map<String, Object> parameters) {
         success = true;
         saveSelection(thumbnailContainers);
-
-        //////////////////////////////////////////////////////////////////////////////////////
         Alert progressAlert = displayProgressDialog(filterName, FXApp.primaryStage);
-        Executors.newSingleThreadExecutor().execute(() -> {
+        model.getExecutorService().execute(() -> {
             try {
                 long size = thumbnailContainers.size();
                 long count = 0;
                 ProgressBar tempPro = (ProgressBar) progressAlert.getGraphic();
-
                 for (ThumbnailContainer tc : thumbnailContainers) {
                     Class<IFilter> cls;
                     try {
                         count++;
                         final float progressCount = ((float)count / size);
-                        Platform.runLater(
-                                () -> {
-                                    tempPro.setProgress(progressCount);
-                                }
-                        );
+                        Platform.runLater(() ->tempPro.setProgress(progressCount));
                         cls = (Class<IFilter>) Class.forName("ch.picturex.filters." + filterName);
                         Constructor<IFilter> constructor = cls.getConstructor();
                         IFilter instanceOfIFilter = constructor.newInstance();
@@ -69,7 +62,6 @@ public class Filters {
                         model.publish(new EventLog("Unable to apply filter " + filterName + " to image: " + tc.getImageWrapper().getName(), Severity.ERROR));
                     }
                 }
-                ////
                 Platform.runLater(() -> forcefullyHideDialog(progressAlert));
             } catch (Exception e) {
                 //Do what ever handling you need here....
@@ -85,9 +77,8 @@ public class Filters {
     }
 
     public static void undo(){
-        //////////////////////////////////////////////////////////////////////////////////////
         Alert progressAlert = displayProgressDialog(null, FXApp.primaryStage);
-        Executors.newSingleThreadExecutor().execute(() -> {
+        model.getExecutorService().execute(() -> {
             try {
                 if (selectionHistory.size() > 0) {
                     List<ThumbnailContainer> lastSelection = selectionHistory.get(selectionHistory.size() - 1);
@@ -99,17 +90,12 @@ public class Filters {
                     for (ThumbnailContainer tc : lastSelection) {
                         count++;
                         final float progressCount = ((float)count / size);
-                        Platform.runLater(
-                                () -> {
-                                    tempPro.setProgress(progressCount);
-                                }
-                        );
+                        Platform.runLater(() ->tempPro.setProgress(progressCount));
                         tc.getImageWrapper().undo();
                     }
                     model.publish(new EventImageChanged(lastSelection.get(0)));
                     selectionHistory.remove(selectionHistory.size() - 1);
                 }
-                ////
                 Platform.runLater(() -> forcefullyHideDialog(progressAlert));
             }
             catch (Exception e) {

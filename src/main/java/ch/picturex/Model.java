@@ -9,6 +9,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 import java.util.prefs.Preferences;
 
@@ -23,6 +25,7 @@ public class Model {
     private ArrayList<ThumbnailContainer> selectedThumbnailContainers = null;
     private ResourceBundle resourceBundle = null;
     private Locale locale = null;
+    private ExecutorService executorService = null;
 
     private Model(){}
 
@@ -31,6 +34,7 @@ public class Model {
             model=new Model();
             model.bus=new EventBus();
             model.logService=new LogService();
+            model.executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()/2);
             configureBus();
             setPreferences();
             setResourceBundle();
@@ -103,4 +107,7 @@ public class Model {
         model = null;
     }
 
+    public ExecutorService getExecutorService() {
+        return model.executorService;
+    }
 }
