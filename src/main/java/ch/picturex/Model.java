@@ -28,6 +28,7 @@ public class Model {
     private ExecutorService executorService = null;
 
     private Model(){}
+    /////////////////////////
 
     public static Model getInstance(){
         if (model == null){
