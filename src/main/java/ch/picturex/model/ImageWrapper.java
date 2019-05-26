@@ -40,6 +40,7 @@ public class ImageWrapper {
         );
         thumbnailImageView.setImage(thumbnail);
         sizeInKBytes =file.length()/(long)1024;
+        if(sizeInKBytes<1) sizeInKBytes = 1;
         totalSizeInBytes+= sizeInKBytes;
         if (getSizeInMegaBytes()<=1){
             tooltipString=String.format("Name:\t%s\nSize:\t\t%d KBytes", this.getName(), this.getSizeInKBytes());

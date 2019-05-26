@@ -144,7 +144,7 @@ public class TopToolBarController implements Initializable {
         grid.setVgap(10);
         grid.setPadding(new Insets(20, 150, 10, 10));
 
-        String INITAL_VALUE = "100";
+        String INITAL_VALUE = "1";
         NumberFormat format = NumberFormat.getIntegerInstance();
         UnaryOperator<TextFormatter.Change> filter = c -> {
             if (c.isContentChange()) {

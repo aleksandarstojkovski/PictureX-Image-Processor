@@ -246,6 +246,7 @@ public class MainController  implements Initializable {
                 System.out.println(x);
                 System.out.println(n);
                 switch (event.getCode()) {
+
                     case UP: {
                         posiz = posiz-n;
                     } break;

@@ -108,6 +108,7 @@ public class Filters {
                     model.publish(new EventLog("Unable to apply filter " + filterName + " to image: " + tc.getImageWrapper().getName(), Severity.ERROR));
                 }
             });
+            model.shutdownExecutorService();
         }
     }
 
