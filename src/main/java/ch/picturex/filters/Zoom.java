@@ -1,6 +1,6 @@
 package ch.picturex.filters;
 
-import ch.picturex.Model;
+import ch.picturex.model.Model;
 import ch.picturex.model.ThumbnailContainer;
 import ch.picturex.events.EventZoom;
 import java.util.Map;

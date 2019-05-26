@@ -42,7 +42,7 @@
                 <fx:include source="topToolBar.fxml"/>
             </StackPane>
         </ToolBar>
-        <SplitPane fx:id="orizontalSplitPane" dividerPositions="0.36608863198458574" prefHeight="604.0"
+        <SplitPane fx:id="horizontalSplitPane" dividerPositions="0.36608863198458574" prefHeight="604.0"
                    prefWidth="1040.0" VBox.vgrow="ALWAYS">
             <AnchorPane minHeight="0.0" minWidth="260.0" prefHeight="160.0"
                         prefWidth="100.0">

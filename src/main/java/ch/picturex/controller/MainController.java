@@ -1,10 +1,10 @@
 package ch.picturex.controller;
 
-import ch.picturex.*;
 import ch.picturex.events.*;
 import ch.picturex.filters.Filters;
 import ch.picturex.model.ImageWrapper;
 import ch.picturex.model.MetadataWrapper;
+import ch.picturex.model.Model;
 import ch.picturex.model.ThumbnailContainer;
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
@@ -31,7 +31,7 @@ import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.prefs.Preferences;
 
-@SuppressWarnings({"unused", "unchecked"})
+@SuppressWarnings({"unused", "unchecked", "IntegerDivisionInFloatingPointContext"})
 
 public class MainController  implements Initializable {
 
@@ -40,7 +40,7 @@ public class MainController  implements Initializable {
     @FXML
     private ScrollPane scrollPane;
     @FXML
-    private SplitPane orizontalSplitPane;
+    private SplitPane horizontalSplitPane;
     @FXML
     private ImageView imageViewPreview;
     @FXML
@@ -100,8 +100,7 @@ public class MainController  implements Initializable {
             timeline.play();
         }
 
-        imageViewPreview.fitWidthProperty().bind(previewPanel.widthProperty()); //make resizable imageViewPreview
-        imageViewPreview.fitHeightProperty().bind(previewPanel.heightProperty()); //make resizable imageViewPreview
+        zoomReset();
 
     }
 
@@ -120,8 +119,8 @@ public class MainController  implements Initializable {
     }
 
     private void zoomReset(){
-        imageViewPreview.fitWidthProperty().bind(previewPanel.widthProperty()); //make resizable imageViewPreview
-        imageViewPreview.fitHeightProperty().bind(previewPanel.heightProperty()); //make resizable imageViewPreview
+        imageViewPreview.fitWidthProperty().bind(previewPanel.widthProperty());
+        imageViewPreview.fitHeightProperty().bind(previewPanel.heightProperty());
     }
 
     private void configureBus(){
@@ -189,21 +188,24 @@ public class MainController  implements Initializable {
     }
 
     private void populateListOfFiles() {
+        ExecutorService executorService = model.getExecutorService();
         String[] validExtensions = {".jpg",".png",".jpeg"};
         for (File f : Objects.requireNonNull(chosenDirectory.listFiles())) {
-            if (f.isFile()) {
-                for (String extension : validExtensions) {
-                    if (f.getName().toLowerCase().endsWith(extension)) {
-                        listOfImageWrappers.add(new ImageWrapper(f));
-                        break;
+            executorService.execute(()-> {
+                if (f.isFile()) {
+                    for (String extension : validExtensions) {
+                        if (f.getName().toLowerCase().endsWith(extension)) {
+                            listOfImageWrappers.add(new ImageWrapper(f));
+                            break;
+                        }
                     }
                 }
-            }
+            });
         }
+        model.shutdownExecutorService();
     }
 
     private void displayThumbnails(){
-
         ExecutorService executorService = model.getExecutorService();
         for(ImageWrapper imgWrp : listOfImageWrappers){
             executorService.execute(()-> {
@@ -223,7 +225,7 @@ public class MainController  implements Initializable {
 
                             if (diff <= 215) {
                                 displayMetadata(imgWrp.getFile());
-                                orizontalSplitPane.setDividerPosition(0, 1);
+                                horizontalSplitPane.setDividerPosition(0, 1);
                                 //buttonMenu.setVisible(true);
                             } else {
                                 displayMetadata(imgWrp.getFile());
@@ -239,12 +241,9 @@ public class MainController  implements Initializable {
                 Platform.runLater(()->allThumbnailContainers.add(thumbnailContainer));
                 Platform.runLater(()->tilePane.getChildren().add(thumbnailContainer));
             });
-            //tilePane.get
             scrollPane.setOnKeyPressed(event -> {
                 double x = tilePane.getWidth();
                 int n = Math.round((int)x / 120);
-                System.out.println(x);
-                System.out.println(n);
                 switch (event.getCode()) {
 
                     case UP: {
@@ -274,6 +273,7 @@ public class MainController  implements Initializable {
                 colorVBoxImageView();
             });
         }
+        model.shutdownExecutorService();
     }
 
     private void setSearchBarListener(TextField searchBarTextField){

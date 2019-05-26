@@ -1,6 +1,6 @@
 package ch.picturex.controller;
 
-import ch.picturex.Model;
+import ch.picturex.model.Model;
 import ch.picturex.events.*;
 import ch.picturex.filters.Filters;
 import ch.picturex.model.Direction;

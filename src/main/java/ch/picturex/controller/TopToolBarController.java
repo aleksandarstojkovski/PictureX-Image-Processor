@@ -1,6 +1,6 @@
 package ch.picturex.controller;
 
-import ch.picturex.Model;
+import ch.picturex.model.Model;
 import ch.picturex.events.*;
 import ch.picturex.filters.Filters;
 import ch.picturex.model.Direction;
@@ -190,9 +190,9 @@ public class TopToolBarController implements Initializable {
 
         Optional<Pair<Integer, Integer>> result = dialog.showAndWait();
 
-        result.ifPresent(e -> {
-            Filters.apply(model.getSelectedThumbnailContainers(),"Resize", Map.of("width", result.get().getKey(), "height", result.get().getValue()));
-        });
+        result.ifPresent(e ->
+            Filters.apply(model.getSelectedThumbnailContainers(),"Resize", Map.of("width", result.get().getKey(), "height", result.get().getValue()))
+        );
     }
 
 

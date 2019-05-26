@@ -1,6 +1,6 @@
 package ch.picturex.service;
 
-import ch.picturex.Model;
+import ch.picturex.model.Model;
 import ch.picturex.events.EventLog;
 import ch.picturex.model.Severity;
 

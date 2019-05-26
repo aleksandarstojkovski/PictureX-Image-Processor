@@ -1,6 +1,6 @@
 package ch.picturex.controller;
 
-import ch.picturex.Model;
+import ch.picturex.model.Model;
 import ch.picturex.model.ImageWrapper;
 import ch.picturex.events.EventUpdateBottomToolBar;
 import javafx.fxml.FXML;

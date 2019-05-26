@@ -1,6 +1,7 @@
 package ch.picturex;
 
 import ch.picturex.events.EventLanguageChange;
+import ch.picturex.model.Model;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -19,7 +20,7 @@ import java.util.Optional;
 public class FXApp extends Application {
 
     private Model model = Model.getInstance();
-    public static Stage primaryStage;
+    private Stage primaryStage;
     private String appName="PictureX";
     private String mainFxml="/fxml/main.fxml";
     private String appIcon="/icons/icon.png";
@@ -27,6 +28,7 @@ public class FXApp extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage=primaryStage;
+        model.setPrimaryStage(primaryStage);
         configureBus();
         Parent root = FXMLLoader.load(getClass().getResource(mainFxml),model.getResourceBundle());
         primaryStage.setTitle(appName);
@@ -39,6 +41,7 @@ public class FXApp extends Application {
     @Override
     public void stop(){
         model.destroy();
+        Platform.exit();
     }
 
     private void configureBus(){

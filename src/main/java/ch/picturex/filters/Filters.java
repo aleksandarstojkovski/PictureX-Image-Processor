@@ -1,8 +1,8 @@
 package ch.picturex.filters;
 
-import ch.picturex.*;
 import ch.picturex.events.EventImageChanged;
 import ch.picturex.events.EventLog;
+import ch.picturex.model.Model;
 import ch.picturex.model.Severity;
 import ch.picturex.model.ThumbnailContainer;
 import javafx.application.Platform;
@@ -72,7 +72,7 @@ public class Filters {
         saveSelection(thumbnailContainers);
         size = thumbnailContainers.size()*2;
         count.set(0);
-        Alert progressAlert = displayProgressDialog(filterName, FXApp.primaryStage);
+        Alert progressAlert = displayProgressDialog(filterName, model.getPrimaryStage());
         ProgressBar tempPro = (ProgressBar) progressAlert.getGraphic();
         Platform.runLater(()->tempPro.setProgress(0));
         for (ThumbnailContainer tc : thumbnailContainers) {
@@ -108,7 +108,6 @@ public class Filters {
                     model.publish(new EventLog("Unable to apply filter " + filterName + " to image: " + tc.getImageWrapper().getName(), Severity.ERROR));
                 }
             });
-            model.shutdownExecutorService();
         }
     }
 
@@ -123,7 +122,7 @@ public class Filters {
             List<ThumbnailContainer> lastSelection = selectionHistory.get(selectionHistory.size() - 1);
             size = lastSelection.size();
             count.set(0);
-            Alert progressAlert = displayProgressDialog(null, FXApp.primaryStage);
+            Alert progressAlert = displayProgressDialog(null, model.getPrimaryStage());
             ProgressBar tempPro = (ProgressBar) progressAlert.getGraphic();
             Platform.runLater(()->tempPro.setProgress(0));
 
@@ -143,7 +142,6 @@ public class Filters {
             model.shutdownExecutorService();
             model.publish(new EventImageChanged(lastSelection.get(0)));
             selectionHistory.remove(selectionHistory.size() - 1);
-
         }
     }
 

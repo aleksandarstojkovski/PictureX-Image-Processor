@@ -1,10 +1,11 @@
-package ch.picturex;
+package ch.picturex.model;
 
 import ch.picturex.events.EventDirectoryChanged;
 import ch.picturex.events.EventSelectedThumbnailContainers;
-import ch.picturex.model.ThumbnailContainer;
 import ch.picturex.service.LogService;
 import de.muspellheim.eventbus.EventBus;
+import javafx.stage.Stage;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Locale;
@@ -27,9 +28,9 @@ public class Model {
     private ResourceBundle resourceBundle = null;
     private Locale locale = null;
     private ExecutorService executorService = null;
+    private Stage primaryStage = null;
 
     private Model(){}
-    /////////////////////////
 
     public static Model getInstance(){
         if (model == null){
@@ -104,9 +105,9 @@ public class Model {
         return model.resourceBundle;
     }
 
-    void destroy(){
+    public void destroy(){
         model.logService.close();
-        model = null;
+        model.shutdownExecutorService();
     }
 
     public ExecutorService getExecutorService() {
@@ -124,5 +125,13 @@ public class Model {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setPrimaryStage(Stage stage){
+        model.primaryStage=stage;
+    }
+
+    public Stage getPrimaryStage(){
+        return model.primaryStage;
     }
 }
