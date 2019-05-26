@@ -31,7 +31,7 @@ public class Filters {
     private static double progressCount;
 
     public static void apply(ArrayList<ThumbnailContainer> thumbnailContainers, String filterName, Map<String, Object> parameters) {
-        if ((thumbnailContainers.size()==1 && thumbnailContainers.get(0).getImageWrapper().getSizeInBytes()<1000) || filterName.equals("Zoom")){
+        if ((thumbnailContainers.size()==1 && thumbnailContainers.get(0).getImageWrapper().getSizeInKBytes()<1000) || filterName.equals("Zoom")){
             applyWithoutDialog(thumbnailContainers,filterName,parameters);
         } else {
             applyWithDialog(thumbnailContainers,filterName,parameters);
@@ -125,6 +125,7 @@ public class Filters {
             Alert progressAlert = displayProgressDialog(null, FXApp.primaryStage);
             ProgressBar tempPro = (ProgressBar) progressAlert.getGraphic();
             Platform.runLater(()->tempPro.setProgress(0));
+
             for (ThumbnailContainer tc : lastSelection) {
                 executorService.execute(()-> {
                     try {
@@ -138,8 +139,10 @@ public class Filters {
                     }
                 });
             }
+            model.shutdownExecutorService();
             model.publish(new EventImageChanged(lastSelection.get(0)));
             selectionHistory.remove(selectionHistory.size() - 1);
+
         }
     }
 

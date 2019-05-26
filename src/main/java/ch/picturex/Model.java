@@ -117,7 +117,7 @@ public class Model {
         return model.executorService;
     }
 
-    private void shutdownExecutorService(){
+    public void shutdownExecutorService(){
         model.executorService.shutdown();
         try {
             model.executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.SECONDS);

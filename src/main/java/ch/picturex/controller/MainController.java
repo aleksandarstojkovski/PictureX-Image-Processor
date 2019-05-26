@@ -62,7 +62,7 @@ public class MainController  implements Initializable {
     private TilePane tilePane;
     private Model model = Model.getInstance();
     private Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1.0), evt -> browseButton.requestFocus()), new KeyFrame(Duration.seconds(1.5), evt -> mainAnchorPane.requestFocus()));
-
+    private int posiz = 0;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -203,6 +203,7 @@ public class MainController  implements Initializable {
     }
 
     private void displayThumbnails(){
+
         ExecutorService executorService = model.getExecutorService();
         for(ImageWrapper imgWrp : listOfImageWrappers){
             executorService.execute(()-> {
@@ -211,6 +212,7 @@ public class MainController  implements Initializable {
                     long diff;
                     boolean isDoubleClicked = false;
                     final long currentTime = System.currentTimeMillis();
+                    posiz = allThumbnailContainers.indexOf(thumbnailContainer);
                     if (mouseEvent.isShiftDown() || mouseEvent.isControlDown()) {
                         selectedThumbnailContainers.add(thumbnailContainer);
                         colorVBoxImageView();
@@ -236,6 +238,39 @@ public class MainController  implements Initializable {
                 });
                 Platform.runLater(()->allThumbnailContainers.add(thumbnailContainer));
                 Platform.runLater(()->tilePane.getChildren().add(thumbnailContainer));
+            });
+            //tilePane.get
+            scrollPane.setOnKeyPressed(event -> {
+                double x = tilePane.getWidth();
+                int n = Math.round((int)x / 120);
+                System.out.println(x);
+                System.out.println(n);
+                switch (event.getCode()) {
+                    case UP: {
+                        posiz = posiz-n;
+                    } break;
+                    case DOWN: {
+                        posiz = posiz+n;
+                    } break;
+                    case LEFT: {
+                        posiz--;
+                    } break;
+                    case RIGHT: {
+                        posiz++;
+                    } break;
+                    //case SHIFT: running = true; break;
+                }
+                if(posiz>=allThumbnailContainers.size()){
+                    posiz = 0;
+                }
+                else if(posiz<0){
+                    posiz = allThumbnailContainers.size()-1;
+                }
+                displayMetadata(allThumbnailContainers.get(posiz).getImageWrapper().getFile());
+                selectedThumbnailContainers.clear();
+                selectedThumbnailContainers.add(allThumbnailContainers.get(posiz));
+                imageViewPreview.setImage(allThumbnailContainers.get(posiz).getImageWrapper().getPreviewImageView());
+                colorVBoxImageView();
             });
         }
     }

@@ -16,7 +16,7 @@ public class ImageWrapper {
     private File file;
     private String name;
     private Image thumbnail;
-    private long sizeInBytes;
+    private long sizeInKBytes;
     private static long totalSizeInBytes = 0;
     private String tooltipString;
     private ImageView thumbnailImageView = new ImageView();
@@ -39,10 +39,10 @@ public class ImageWrapper {
                 true // load in background
         );
         thumbnailImageView.setImage(thumbnail);
-        sizeInBytes=file.length()/(long)1024;
-        totalSizeInBytes+=sizeInBytes;
+        sizeInKBytes =file.length()/(long)1024;
+        totalSizeInBytes+= sizeInKBytes;
         if (getSizeInMegaBytes()<=1){
-            tooltipString=String.format("Name:\t%s\nSize:\t\t%d Bytes", this.getName(), this.getSizeInBytes());
+            tooltipString=String.format("Name:\t%s\nSize:\t\t%d KBytes", this.getName(), this.getSizeInKBytes());
         } else {
             tooltipString=String.format("Name:\t%s\nSize:\t\t%d MB", this.getName(), this.getSizeInMegaBytes());
         }
@@ -70,12 +70,12 @@ public class ImageWrapper {
         return thumbnail;
     }
 
-    public long getSizeInBytes() {
-        return sizeInBytes;
+    public long getSizeInKBytes() {
+        return sizeInKBytes;
     }
 
     private long getSizeInMegaBytes() {
-        return sizeInBytes/1024;
+        return sizeInKBytes /1024;
     }
 
     public static long getTotalSizeInBytes() {
