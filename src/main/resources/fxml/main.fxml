@@ -29,7 +29,7 @@
                 </graphic>
             </Button>
             <Pane HBox.hgrow="ALWAYS" minWidth="130"/>
-            <CustomTextField fx:id="globingTextField" minWidth="210">
+            <CustomTextField fx:id="globingTextField" minWidth="225">
                 <left>
                     <Label>
                         <graphic>

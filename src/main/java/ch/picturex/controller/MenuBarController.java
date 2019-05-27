@@ -66,5 +66,22 @@ public class MenuBarController implements Initializable {
         model.publish(new EventLanguageChange());
     }
 
+    @FXML
+    private void zoomIn(){
+        model.publish(new EventZoom("in"));
+    }
+
+    @FXML
+    private void zoomOut(){
+        model.publish(new EventZoom("out"));
+    }
+
+    @FXML
+    private void zoomReset(){
+        model.publish(new EventZoom("reset"));
+    }
+
+
+
 
 }

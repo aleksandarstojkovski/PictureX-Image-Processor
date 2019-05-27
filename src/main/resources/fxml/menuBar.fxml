@@ -27,6 +27,15 @@
                   text="%menu.Resize"/>
     </Menu>
 
+    <Menu mnemonicParsing="false" text="Zoom">
+        <MenuItem mnemonicParsing="false" onAction="#zoomIn"
+                  text="%menu.zoomin"/>
+        <MenuItem mnemonicParsing="false" onAction="#zoomOut"
+                  text="%menu.zooout"/>
+        <MenuItem mnemonicParsing="false" onAction="#zoomReset"
+                  text="%menu.zooreset"/>
+    </Menu>
+
 </Menu>
 <Menu mnemonicParsing="false" text="%menu.view">
     <Menu mnemonicParsing="false" text="%menu.language">
@@ -37,9 +46,9 @@
     </Menu>
 </Menu>
 <Menu mnemonicParsing="false" text="%menu.window">
-    <MenuItem mnemonicParsing="false" text="Window"/>
+    <MenuItem mnemonicParsing="false" text="%menu.window"/>
 </Menu>
 <Menu mnemonicParsing="false" text="%menu.help">
-    <MenuItem mnemonicParsing="false" text="Help"/>
+    <MenuItem mnemonicParsing="false" text="%menu.help"/>
 </Menu>
 </MenuBar>
