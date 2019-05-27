@@ -23,5 +23,4 @@ public class BlackAndWhite implements IFilter {
         } catch (IOException ignored) {}
     }
 
-
 }

@@ -1,6 +1,6 @@
 package ch.picturex.controller;
 
-import ch.picturex.Model;
+import ch.picturex.model.Model;
 import ch.picturex.model.ImageWrapper;
 import ch.picturex.events.EventUpdateBottomToolBar;
 import javafx.fxml.FXML;
@@ -29,7 +29,7 @@ public class BottomToolBarController implements Initializable {
 
     private void populateBottomPane(List<ImageWrapper> listOfImageWrappers, File file){
         browseTextField.setText(file.getAbsolutePath());
-        numberOfFilesLabel.setText(listOfImageWrappers.size() + " " + model.getResourceBundle().getString("etichetta.elementi"));
+        numberOfFilesLabel.setText(listOfImageWrappers.size() + " " + model.getResourceBundle().getString("label.elements"));
         if (ImageWrapper.getTotalSizeInMegaBytes() <= 1)
             totalSizeLabel.setText(ImageWrapper.getTotalSizeInBytes() + " Bytes");
         else
