@@ -23,7 +23,7 @@
           AnchorPane.topAnchor="0.0">
         <fx:include source="menuBar.fxml"/>
         <ToolBar>
-            <Button fx:id="browseButton" mnemonicParsing="false" onAction="#handleBrowseButton" text="Browse">
+            <Button fx:id="browseButton" mnemonicParsing="false" onAction="#handleBrowseButton" text="%button.browse">
                 <graphic>
                     <FontIcon iconLiteral="fa-folder-open-o"/>
                 </graphic>
