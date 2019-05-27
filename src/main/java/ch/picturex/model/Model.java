@@ -108,6 +108,7 @@ public class Model {
     public void destroy(){
         model.logService.close();
         model.shutdownExecutorService();
+        model=null;
     }
 
     public ExecutorService getExecutorService() {
