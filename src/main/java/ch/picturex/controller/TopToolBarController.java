@@ -1,9 +1,9 @@
 package ch.picturex.controller;
 
-import ch.picturex.model.Model;
 import ch.picturex.events.*;
 import ch.picturex.filters.Filters;
 import ch.picturex.model.Direction;
+import ch.picturex.model.Model;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -15,10 +15,13 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 import javafx.util.converter.IntegerStringConverter;
+
 import java.net.URL;
 import java.text.NumberFormat;
 import java.text.ParsePosition;
-import java.util.*;
+import java.util.Map;
+import java.util.Optional;
+import java.util.ResourceBundle;
 import java.util.function.UnaryOperator;
 import java.util.prefs.Preferences;
 
@@ -53,7 +56,7 @@ public class TopToolBarController implements Initializable {
         setHandlers();
     }
 
-    private void installTooltips(){
+    private void installTooltips() {
         Tooltip.install(zoomInButton, new Tooltip("Zoom In"));
         Tooltip.install(zoomOutButton, new Tooltip("Zoom Out"));
         Tooltip.install(blackAndWhiteButton, new Tooltip("Black And White Filter"));
@@ -63,74 +66,74 @@ public class TopToolBarController implements Initializable {
         Tooltip.install(zoomResetButton, new Tooltip("Reset Zoom"));
     }
 
-    private void setHandlers(){
-        zoomInButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e-> model.publish(new EventFilterZoom(Direction.IN)));
-        zoomOutButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e-> model.publish(new EventFilterZoom(Direction.OUT)));
-        blackAndWhiteButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e-> model.publish(new EventFilterBlackAndWhite()));
-        undoButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e-> model.publish(new EventFilterUndo()));
-        rotateLeftButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e-> model.publish(new EventFilterRotate(Direction.LEFT)));
-        rotateRightButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e-> model.publish(new EventFilterRotate(Direction.RIGHT)));
-        resizeButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e-> model.publish(new EventOpenDialogResize()));
-        zoomResetButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e-> model.publish(new EventFilterZoom(Direction.RESET)));
+    private void setHandlers() {
+        zoomInButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> model.publish(new EventFilterZoom(Direction.IN)));
+        zoomOutButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> model.publish(new EventFilterZoom(Direction.OUT)));
+        blackAndWhiteButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> model.publish(new EventFilterBlackAndWhite()));
+        undoButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> model.publish(new EventFilterUndo()));
+        rotateLeftButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> model.publish(new EventFilterRotate(Direction.LEFT)));
+        rotateRightButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> model.publish(new EventFilterRotate(Direction.RIGHT)));
+        resizeButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> model.publish(new EventOpenDialogResize()));
+        zoomResetButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> model.publish(new EventFilterZoom(Direction.RESET)));
     }
 
-    private void configureBus(){
-        model.subscribe(EventFilterRotate.class, e->{
-            if (e.getDirection() == Direction.LEFT){
+    private void configureBus() {
+        model.subscribe(EventFilterRotate.class, e -> {
+            if (e.getDirection() == Direction.LEFT) {
                 rotateLeft();
             } else {
                 rotateRight();
             }
         });
-        model.subscribe(EventFilterZoom.class, e->{
-            if (e.getDirection() == Direction.IN){
+        model.subscribe(EventFilterZoom.class, e -> {
+            if (e.getDirection() == Direction.IN) {
                 zoomInButton();
-            } else if (e.getDirection() == Direction.OUT){
+            } else if (e.getDirection() == Direction.OUT) {
                 zoomOutButton();
             } else {
                 zoomResetButton();
             }
         });
-        model.subscribe(EventFilterUndo.class, e->undoButton());
-        model.subscribe(EventFilterBlackAndWhite.class, e->blackAndWhiteButton());
-        model.subscribe(EventOpenDialogResize.class, e->resizeButton());
+        model.subscribe(EventFilterUndo.class, e -> undoButton());
+        model.subscribe(EventFilterBlackAndWhite.class, e -> blackAndWhiteButton());
+        model.subscribe(EventOpenDialogResize.class, e -> resizeButton());
     }
 
-    private void zoomInButton(){
-        Filters.apply(model.getSelectedThumbnailContainers(),"Zoom",Map.of("direction","in"));
+    private void zoomInButton() {
+        Filters.apply(model.getSelectedThumbnailContainers(), "Zoom", Map.of("direction", "in"));
     }
 
-    private void zoomResetButton(){
-        Filters.apply(model.getSelectedThumbnailContainers(),"Zoom",Map.of("direction","reset"));
+    private void zoomResetButton() {
+        Filters.apply(model.getSelectedThumbnailContainers(), "Zoom", Map.of("direction", "reset"));
     }
 
-    private void zoomOutButton(){
-        Filters.apply(model.getSelectedThumbnailContainers(),"Zoom",Map.of("direction","out"));
+    private void zoomOutButton() {
+        Filters.apply(model.getSelectedThumbnailContainers(), "Zoom", Map.of("direction", "out"));
     }
 
-    private void blackAndWhiteButton(){
-        Filters.apply(model.getSelectedThumbnailContainers(),"BlackAndWhite",null);
+    private void blackAndWhiteButton() {
+        Filters.apply(model.getSelectedThumbnailContainers(), "BlackAndWhite", null);
     }
 
-    private void undoButton(){
+    private void undoButton() {
         Filters.undo();
     }
 
-    private void rotateLeft(){
-        Filters.apply(model.getSelectedThumbnailContainers(),"Rotate", Map.of("direction", "left"));
+    private void rotateLeft() {
+        Filters.apply(model.getSelectedThumbnailContainers(), "Rotate", Map.of("direction", "left"));
     }
 
-    private void rotateRight(){
-        Filters.apply(model.getSelectedThumbnailContainers(),"Rotate", Map.of("direction", "right"));
+    private void rotateRight() {
+        Filters.apply(model.getSelectedThumbnailContainers(), "Rotate", Map.of("direction", "right"));
     }
 
-    private void resizeButton(){
+    private void resizeButton() {
         Dialog<Pair<Integer, Integer>> dialog = new Dialog<>();
         dialog.setTitle(model.getResourceBundle().getString("dialog.title"));
         dialog.setHeaderText(model.getResourceBundle().getString("dialog.text"));
 
         // Set the icon (must be included in the project).
-        Stage stage = (Stage)dialog.getDialogPane().getScene().getWindow();
+        Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
         stage.getIcons().add(new Image("/icons/icon.png"));
 
 
@@ -191,7 +194,7 @@ public class TopToolBarController implements Initializable {
         Optional<Pair<Integer, Integer>> result = dialog.showAndWait();
 
         result.ifPresent(e ->
-            Filters.apply(model.getSelectedThumbnailContainers(),"Resize", Map.of("width", result.get().getKey(), "height", result.get().getValue()))
+                Filters.apply(model.getSelectedThumbnailContainers(), "Resize", Map.of("width", result.get().getKey(), "height", result.get().getValue()))
         );
     }
 

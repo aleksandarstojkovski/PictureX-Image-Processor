@@ -11,8 +11,9 @@ import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
-import javafx.animation.*;
-import javafx.application.Platform;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
@@ -21,19 +22,26 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.TilePane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import java.io.*;
+
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.prefs.Preferences;
 
-@SuppressWarnings({"unused", "unchecked", "IntegerDivisionInFloatingPointContext"})
+@SuppressWarnings({"unused", "unchecked"})
 
-public class MainController  implements Initializable {
+public class MainController implements Initializable {
 
     @FXML
     private AnchorPane mainAnchorPane;
@@ -63,6 +71,7 @@ public class MainController  implements Initializable {
     private Model model = Model.getInstance();
     private Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1.0), evt -> browseButton.requestFocus()), new KeyFrame(Duration.seconds(1.5), evt -> mainAnchorPane.requestFocus()));
     private int posiz = 0;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -77,21 +86,21 @@ public class MainController  implements Initializable {
         // make scrollPane resizable
         scrollPane.setContent(tilePane);
 
-        TableColumn<String,String> firstColumn = new TableColumn<>("type");
+        TableColumn<String, String> firstColumn = new TableColumn<>("type");
         firstColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
         firstColumn.prefWidthProperty().bind(tableView.widthProperty().divide(4));
-        TableColumn<String,String> secondColumn = new TableColumn<>("name");
+        TableColumn<String, String> secondColumn = new TableColumn<>("name");
         secondColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         secondColumn.prefWidthProperty().bind(tableView.widthProperty().divide(2));
-        TableColumn<String,String> thirdColumn = new TableColumn<>("value");
+        TableColumn<String, String> thirdColumn = new TableColumn<>("value");
         thirdColumn.setCellValueFactory(new PropertyValueFactory<>("value"));
         thirdColumn.prefWidthProperty().bind(tableView.widthProperty().divide(4));
-        tableView.getColumns().addAll(firstColumn,secondColumn,thirdColumn);
+        tableView.getColumns().addAll(firstColumn, secondColumn, thirdColumn);
 
         setSearchBarListener(globingTextField);
 
         //alla partenza se il programma è già stato usato fa partire tutto dall'ultimo path
-        if(getLastDirectoryPreferences() != null){
+        if (getLastDirectoryPreferences() != null) {
             chosenDirectory = getLastDirectoryPreferences();
             directoryChosenAction();
         } else {
@@ -104,31 +113,32 @@ public class MainController  implements Initializable {
 
     }
 
-    private void zoomIn(){
+    private void zoomIn() {
         imageViewPreview.fitHeightProperty().unbind();
         imageViewPreview.fitWidthProperty().unbind();
-        imageViewPreview.setFitWidth(imageViewPreview.getFitWidth()+100);
-        imageViewPreview.setFitHeight(imageViewPreview.getFitHeight()+100);
+        imageViewPreview.setFitWidth(imageViewPreview.getFitWidth() + 100);
+        imageViewPreview.setFitHeight(imageViewPreview.getFitHeight() + 100);
     }
 
-    private void zoomOut(){
+    private void zoomOut() {
         imageViewPreview.fitHeightProperty().unbind();
         imageViewPreview.fitWidthProperty().unbind();
-        imageViewPreview.setFitWidth(imageViewPreview.getFitWidth()-100);
-        imageViewPreview.setFitHeight(imageViewPreview.getFitHeight()-100);
+        imageViewPreview.setFitWidth(imageViewPreview.getFitWidth() - 100);
+        imageViewPreview.setFitHeight(imageViewPreview.getFitHeight() - 100);
     }
 
-    private void zoomReset(){
+    private void zoomReset() {
         imageViewPreview.fitWidthProperty().bind(previewPanel.widthProperty());
         imageViewPreview.fitHeightProperty().bind(previewPanel.heightProperty());
     }
 
-    private void configureBus(){
+    private void configureBus() {
         model.subscribe(EventImageChanged.class, e -> {
             imageViewPreview.setImage(e.getThubnailContainer().getImageWrapper().getPreviewImageView());
-            if(selectedThumbnailContainers.size()==1)displayMetadata(selectedThumbnailContainers.get(0).getImageWrapper().getFile()); //update exif table
+            if (selectedThumbnailContainers.size() == 1)
+                displayMetadata(selectedThumbnailContainers.get(0).getImageWrapper().getFile()); //update exif table
         });
-        model.subscribe(EventZoom.class, e->{
+        model.subscribe(EventZoom.class, e -> {
             switch (e.getDirection()) {
                 case "in":
                     zoomIn();
@@ -141,27 +151,27 @@ public class MainController  implements Initializable {
                     break;
             }
         });
-        model.subscribe(EventBrowseButton.class, e->handleBrowseButton());
+        model.subscribe(EventBrowseButton.class, e -> handleBrowseButton());
         model.publish(new EventSelectedThumbnailContainers(selectedThumbnailContainers));
     }
 
     @FXML
-    public void handleBrowseButton(){
+    public void handleBrowseButton() {
         // default Windows directory choser
         final DirectoryChooser dirChoser = new DirectoryChooser();
 
         // get main stage
-        Stage stage = (Stage)mainAnchorPane.getScene().getWindow();
+        Stage stage = (Stage) mainAnchorPane.getScene().getWindow();
 
         // if program has been already opened, load previous directry
-        if(getLastDirectoryPreferences() != null){
+        if (getLastDirectoryPreferences() != null) {
             dirChoser.setInitialDirectory(getLastDirectoryPreferences());
         }
 
         // display Windows directory choser
         chosenDirectory = dirChoser.showDialog(stage);
 
-        if (chosenDirectory != null){
+        if (chosenDirectory != null) {
             timeline.stop();
             mainAnchorPane.requestFocus();
             directoryChosenAction();
@@ -170,7 +180,7 @@ public class MainController  implements Initializable {
 
     }
 
-    private void directoryChosenAction(){
+    private void directoryChosenAction() {
         // aggiorna ad ogni selezione il path nelle preferenze
         setLastDirectoryPreferences(chosenDirectory);
         clearUI();
@@ -180,7 +190,7 @@ public class MainController  implements Initializable {
         Filters.clearHistory();
     }
 
-    private void clearUI(){
+    private void clearUI() {
         allThumbnailContainers.clear();
         tilePane.getChildren().clear();
         listOfImageWrappers.clear();
@@ -188,83 +198,80 @@ public class MainController  implements Initializable {
     }
 
     private void populateListOfFiles() {
-        ExecutorService executorService = model.getExecutorService();
-        String[] validExtensions = {".jpg",".png",".jpeg"};
+        String[] validExtensions = {".jpg", ".png", ".jpeg"};
         for (File f : Objects.requireNonNull(chosenDirectory.listFiles())) {
-            executorService.execute(()-> {
-                if (f.isFile()) {
-                    for (String extension : validExtensions) {
-                        if (f.getName().toLowerCase().endsWith(extension)) {
-                            listOfImageWrappers.add(new ImageWrapper(f));
-                            break;
-                        }
+            if (f.isFile()) {
+                for (String extension : validExtensions) {
+                    if (f.getName().toLowerCase().endsWith(extension)) {
+                        listOfImageWrappers.add(new ImageWrapper(f));
+                        break;
                     }
                 }
-            });
+            }
         }
-        model.shutdownExecutorService();
     }
 
-    private void displayThumbnails(){
+    private void displayThumbnails() {
         ExecutorService executorService = model.getExecutorService();
-        for(ImageWrapper imgWrp : listOfImageWrappers){
-            executorService.execute(()-> {
-                ThumbnailContainer thumbnailContainer = new ThumbnailContainer(imgWrp);
-                thumbnailContainer.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> { //aggiunta listener ad immagini
-                    long diff;
-                    boolean isDoubleClicked = false;
-                    final long currentTime = System.currentTimeMillis();
-                    posiz = allThumbnailContainers.indexOf(thumbnailContainer);
-                    if (mouseEvent.isShiftDown() || mouseEvent.isControlDown()) {
-                        selectedThumbnailContainers.add(thumbnailContainer);
-                        colorVBoxImageView();
-                    } else {
-                        imageViewPreview.setImage(imgWrp.getPreviewImageView());
-                        if (currentTime != 0) {//lastTime!=0 && creava bug al primo click
-                            diff = currentTime - lastTime;
+        for (ImageWrapper imgWrp : listOfImageWrappers) {
+            ThumbnailContainer thumbnailContainer = new ThumbnailContainer(imgWrp);
+            thumbnailContainer.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> { //aggiunta listener ad immagini
+                long diff;
+                boolean isDoubleClicked = false;
+                final long currentTime = System.currentTimeMillis();
+                posiz = allThumbnailContainers.indexOf(thumbnailContainer);
+                if (mouseEvent.isShiftDown() || mouseEvent.isControlDown()) {
+                    selectedThumbnailContainers.add(thumbnailContainer);
+                    colorVBoxImageView();
+                } else {
+                    imageViewPreview.setImage(imgWrp.getPreviewImageView());
+                    if (currentTime != 0) {//lastTime!=0 && creava bug al primo click
+                        diff = currentTime - lastTime;
 
-                            if (diff <= 215) {
-                                displayMetadata(imgWrp.getFile());
-                                horizontalSplitPane.setDividerPosition(0, 1);
-                                //buttonMenu.setVisible(true);
-                            } else {
-                                displayMetadata(imgWrp.getFile());
-                                selectedThumbnailContainers.clear();
-                                selectedThumbnailContainers.add(thumbnailContainer);
-                            }
+                        if (diff <= 215) {
+                            displayMetadata(imgWrp.getFile());
+                            horizontalSplitPane.setDividerPosition(0, 1);
+                            //buttonMenu.setVisible(true);
+                        } else {
+                            displayMetadata(imgWrp.getFile());
+                            selectedThumbnailContainers.clear();
+                            selectedThumbnailContainers.add(thumbnailContainer);
                         }
-                        lastTime = currentTime;
-                        colorVBoxImageView();
                     }
-                    mouseEvent.consume();
-                });
-                Platform.runLater(()->allThumbnailContainers.add(thumbnailContainer));
-                Platform.runLater(()->tilePane.getChildren().add(thumbnailContainer));
+                    lastTime = currentTime;
+                    colorVBoxImageView();
+                }
+                mouseEvent.consume();
             });
+            allThumbnailContainers.add(thumbnailContainer);
+            tilePane.getChildren().add(thumbnailContainer);
             scrollPane.setOnKeyPressed(event -> {
                 double x = tilePane.getWidth();
-                int n = Math.round((int)x / 120);
+                int n = Math.round((int) x / 120);
                 switch (event.getCode()) {
 
                     case UP: {
-                        posiz = posiz-n;
-                    } break;
+                        posiz = posiz - n;
+                    }
+                    break;
                     case DOWN: {
-                        posiz = posiz+n;
-                    } break;
+                        posiz = posiz + n;
+                    }
+                    break;
                     case LEFT: {
                         posiz--;
-                    } break;
+                    }
+                    break;
                     case RIGHT: {
                         posiz++;
-                    } break;
+                    }
+                    break;
                     //case SHIFT: running = true; break;
                 }
-                if(posiz>=allThumbnailContainers.size()){
+                if (posiz >= allThumbnailContainers.size()) {
                     posiz = 0;
-                }
-                else if(posiz<0){
-                    posiz = allThumbnailContainers.size()-1;
+                } else if (posiz < 0) {
+                    posiz = allThumbnailContainers.size() - 1;
                 }
                 displayMetadata(allThumbnailContainers.get(posiz).getImageWrapper().getFile());
                 selectedThumbnailContainers.clear();
@@ -273,21 +280,20 @@ public class MainController  implements Initializable {
                 colorVBoxImageView();
             });
         }
-        model.shutdownExecutorService();
     }
 
-    private void setSearchBarListener(TextField searchBarTextField){
+    private void setSearchBarListener(TextField searchBarTextField) {
         searchBarTextField.textProperty().addListener((observableValue, s, t1) -> {
             ArrayList<ThumbnailContainer> toBeRemovedTC = new ArrayList<>();
             ArrayList<ThumbnailContainer> toBeAddedTC = new ArrayList<>();
-            for(ThumbnailContainer v : allThumbnailContainers){
+            for (ThumbnailContainer v : allThumbnailContainers) {
                 ImageWrapper iw = v.getImageWrapper();
                 String filename = iw.getName().trim();
-                if(!filename.toLowerCase().contains(t1.toLowerCase())){
+                if (!filename.toLowerCase().contains(t1.toLowerCase())) {
                     toBeRemovedTC.add(v);
                 }
             }
-            if(s.length() > t1.length()) {
+            if (s.length() > t1.length()) {
                 for (ThumbnailContainer v : allThumbnailContainers) {
                     ImageWrapper iw = v.getImageWrapper();
                     String filename = iw.getName().trim();
@@ -295,10 +301,11 @@ public class MainController  implements Initializable {
                         toBeAddedTC.add(v);
                     }
                 }
-                for(ThumbnailContainer v : toBeAddedTC){
-                    try{
+                for (ThumbnailContainer v : toBeAddedTC) {
+                    try {
                         tilePane.getChildren().add(v);
-                    }catch (IllegalArgumentException ignored){}
+                    } catch (IllegalArgumentException ignored) {
+                    }
                 }
             }
             tilePane.getChildren().removeAll(toBeRemovedTC);
@@ -306,35 +313,34 @@ public class MainController  implements Initializable {
     }
 
     private void colorVBoxImageView() {
-        if (!selectedThumbnailContainers.isEmpty()){
-            for (ThumbnailContainer thumbnailContainer : allThumbnailContainers){
-                if (selectedThumbnailContainers.contains(thumbnailContainer)){
+        if (!selectedThumbnailContainers.isEmpty()) {
+            for (ThumbnailContainer thumbnailContainer : allThumbnailContainers) {
+                if (selectedThumbnailContainers.contains(thumbnailContainer)) {
                     thumbnailContainer.setStyle("-fx-background-color: #CCE8FF;\n");
-                }
-                else{
+                } else {
                     thumbnailContainer.setStyle("-fx-background-color: transparent;");
                 }
             }
         }
     }
 
-    private File getLastDirectoryPreferences(){
+    private File getLastDirectoryPreferences() {
         Preferences preference = Preferences.userNodeForPackage(Model.class);
         String filePath = preference.get("directory", null);
-        if(filePath != null){
+        if (filePath != null) {
             return new File(filePath);
         }
         return null;
     }
 
-    private void setLastDirectoryPreferences(File file){
+    private void setLastDirectoryPreferences(File file) {
         Preferences preference = Preferences.userNodeForPackage(Model.class);
         if (file != null) {
             preference.put("directory", file.getPath());
         }
     }
 
-    private void displayMetadata(File file){
+    private void displayMetadata(File file) {
         Metadata metadata;
         try {
             metadata = ImageMetadataReader.readMetadata(file);

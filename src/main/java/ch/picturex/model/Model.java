@@ -30,14 +30,15 @@ public class Model {
     private ExecutorService executorService = null;
     private Stage primaryStage = null;
 
-    private Model(){}
+    private Model() {
+    }
 
-    public static Model getInstance(){
-        if (model == null){
-            model=new Model();
-            model.bus=new EventBus();
-            model.logService=new LogService();
-            model.executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()/2);
+    public static Model getInstance() {
+        if (model == null) {
+            model = new Model();
+            model.bus = new EventBus();
+            model.logService = new LogService();
+            model.executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() / 2);
             configureBus();
             setPreferences();
             setResourceBundle();
@@ -45,27 +46,27 @@ public class Model {
         return model;
     }
 
-    private static void configureBus(){
-        model.bus.subscribe(EventDirectoryChanged.class, e->{
+    private static void configureBus() {
+        model.bus.subscribe(EventDirectoryChanged.class, e -> {
             model.chosenDirectory = e.getFile();
             model.setLastDirectoryPreferences(e.getFile());
         });
-        model.bus.subscribe(EventSelectedThumbnailContainers.class, e->
-            model.selectedThumbnailContainers = e.getSelectedThumbnailContainers()
+        model.bus.subscribe(EventSelectedThumbnailContainers.class, e ->
+                model.selectedThumbnailContainers = e.getSelectedThumbnailContainers()
         );
     }
 
-    private static void setPreferences(){
+    private static void setPreferences() {
         Preferences preference = Preferences.userNodeForPackage(Model.class);
         String filePath = preference.get("directory", null);
         if (filePath != null)
             model.chosenDirectory = new File(filePath);
     }
 
-    private static void setResourceBundle(){
+    private static void setResourceBundle() {
         Preferences preference = Preferences.userNodeForPackage(Model.class);
         String language = preference.get("language", "en");
-        if(language.equals("en")){
+        if (language.equals("en")) {
             model.locale = Locale.ENGLISH;
         } else {
             model.locale = Locale.ITALIAN;
@@ -74,8 +75,8 @@ public class Model {
         model.resourceBundle = ResourceBundle.getBundle("i18n/stringhe");
     }
 
-    public Locale getLocale(){
-        return  model.locale;
+    public Locale getLocale() {
+        return model.locale;
     }
 
     public File getChosenDirectory() {
@@ -86,18 +87,18 @@ public class Model {
         return model.selectedThumbnailContainers;
     }
 
-    private void setLastDirectoryPreferences(File file){
+    private void setLastDirectoryPreferences(File file) {
         Preferences preference = Preferences.userNodeForPackage(Model.class);
         if (file != null) {
             preference.put("directory", file.getPath());
         }
     }
 
-    public <T> void subscribe(Class<? extends T> eventType, Consumer<T> subscriber){
-        model.bus.subscribe(eventType,subscriber);
+    public <T> void subscribe(Class<? extends T> eventType, Consumer<T> subscriber) {
+        model.bus.subscribe(eventType, subscriber);
     }
 
-    public void publish(Object event){
+    public void publish(Object event) {
         model.bus.publish(event);
     }
 
@@ -105,21 +106,21 @@ public class Model {
         return model.resourceBundle;
     }
 
-    public void destroy(){
+    public void destroy() {
         model.logService.close();
         model.shutdownExecutorService();
-        model=null;
+        model = null;
     }
 
     public ExecutorService getExecutorService() {
-        if (! model.executorService.isTerminated()){
+        if (!model.executorService.isTerminated()) {
             shutdownExecutorService();
         }
         model.executorService = Executors.newFixedThreadPool(1);
         return model.executorService;
     }
 
-    public void shutdownExecutorService(){
+    public void shutdownExecutorService() {
         model.executorService.shutdown();
         try {
             model.executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.SECONDS);
@@ -128,11 +129,11 @@ public class Model {
         }
     }
 
-    public void setPrimaryStage(Stage stage){
-        model.primaryStage=stage;
+    public void setPrimaryStage(Stage stage) {
+        model.primaryStage = stage;
     }
 
-    public Stage getPrimaryStage(){
+    public Stage getPrimaryStage() {
         return model.primaryStage;
     }
 }

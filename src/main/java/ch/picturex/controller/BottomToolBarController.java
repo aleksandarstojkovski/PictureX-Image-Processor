@@ -1,11 +1,12 @@
 package ch.picturex.controller;
 
-import ch.picturex.model.Model;
-import ch.picturex.model.ImageWrapper;
 import ch.picturex.events.EventUpdateBottomToolBar;
+import ch.picturex.model.ImageWrapper;
+import ch.picturex.model.Model;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+
 import java.io.File;
 import java.net.URL;
 import java.util.List;
@@ -24,10 +25,10 @@ public class BottomToolBarController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        model.subscribe(EventUpdateBottomToolBar.class, e->populateBottomPane(e.getListOfImageWrappers(), e.getFile()));
+        model.subscribe(EventUpdateBottomToolBar.class, e -> populateBottomPane(e.getListOfImageWrappers(), e.getFile()));
     }
 
-    private void populateBottomPane(List<ImageWrapper> listOfImageWrappers, File file){
+    private void populateBottomPane(List<ImageWrapper> listOfImageWrappers, File file) {
         browseTextField.setText(file.getAbsolutePath());
         numberOfFilesLabel.setText(listOfImageWrappers.size() + " " + model.getResourceBundle().getString("label.elements"));
         if (ImageWrapper.getTotalSizeInMegaBytes() <= 1)

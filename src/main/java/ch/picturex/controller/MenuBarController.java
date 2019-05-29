@@ -1,13 +1,14 @@
 package ch.picturex.controller;
 
-import ch.picturex.model.Model;
 import ch.picturex.events.*;
 import ch.picturex.filters.Filters;
 import ch.picturex.model.Direction;
+import ch.picturex.model.Model;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.MenuBar;
+
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
@@ -25,7 +26,7 @@ public class MenuBarController implements Initializable {
 
     }
 
-    public void BNFilterMetod(){
+    public void BNFilterMetod() {
         model.publish(new EventFilterBlackAndWhite());
     }
 
@@ -45,43 +46,41 @@ public class MenuBarController implements Initializable {
         Platform.exit();
     }
 
-    public void resizeMetod(){
+    public void resizeMetod() {
         model.publish(new EventOpenDialogResize());
     }
 
     @FXML
-    private void handleBrowseButton(){
+    private void handleBrowseButton() {
         model.publish(new EventBrowseButton());
     }
 
     @FXML
-    private void setItaLanguage(){
-        preference.put("language","it");
+    private void setItaLanguage() {
+        preference.put("language", "it");
         model.publish(new EventLanguageChange());
     }
 
     @FXML
-    private void setEngLanguage(){
-        preference.put("language","en");
+    private void setEngLanguage() {
+        preference.put("language", "en");
         model.publish(new EventLanguageChange());
     }
 
     @FXML
-    private void zoomIn(){
+    private void zoomIn() {
         model.publish(new EventZoom("in"));
     }
 
     @FXML
-    private void zoomOut(){
+    private void zoomOut() {
         model.publish(new EventZoom("out"));
     }
 
     @FXML
-    private void zoomReset(){
+    private void zoomReset() {
         model.publish(new EventZoom("reset"));
     }
-
-
 
 
 }

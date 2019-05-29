@@ -6,8 +6,8 @@ public class EventFilterZoom {
 
     private Direction direction;
 
-    public EventFilterZoom(Direction direction){
-        this.direction=direction;
+    public EventFilterZoom(Direction direction) {
+        this.direction = direction;
     }
 
     public Direction getDirection() {
