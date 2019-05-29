@@ -20,11 +20,15 @@ public class ThumbnailContainer extends VBox {
         this.getChildren().add(imageWrapper.getThumbnailImageView());
         this.getChildren().add(new Label(imageWrapper.getName()));
         // set tooltip
-        Tooltip.install(this, new Tooltip(imageWrapper.getTooltipString()));
+        setTooltip();
     }
 
     public ImageWrapper getImageWrapper() {
         return imageWrapper;
+    }
+
+    public void setTooltip(){
+        Tooltip.install(this, new Tooltip(imageWrapper.getTooltipString()));
     }
 
 }

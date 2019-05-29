@@ -116,15 +116,15 @@ public class MainController implements Initializable {
     private void zoomIn() {
         imageViewPreview.fitHeightProperty().unbind();
         imageViewPreview.fitWidthProperty().unbind();
-        imageViewPreview.setFitWidth(imageViewPreview.getFitWidth() + 100);
-        imageViewPreview.setFitHeight(imageViewPreview.getFitHeight() + 100);
+        imageViewPreview.setFitWidth(imageViewPreview.getFitWidth() + 50);
+        imageViewPreview.setFitHeight(imageViewPreview.getFitHeight() + 50);
     }
 
     private void zoomOut() {
         imageViewPreview.fitHeightProperty().unbind();
         imageViewPreview.fitWidthProperty().unbind();
-        imageViewPreview.setFitWidth(imageViewPreview.getFitWidth() - 100);
-        imageViewPreview.setFitHeight(imageViewPreview.getFitHeight() - 100);
+        imageViewPreview.setFitWidth(imageViewPreview.getFitWidth() - 50);
+        imageViewPreview.setFitHeight(imageViewPreview.getFitHeight() - 50);
     }
 
     private void zoomReset() {
@@ -135,6 +135,7 @@ public class MainController implements Initializable {
     private void configureBus() {
         model.subscribe(EventImageChanged.class, e -> {
             imageViewPreview.setImage(e.getThubnailContainer().getImageWrapper().getPreviewImageView());
+            e.getThubnailContainer().setTooltip();
             if (selectedThumbnailContainers.size() == 1)
                 displayMetadata(selectedThumbnailContainers.get(0).getImageWrapper().getFile()); //update exif table
         });
