@@ -6,8 +6,8 @@ public class EventDirectoryChanged {
 
     private File file;
 
-    public EventDirectoryChanged(File file){
-        this.file=file;
+    public EventDirectoryChanged(File file) {
+        this.file = file;
     }
 
     public File getFile() {

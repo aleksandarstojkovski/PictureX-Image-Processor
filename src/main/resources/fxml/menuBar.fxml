@@ -13,7 +13,7 @@
     <MenuItem mnemonicParsing="false" onAction="#handleBrowseButton"
               text="%menu.Browser"/>
 </Menu>
-<Menu mnemonicParsing="false" text="%menu.modifica">
+<Menu mnemonicParsing="false" text="%menu.modify">
     <MenuItem mnemonicParsing="false" onAction="#undo" text="%menu.Undo"/>
 
     <Menu mnemonicParsing="false" text="%menu.Filters">
@@ -23,16 +23,32 @@
                   text="%menu.RotateDX"/>
         <MenuItem mnemonicParsing="false" onAction="#rotateSXMetod"
                   text="%menu.RotateSX"/>
+        <MenuItem mnemonicParsing="false" onAction="#resizeMetod"
+                  text="%menu.Resize"/>
+    </Menu>
+
+    <Menu mnemonicParsing="false" text="Zoom">
+        <MenuItem mnemonicParsing="false" onAction="#zoomIn"
+                  text="%menu.zoomin"/>
+        <MenuItem mnemonicParsing="false" onAction="#zoomOut"
+                  text="%menu.zooout"/>
+        <MenuItem mnemonicParsing="false" onAction="#zoomReset"
+                  text="%menu.zooreset"/>
     </Menu>
 
 </Menu>
-<Menu mnemonicParsing="false" text="%menu.vista">
-    <MenuItem mnemonicParsing="false" text="View"/>
+<Menu mnemonicParsing="false" text="%menu.view">
+    <Menu mnemonicParsing="false" text="%menu.language">
+    <MenuItem mnemonicParsing="false" onAction="#setItaLanguage"
+              text="%menu.italian"/>
+    <MenuItem mnemonicParsing="false" onAction="#setEngLanguage"
+              text="%menu.english"/>
+    </Menu>
 </Menu>
-<Menu mnemonicParsing="false" text="%menu.finestra">
-    <MenuItem mnemonicParsing="false" text="Window"/>
+<Menu mnemonicParsing="false" text="%menu.window">
+    <MenuItem mnemonicParsing="false" text="%menu.window"/>
 </Menu>
-<Menu mnemonicParsing="false" text="%menu.aiuto">
-    <MenuItem mnemonicParsing="false" text="Help"/>
+<Menu mnemonicParsing="false" text="%menu.help">
+    <MenuItem mnemonicParsing="false" text="%menu.help"/>
 </Menu>
 </MenuBar>

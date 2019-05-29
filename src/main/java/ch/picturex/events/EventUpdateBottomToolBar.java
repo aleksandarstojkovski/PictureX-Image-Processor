@@ -10,9 +10,9 @@ public class EventUpdateBottomToolBar {
     private List<ImageWrapper> listOfImageWrappers;
     private File file;
 
-    public EventUpdateBottomToolBar(List<ImageWrapper> listOfImageWrappers, File file){
-        this.listOfImageWrappers=listOfImageWrappers;
-        this.file=file;
+    public EventUpdateBottomToolBar(List<ImageWrapper> listOfImageWrappers, File file) {
+        this.listOfImageWrappers = listOfImageWrappers;
+        this.file = file;
     }
 
     public List<ImageWrapper> getListOfImageWrappers() {

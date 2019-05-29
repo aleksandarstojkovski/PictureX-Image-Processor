@@ -10,10 +10,10 @@ public class MetadataWrapper {
     private String value;
     private String type;
 
-    public MetadataWrapper(Tag tag){
-        this.name=tag.getTagName();
-        this.value =tag.getDescription();
-        this.type=tag.getDirectoryName();
+    public MetadataWrapper(Tag tag) {
+        this.name = tag.getTagName();
+        this.value = tag.getDescription();
+        this.type = tag.getDirectoryName();
     }
 
     public String getName() {

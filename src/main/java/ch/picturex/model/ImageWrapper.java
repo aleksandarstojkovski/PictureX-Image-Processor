@@ -2,6 +2,7 @@ package ch.picturex.model;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -16,7 +17,7 @@ public class ImageWrapper {
     private File file;
     private String name;
     private Image thumbnail;
-    private long sizeInBytes;
+    private long sizeInKBytes;
     private static long totalSizeInBytes = 0;
     private String tooltipString;
     private ImageView thumbnailImageView = new ImageView();
@@ -28,9 +29,9 @@ public class ImageWrapper {
         init(file);
     }
 
-    private void init(File file){
-        this.file=file;
-        name=file.getName();
+    private void init(File file) {
+        this.file = file;
+        name = file.getName();
         thumbnail = new Image(file.toURI().toString(),
                 100, // requested width
                 100, // requested height
@@ -39,16 +40,17 @@ public class ImageWrapper {
                 true // load in background
         );
         thumbnailImageView.setImage(thumbnail);
-        sizeInBytes=file.length()/(long)1024;
-        totalSizeInBytes+=sizeInBytes;
-        if (getSizeInMegaBytes()<=1){
-            tooltipString=String.format("Name:\t%s\nSize:\t\t%d Bytes", this.getName(), this.getSizeInBytes());
+        sizeInKBytes = file.length() / (long) 1024;
+        if (sizeInKBytes < 1) sizeInKBytes = 1;
+        totalSizeInBytes += sizeInKBytes;
+        if (getSizeInMegaBytes() <= 1) {
+            tooltipString = String.format("Name:\t%s\nSize:\t\t%d KBytes", this.getName(), this.getSizeInKBytes());
         } else {
-            tooltipString=String.format("Name:\t%s\nSize:\t\t%d MB", this.getName(), this.getSizeInMegaBytes());
+            tooltipString = String.format("Name:\t%s\nSize:\t\t%d MB", this.getName(), this.getSizeInMegaBytes());
         }
     }
 
-    public void set(BufferedImage bufferedImage){
+    public void set(BufferedImage bufferedImage) {
         saveVersion();
         try {
             ImageIO.write(bufferedImage, getExtension(), getFile());
@@ -70,12 +72,12 @@ public class ImageWrapper {
         return thumbnail;
     }
 
-    private long getSizeInBytes() {
-        return sizeInBytes;
+    public long getSizeInKBytes() {
+        return sizeInKBytes;
     }
 
     private long getSizeInMegaBytes() {
-        return sizeInBytes/1024;
+        return sizeInKBytes / 1024;
     }
 
     public static long getTotalSizeInBytes() {
@@ -83,15 +85,15 @@ public class ImageWrapper {
     }
 
     public static long getTotalSizeInMegaBytes() {
-        return totalSizeInBytes/1024;
+        return totalSizeInBytes / 1024;
     }
 
     public String getName() {
         return name;
     }
 
-    public static void clear(){
-        totalSizeInBytes=0;
+    public static void clear() {
+        totalSizeInBytes = 0;
     }
 
     String getTooltipString() {
@@ -102,7 +104,7 @@ public class ImageWrapper {
         return thumbnailImageView;
     }
 
-    private BufferedImage getBufferedImage(){
+    private BufferedImage getBufferedImage() {
         BufferedImage img = null;
         try {
             img = ImageIO.read(file);
@@ -112,12 +114,12 @@ public class ImageWrapper {
         return img;
     }
 
-    private String getExtension(){
+    private String getExtension() {
         return file.getName().substring(file.getName().lastIndexOf(".")).substring(1);
     }
 
-    public void undo(){
-        if (index > 0){
+    public void undo() {
+        if (index > 0) {
             index--;
             try {
                 ImageIO.write(versionHistory.get(index), getExtension(), getFile());
@@ -128,7 +130,7 @@ public class ImageWrapper {
         }
     }
 
-    private void saveVersion(){
+    private void saveVersion() {
         versionHistory.add(getBufferedImage());
         index++;
     }

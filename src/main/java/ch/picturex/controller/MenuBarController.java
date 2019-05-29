@@ -1,21 +1,22 @@
 package ch.picturex.controller;
 
-import ch.picturex.Model;
-import ch.picturex.events.EventBrowseButton;
-import ch.picturex.events.EventFilterBlackAndWhite;
-import ch.picturex.events.EventFilterRotate;
+import ch.picturex.events.*;
 import ch.picturex.filters.Filters;
 import ch.picturex.model.Direction;
+import ch.picturex.model.Model;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.MenuBar;
-import javafx.stage.Stage;
+
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.prefs.Preferences;
 
 public class MenuBarController implements Initializable {
 
     private Model model = Model.getInstance();
+    private Preferences preference = Preferences.userNodeForPackage(Model.class);
 
     @FXML
     MenuBar menuBar;
@@ -25,7 +26,7 @@ public class MenuBarController implements Initializable {
 
     }
 
-    public void BNFilterMetod(){
+    public void BNFilterMetod() {
         model.publish(new EventFilterBlackAndWhite());
     }
 
@@ -42,13 +43,44 @@ public class MenuBarController implements Initializable {
     }
 
     public void handleCloseButtonAction() {
-        Stage stage = (Stage) menuBar.getScene().getWindow();
-        stage.close();
+        Platform.exit();
+    }
+
+    public void resizeMetod() {
+        model.publish(new EventOpenDialogResize());
     }
 
     @FXML
-    private void handleBrowseButton(){
+    private void handleBrowseButton() {
         model.publish(new EventBrowseButton());
     }
+
+    @FXML
+    private void setItaLanguage() {
+        preference.put("language", "it");
+        model.publish(new EventLanguageChange());
+    }
+
+    @FXML
+    private void setEngLanguage() {
+        preference.put("language", "en");
+        model.publish(new EventLanguageChange());
+    }
+
+    @FXML
+    private void zoomIn() {
+        model.publish(new EventZoom("in"));
+    }
+
+    @FXML
+    private void zoomOut() {
+        model.publish(new EventZoom("out"));
+    }
+
+    @FXML
+    private void zoomReset() {
+        model.publish(new EventZoom("reset"));
+    }
+
 
 }

@@ -23,13 +23,13 @@
           AnchorPane.topAnchor="0.0">
         <fx:include source="menuBar.fxml"/>
         <ToolBar>
-            <Button mnemonicParsing="false" onAction="#handleBrowseButton" text="Browse">
+            <Button fx:id="browseButton" mnemonicParsing="false" onAction="#handleBrowseButton" text="%button.browse">
                 <graphic>
                     <FontIcon iconLiteral="fa-folder-open-o"/>
                 </graphic>
             </Button>
             <Pane HBox.hgrow="ALWAYS" minWidth="130"/>
-            <CustomTextField fx:id="globingTextField" minWidth="210">
+            <CustomTextField fx:id="globingTextField" minWidth="225">
                 <left>
                     <Label>
                         <graphic>
@@ -42,7 +42,7 @@
                 <fx:include source="topToolBar.fxml"/>
             </StackPane>
         </ToolBar>
-        <SplitPane fx:id="orizontalSplitPane" dividerPositions="0.36608863198458574" prefHeight="604.0"
+        <SplitPane fx:id="horizontalSplitPane" dividerPositions="0.36608863198458574" prefHeight="604.0"
                    prefWidth="1040.0" VBox.vgrow="ALWAYS">
             <AnchorPane minHeight="0.0" minWidth="260.0" prefHeight="160.0"
                         prefWidth="100.0">
@@ -53,7 +53,7 @@
                     <GridPane fx:id="previewPanel" minHeight="200" alignment="CENTER">
                         <ScrollPane fitToWidth="true" fitToHeight="true" GridPane.halignment="CENTER"
                                     GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER"
-                                    GridPane.vgrow="ALWAYS">
+                                    GridPane.vgrow="ALWAYS" pannable="true" style="-fx-cursor: hand">
                             <StackPane>
                                 <ImageView fx:id="imageViewPreview" fitHeight="288.0" fitWidth="283.0"
                                            pickOnBounds="true" preserveRatio="true"/>
