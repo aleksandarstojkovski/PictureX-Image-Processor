@@ -21,6 +21,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
@@ -248,15 +249,15 @@ public class MainController implements Initializable {
             tilePane.getChildren().add(thumbnailContainer);
             scrollPane.setOnKeyPressed(event -> {
                 double x = tilePane.getWidth();
-                int n = Math.round((int) x / 120);
+                int nrOfTbCforRow = Math.round((int) x / 120);
+                int nOfLastRowTbC = allThumbnailContainers.size()/nrOfTbCforRow;
                 switch (event.getCode()) {
-
                     case UP: {
-                        posiz = posiz - n;
+                        posiz = posiz - nrOfTbCforRow;
                     }
                     break;
                     case DOWN: {
-                        posiz = posiz + n;
+                        posiz = posiz + nrOfTbCforRow;
                     }
                     break;
                     case LEFT: {
@@ -267,10 +268,9 @@ public class MainController implements Initializable {
                         posiz++;
                     }
                     break;
-                    //case SHIFT: running = true; break;
                 }
                 if (posiz >= allThumbnailContainers.size()) {
-                    posiz = 0;
+                    posiz = posiz - allThumbnailContainers.size();
                 } else if (posiz < 0) {
                     posiz = allThumbnailContainers.size() - 1;
                 }
@@ -278,6 +278,9 @@ public class MainController implements Initializable {
                 selectedThumbnailContainers.clear();
                 selectedThumbnailContainers.add(allThumbnailContainers.get(posiz));
                 imageViewPreview.setImage(allThumbnailContainers.get(posiz).getImageWrapper().getPreviewImageView());
+                if (event.getCode() == KeyCode.A && event.isControlDown()) {
+                    selectedThumbnailContainers.addAll(allThumbnailContainers);
+                }
                 colorVBoxImageView();
             });
         }
