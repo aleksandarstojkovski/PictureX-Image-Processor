@@ -135,9 +135,10 @@ public class MenuBarController implements Initializable {
 
         scaleTransition.play();
         dialog.showAndWait();
-
-
     }
 
+    public void fullScreen(){
+        model.getPrimaryStage().setMaximized(true);
+    }
 
 }

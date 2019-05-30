@@ -58,6 +58,7 @@ public class FXApp extends Application {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            model.setPrimaryStage(primaryStage);
             Platform.runLater(() -> primaryStage.show());
             configureBus();
         }
