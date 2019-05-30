@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Filters {
 
-    private static Model model = Model.getInstance();
+    private static final Model model = Model.getInstance();
     private static List<ArrayList<ThumbnailContainer>> selectionHistory = new ArrayList<>();
     private static AtomicInteger count = new AtomicInteger(0);
     private static long size;
@@ -77,8 +77,8 @@ public class Filters {
         ProgressBar tempPro = (ProgressBar) progressAlert.getGraphic();
         Platform.runLater(() -> tempPro.setProgress(0));
         for (ThumbnailContainer tc : thumbnailContainers) {
-            success = true;
             executorService.execute(() -> {
+                success = true;
                 try {
                     Class<IFilter> cls;
                     cls = (Class<IFilter>) Class.forName("ch.picturex.filters." + filterName);
@@ -90,8 +90,6 @@ public class Filters {
                     method.invoke(instanceOfIFilter, tc, parameters);
                     progressCount = ((double) count.incrementAndGet() / size);
                     Platform.runLater(() -> tempPro.setProgress(progressCount));
-                    if (count.get() >= size)
-                        Platform.runLater(() -> forcefullyHideDialog(progressAlert));
                 } catch (Exception e) {
                     success = false;
                 }
@@ -101,13 +99,18 @@ public class Filters {
                     }
                     model.publish(new EventLog("Filter " + filterName + " applied on image: " + tc.getImageWrapper().getName(), Severity.INFO));
                 } else {
-                    Platform.runLater(() -> forcefullyHideDialog(progressAlert));
-                    Platform.runLater(() -> Notifications.create()
-                            .title(model.getResourceBundle().getString("notify.notSupportedFormat.title"))
-                            .text(model.getResourceBundle().getString("notify.notSupportedFormat.text"))
-                            .showWarning());
+                    synchronized (model) {
+                        Platform.runLater(() -> Notifications.create()
+                                .title(model.getResourceBundle().getString("notify.notSupportedFormat.title"))
+                                .text(model.getResourceBundle().getString("notify.notSupportedFormat.text"))
+                                .showWarning());
+                    }
                     model.publish(new EventLog("Unable to apply filter " + filterName + " to image: " + tc.getImageWrapper().getName(), Severity.ERROR));
+                    progressCount = ((double) count.incrementAndGet() / size);
+                    Platform.runLater(() -> tempPro.setProgress(progressCount));
                 }
+                if (count.get() >= size)
+                    Platform.runLater(() -> forcefullyHideDialog(progressAlert));
             });
         }
     }
@@ -126,7 +129,6 @@ public class Filters {
             Alert progressAlert = displayProgressDialog(null, model.getPrimaryStage());
             ProgressBar tempPro = (ProgressBar) progressAlert.getGraphic();
             Platform.runLater(() -> tempPro.setProgress(0));
-
             for (ThumbnailContainer tc : lastSelection) {
                 executorService.execute(() -> {
                     try {
@@ -140,7 +142,6 @@ public class Filters {
                     }
                 });
             }
-            model.shutdownExecutorService();
             model.publish(new EventImageChanged(lastSelection.get(0)));
             selectionHistory.remove(selectionHistory.size() - 1);
         }

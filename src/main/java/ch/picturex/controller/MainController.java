@@ -250,7 +250,7 @@ public class MainController implements Initializable {
             scrollPane.setOnKeyPressed(event -> {
                 double x = tilePane.getWidth();
                 int nrOfTbCforRow = Math.round((int) x / 120);
-                int nOfLastRowTbC = allThumbnailContainers.size()/nrOfTbCforRow;
+                int nOfLastRowTbC = allThumbnailContainers.size() / nrOfTbCforRow;
                 switch (event.getCode()) {
                     case UP: {
                         posiz = posiz - nrOfTbCforRow;

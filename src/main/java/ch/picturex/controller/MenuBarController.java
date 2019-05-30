@@ -11,7 +11,10 @@ import javafx.fxml.Initializable;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.*;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -20,7 +23,6 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.net.URL;
-
 import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
 
@@ -95,7 +97,7 @@ public class MenuBarController implements Initializable {
     }
 
     @FXML
-    private void help(){
+    private void help() {
         Dialog dialog = new Dialog<>();
         Image image = new Image(getClass().getResource("/icons/icon2.png").toExternalForm());
         ImageView imageView = new ImageView(image);

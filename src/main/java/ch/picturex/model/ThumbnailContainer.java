@@ -27,7 +27,7 @@ public class ThumbnailContainer extends VBox {
         return imageWrapper;
     }
 
-    public void setTooltip(){
+    public void setTooltip() {
         Tooltip.install(this, new Tooltip(imageWrapper.getTooltipString()));
     }
 

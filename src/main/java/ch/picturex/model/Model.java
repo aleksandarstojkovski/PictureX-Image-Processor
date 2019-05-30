@@ -38,7 +38,7 @@ public class Model {
             model = new Model();
             model.bus = new EventBus();
             model.logService = new LogService();
-            model.executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() / 2);
+            model.executorService = Executors.newFixedThreadPool(1);
             configureBus();
             setPreferences();
             setResourceBundle();
@@ -120,7 +120,7 @@ public class Model {
         return model.executorService;
     }
 
-    public void shutdownExecutorService() {
+    private void shutdownExecutorService() {
         model.executorService.shutdown();
         try {
             model.executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.SECONDS);
