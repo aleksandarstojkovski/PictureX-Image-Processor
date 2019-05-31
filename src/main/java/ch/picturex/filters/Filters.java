@@ -95,7 +95,7 @@ public class Filters {
                     }
                     model.publish(new EventLog("Filter " + filterName + " applied on image: " + tc.getImageWrapper().getName(), Severity.INFO));
                 } else {
-                    model.publish(new EventLog("Unable to apply filter " + filterName + " to image: " + tc.getImageWrapper().getName(), Severity.ERROR));
+                    model.publish(new EventLog(model.getResourceBundle().getString("log.message.unableApplyFilter") + filterName + model.getResourceBundle().getString("log.message.toImage") + tc.getImageWrapper().getName(), Severity.ERROR));
                     progressCount = ((double) count.incrementAndGet() / size);
                     Platform.runLater(() -> tempPro.setProgress(progressCount));
                 }
