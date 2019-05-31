@@ -12,6 +12,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+
 import java.io.IOException;
 import java.util.Optional;
 
@@ -21,16 +22,16 @@ public class FXApp extends Application {
 
     private Model model = Model.getInstance();
     private Stage primaryStage;
-    private String appName="PictureX";
-    private String mainFxml="/fxml/main.fxml";
-    private String appIcon="/icons/icon.png";
+    private String appName = "PictureX";
+    private String mainFxml = "/fxml/main.fxml";
+    private String appIcon = "/icons/icon.png";
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        this.primaryStage=primaryStage;
+        this.primaryStage = primaryStage;
         model.setPrimaryStage(primaryStage);
         configureBus();
-        Parent root = FXMLLoader.load(getClass().getResource(mainFxml),model.getResourceBundle());
+        Parent root = FXMLLoader.load(getClass().getResource(mainFxml), model.getResourceBundle());
         primaryStage.setTitle(appName);
         primaryStage.setScene(new Scene(root, 1040, 700));
         primaryStage.getIcons().add(new Image(appIcon));
@@ -39,17 +40,17 @@ public class FXApp extends Application {
     }
 
     @Override
-    public void stop(){
+    public void stop() {
         model.destroy();
         Platform.exit();
     }
 
-    private void configureBus(){
-        model.subscribe(EventLanguageChange.class, e->reloadUI());
+    private void configureBus() {
+        model.subscribe(EventLanguageChange.class, e -> reloadUI());
     }
 
-    private void reloadUI(){
-        if (closeWindowEvent(new WindowEvent(primaryStage,WindowEvent.WINDOW_CLOSE_REQUEST),primaryStage)) {
+    private void reloadUI() {
+        if (closeWindowEvent(new WindowEvent(primaryStage, WindowEvent.WINDOW_CLOSE_REQUEST), primaryStage)) {
             model.destroy();
             model = Model.getInstance();
             try {
@@ -57,6 +58,7 @@ public class FXApp extends Application {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            model.setPrimaryStage(primaryStage);
             Platform.runLater(() -> primaryStage.show());
             configureBus();
         }
@@ -70,12 +72,12 @@ public class FXApp extends Application {
         alert.setTitle(model.getResourceBundle().getString("alert.title"));
         alert.setContentText(model.getResourceBundle().getString("alert.text"));
         alert.initOwner(primaryStage.getOwner());
-        Stage stage = (Stage)alert.getDialogPane().getScene().getWindow();
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
         stage.setResizable(true);
         stage.getIcons().add(new Image(appIcon));
         Optional<ButtonType> res = alert.showAndWait();
-        if(res.isPresent()) {
-            if(res.get().equals(ButtonType.CANCEL)) {
+        if (res.isPresent()) {
+            if (res.get().equals(ButtonType.CANCEL)) {
                 event.consume();
                 return false;
             }

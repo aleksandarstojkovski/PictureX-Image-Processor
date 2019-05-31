@@ -46,9 +46,9 @@
     </Menu>
 </Menu>
 <Menu mnemonicParsing="false" text="%menu.window">
-    <MenuItem mnemonicParsing="false" text="%menu.window"/>
+    <MenuItem mnemonicParsing="false" text="%menu.maximize" onAction="#fullScreen"/>
 </Menu>
-<Menu mnemonicParsing="false" text="%menu.help">
+<Menu mnemonicParsing="false" onAction="#help" text="%menu.help">
     <MenuItem mnemonicParsing="false" text="%menu.help"/>
 </Menu>
 </MenuBar>

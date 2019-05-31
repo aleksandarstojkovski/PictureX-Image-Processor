@@ -1,7 +1,7 @@
 package ch.picturex.service;
 
-import ch.picturex.model.Model;
 import ch.picturex.events.EventLog;
+import ch.picturex.model.Model;
 import ch.picturex.model.Severity;
 
 import java.io.*;
@@ -15,15 +15,15 @@ public class LogService {
     private final DateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
     private Model model = Model.getInstance();
 
-    public LogService(){
+    public LogService() {
         configureBus();
     }
 
-    private void configureBus(){
+    private void configureBus() {
         model.subscribe(EventLog.class, e -> log(e.getText(), e.getSeverity()));
     }
 
-    private void log(String text, Severity severity){
+    private void log(String text, Severity severity) {
         Date date = new Date();
         if (out == null) {
             FileWriter fr = null;
@@ -40,7 +40,7 @@ public class LogService {
         out.flush();
     }
 
-    public void close(){
+    public void close() {
         if (out != null) {
             out.close();
         }

@@ -6,8 +6,8 @@ public class EventFilterRotate {
 
     private Direction direction;
 
-    public EventFilterRotate(Direction direction){
-        this.direction=direction;
+    public EventFilterRotate(Direction direction) {
+        this.direction = direction;
     }
 
     public Direction getDirection() {
