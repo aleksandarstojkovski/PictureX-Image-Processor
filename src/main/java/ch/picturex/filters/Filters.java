@@ -10,9 +10,9 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.controlsfx.control.Notifications;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +34,7 @@ public class Filters {
     public static void apply(ArrayList<ThumbnailContainer> thumbnailContainers, String filterName, Map<String, Object> parameters) {
         if ((thumbnailContainers.size() == 1 && thumbnailContainers.get(0).getImageWrapper().getSizeInKBytes() < 1000) || filterName.equals("Zoom")) {
             applyWithoutDialog(thumbnailContainers, filterName, parameters);
-        } else {
+        } else if (thumbnailContainers.size() > 0) {
             applyWithDialog(thumbnailContainers, filterName, parameters);
         }
     }
@@ -50,7 +50,7 @@ public class Filters {
                 IFilter instanceOfIFilter = constructor.newInstance();
                 Method method = cls.getMethod("apply", ThumbnailContainer.class, Map.class);
                 method.invoke(instanceOfIFilter, tc, parameters);
-            } catch (Exception e) {
+            } catch (InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException | ClassNotFoundException e) {
                 success = false;
             }
             if (success) {
@@ -59,10 +59,6 @@ public class Filters {
                 }
                 model.publish(new EventLog("Filter " + filterName + " applied on image: " + tc.getImageWrapper().getName(), Severity.INFO));
             } else {
-                Notifications.create()
-                        .title(model.getResourceBundle().getString("notify.notSupportedFormat.title"))
-                        .text(model.getResourceBundle().getString("notify.notSupportedFormat.text"))
-                        .showWarning();
                 model.publish(new EventLog("Unable to apply filter " + filterName + " to image: " + tc.getImageWrapper().getName(), Severity.ERROR));
             }
         }
@@ -90,7 +86,7 @@ public class Filters {
                     method.invoke(instanceOfIFilter, tc, parameters);
                     progressCount = ((double) count.incrementAndGet() / size);
                     Platform.runLater(() -> tempPro.setProgress(progressCount));
-                } catch (Exception e) {
+                } catch (InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException | ClassNotFoundException e) {
                     success = false;
                 }
                 if (success) {
@@ -99,12 +95,6 @@ public class Filters {
                     }
                     model.publish(new EventLog("Filter " + filterName + " applied on image: " + tc.getImageWrapper().getName(), Severity.INFO));
                 } else {
-                    synchronized (model) {
-                        Platform.runLater(() -> Notifications.create()
-                                .title(model.getResourceBundle().getString("notify.notSupportedFormat.title"))
-                                .text(model.getResourceBundle().getString("notify.notSupportedFormat.text"))
-                                .showWarning());
-                    }
                     model.publish(new EventLog("Unable to apply filter " + filterName + " to image: " + tc.getImageWrapper().getName(), Severity.ERROR));
                     progressCount = ((double) count.incrementAndGet() / size);
                     Platform.runLater(() -> tempPro.setProgress(progressCount));

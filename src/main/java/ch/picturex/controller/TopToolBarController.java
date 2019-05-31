@@ -128,6 +128,8 @@ public class TopToolBarController implements Initializable {
     }
 
     private void resizeButton() {
+        if (model.getSelectedThumbnailContainers().size() == 0)
+            return;
         Dialog<Pair<Integer, Integer>> dialog = new Dialog<>();
         dialog.setTitle(model.getResourceBundle().getString("dialog.title"));
         dialog.setHeaderText(model.getResourceBundle().getString("dialog.text"));

@@ -137,7 +137,7 @@ public class MenuBarController implements Initializable {
         dialog.showAndWait();
     }
 
-    public void fullScreen(){
+    public void fullScreen() {
         model.getPrimaryStage().setMaximized(true);
     }
 
