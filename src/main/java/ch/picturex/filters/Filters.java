@@ -57,9 +57,9 @@ public class Filters {
                 if (thumbnailContainers.size() == 1) {
                     model.publish(new EventImageChanged(thumbnailContainers.get(0)));
                 }
-                model.publish(new EventLog("Filter " + filterName + " applied on image: " + tc.getImageWrapper().getName(), Severity.INFO));
+                model.publish(new EventLog(model.getResourceBundle().getString("log.message.filter") + " " + filterName + model.getResourceBundle().getString("log.message.applyToImage") + " " + tc.getImageWrapper().getName(), Severity.INFO));
             } else {
-                model.publish(new EventLog("Unable to apply filter " + filterName + " to image: " + tc.getImageWrapper().getName(), Severity.ERROR));
+                model.publish(new EventLog(model.getResourceBundle().getString("log.message.unableApplyFilter") + filterName + model.getResourceBundle().getString("log.message.toImage") + tc.getImageWrapper().getName(), Severity.ERROR));
             }
         }
     }
@@ -93,7 +93,7 @@ public class Filters {
                     if (thumbnailContainers.size() == 1) {
                         model.publish(new EventImageChanged(thumbnailContainers.get(0)));
                     }
-                    model.publish(new EventLog("Filter " + filterName + " applied on image: " + tc.getImageWrapper().getName(), Severity.INFO));
+                    model.publish(new EventLog(model.getResourceBundle().getString("log.message.filter") + " " + filterName + " " + model.getResourceBundle().getString("log.message.applyToImage") + " " + tc.getImageWrapper().getName(), Severity.INFO));
                 } else {
                     model.publish(new EventLog(model.getResourceBundle().getString("log.message.unableApplyFilter") + filterName + model.getResourceBundle().getString("log.message.toImage") + tc.getImageWrapper().getName(), Severity.ERROR));
                     progressCount = ((double) count.incrementAndGet() / size);
