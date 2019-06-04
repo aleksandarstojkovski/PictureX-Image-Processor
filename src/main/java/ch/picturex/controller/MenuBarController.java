@@ -102,7 +102,7 @@ public class MenuBarController implements Initializable {
     @FXML
     private void help() {
         Dialog dialog = new Dialog<>();
-        Image image = new Image(getClass().getResource("/icons/icon2.png").toExternalForm());
+        Image image = new Image(getClass().getResource("/icons/icon.png").toExternalForm());
         ImageView imageView = new ImageView(image);
         imageView.setFitHeight(150);
         imageView.setPreserveRatio(true);
