@@ -61,10 +61,10 @@ public class Filters {
                 model.publish(new EventLog(model.getResourceBundle().getString("log.message.filter") + " " + filterName + model.getResourceBundle().getString("log.message.applyToImage") + " " + tc.getImageWrapper().getName(), Severity.INFO));
             } else {
                 model.publish(new EventLog(model.getResourceBundle().getString("log.message.unableApplyFilter") + filterName + model.getResourceBundle().getString("log.message.toImage") + tc.getImageWrapper().getName(), Severity.ERROR));
-                Notifications.create()
+                Platform.runLater(()-> Notifications.create()
                         .title(model.getResourceBundle().getString("notify.notSupportedFormat.title"))
                         .text(model.getResourceBundle().getString("notify.notSupportedFormat.text"))
-                        .showWarning();
+                        .showWarning());
             }
         }
     }
@@ -101,10 +101,10 @@ public class Filters {
                     model.publish(new EventLog(model.getResourceBundle().getString("log.message.filter") + " " + filterName + " " + model.getResourceBundle().getString("log.message.applyToImage") + " " + tc.getImageWrapper().getName(), Severity.INFO));
                 } else {
                     model.publish(new EventLog(model.getResourceBundle().getString("log.message.unableApplyFilter") + filterName + model.getResourceBundle().getString("log.message.toImage") + tc.getImageWrapper().getName(), Severity.ERROR));
-                    Notifications.create()
+                    Platform.runLater(()-> Notifications.create()
                             .title(model.getResourceBundle().getString("notify.notSupportedFormat.title"))
                             .text(model.getResourceBundle().getString("notify.notSupportedFormat.text"))
-                            .showWarning();
+                            .showWarning());
                     progressCount = ((double) count.incrementAndGet() / size);
                     Platform.runLater(() -> tempPro.setProgress(progressCount));
                 }
