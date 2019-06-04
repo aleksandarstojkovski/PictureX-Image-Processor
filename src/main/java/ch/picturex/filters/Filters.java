@@ -10,6 +10,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.controlsfx.control.Notifications;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -60,6 +61,10 @@ public class Filters {
                 model.publish(new EventLog(model.getResourceBundle().getString("log.message.filter") + " " + filterName + model.getResourceBundle().getString("log.message.applyToImage") + " " + tc.getImageWrapper().getName(), Severity.INFO));
             } else {
                 model.publish(new EventLog(model.getResourceBundle().getString("log.message.unableApplyFilter") + filterName + model.getResourceBundle().getString("log.message.toImage") + tc.getImageWrapper().getName(), Severity.ERROR));
+                Notifications.create()
+                        .title(model.getResourceBundle().getString("notify.notSupportedFormat.title"))
+                        .text(model.getResourceBundle().getString("notify.notSupportedFormat.text"))
+                        .showWarning();
             }
         }
     }
@@ -96,6 +101,10 @@ public class Filters {
                     model.publish(new EventLog(model.getResourceBundle().getString("log.message.filter") + " " + filterName + " " + model.getResourceBundle().getString("log.message.applyToImage") + " " + tc.getImageWrapper().getName(), Severity.INFO));
                 } else {
                     model.publish(new EventLog(model.getResourceBundle().getString("log.message.unableApplyFilter") + filterName + model.getResourceBundle().getString("log.message.toImage") + tc.getImageWrapper().getName(), Severity.ERROR));
+                    Notifications.create()
+                            .title(model.getResourceBundle().getString("notify.notSupportedFormat.title"))
+                            .text(model.getResourceBundle().getString("notify.notSupportedFormat.text"))
+                            .showWarning();
                     progressCount = ((double) count.incrementAndGet() / size);
                     Platform.runLater(() -> tempPro.setProgress(progressCount));
                 }

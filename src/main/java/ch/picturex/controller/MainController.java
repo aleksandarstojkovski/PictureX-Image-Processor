@@ -296,20 +296,17 @@ public class MainController implements Initializable {
                 if (!filename.toLowerCase().contains(t1.toLowerCase())) {
                     toBeRemovedTC.add(v);
                 }
-            }
-            if (s.length() > t1.length()) {
-                for (ThumbnailContainer v : allThumbnailContainers) {
-                    ImageWrapper iw = v.getImageWrapper();
-                    String filename = iw.getName().trim();
-                    if (filename.toLowerCase().contains(t1.toLowerCase())) {
+                else{
+                    if (s.length() > t1.length()) {
                         toBeAddedTC.add(v);
                     }
-                }
-                for (ThumbnailContainer v : toBeAddedTC) {
-                    try {
-                        tilePane.getChildren().add(v);
-                    } catch (IllegalArgumentException ignored) {
+                    for (ThumbnailContainer vv : toBeAddedTC) {
+                        try {
+                            tilePane.getChildren().add(vv);
+                        } catch (IllegalArgumentException ignored) {
+                        }
                     }
+
                 }
             }
             tilePane.getChildren().removeAll(toBeRemovedTC);
