@@ -1,54 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
 
-
-<MenuBar fx:id="menuBar" useSystemMenuBar="true" xmlns="http://javafx.com/javafx"
-         xmlns:fx="http://javafx.com/fxml"
-         fx:controller="ch.picturex.controller.MenuBarController">
+<MenuBar fx:id="menuBar"  useSystemMenuBar="true" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.picturex.controller.MenuBarController">
 <Menu mnemonicParsing="false" text="PictureX">
-    <MenuItem onAction="#handleCloseButtonAction" mnemonicParsing="false" text="%menu.Close"/>
+    <MenuItem mnemonicParsing="false" onAction="#handleCloseButtonAction" text="%menu.Close" />
 </Menu>
 <Menu mnemonicParsing="false" text="File">
-    <MenuItem mnemonicParsing="false" onAction="#handleBrowseButton"
-              text="%menu.Browser"/>
+    <MenuItem mnemonicParsing="false" onAction="#handleBrowseButton" text="%menu.Browser" />
 </Menu>
 <Menu mnemonicParsing="false" text="%menu.modify">
-    <MenuItem mnemonicParsing="false" onAction="#undo" text="%menu.Undo"/>
+    <MenuItem mnemonicParsing="false" onAction="#undo" text="%menu.Undo" />
 
     <Menu mnemonicParsing="false" text="%menu.Filters">
-        <MenuItem mnemonicParsing="false" onAction="#BNFilterMetod"
-                  text="%menu.BNFilter"/>
-        <MenuItem mnemonicParsing="false" onAction="#rotateDXMetod"
-                  text="%menu.RotateDX"/>
-        <MenuItem mnemonicParsing="false" onAction="#rotateSXMetod"
-                  text="%menu.RotateSX"/>
-        <MenuItem mnemonicParsing="false" onAction="#resizeMetod"
-                  text="%menu.Resize"/>
+        <MenuItem mnemonicParsing="false" onAction="#BNFilterMetod" text="%menu.BNFilter" />
+        <MenuItem mnemonicParsing="false" onAction="#rotateDXMetod" text="%menu.RotateDX" />
+        <MenuItem mnemonicParsing="false" onAction="#rotateSXMetod" text="%menu.RotateSX" />
+        <MenuItem mnemonicParsing="false" onAction="#resizeMetod" text="%menu.Resize" />
     </Menu>
 
     <Menu mnemonicParsing="false" text="Zoom">
-        <MenuItem mnemonicParsing="false" onAction="#zoomIn"
-                  text="%menu.zoomin"/>
-        <MenuItem mnemonicParsing="false" onAction="#zoomOut"
-                  text="%menu.zooout"/>
-        <MenuItem mnemonicParsing="false" onAction="#zoomReset"
-                  text="%menu.zooreset"/>
+        <MenuItem mnemonicParsing="false" onAction="#zoomIn" text="%menu.zoomin" />
+        <MenuItem mnemonicParsing="false" onAction="#zoomOut" text="%menu.zooout" />
+        <MenuItem mnemonicParsing="false" onAction="#zoomReset" text="%menu.zooreset" />
     </Menu>
 
 </Menu>
+    <Menu mnemonicParsing="false" text="%menu.format">
+
+    </Menu>
 <Menu mnemonicParsing="false" text="%menu.view">
     <Menu mnemonicParsing="false" text="%menu.language">
-    <MenuItem mnemonicParsing="false" onAction="#setItaLanguage"
-              text="%menu.italian"/>
-    <MenuItem mnemonicParsing="false" onAction="#setEngLanguage"
-              text="%menu.english"/>
+    <MenuItem mnemonicParsing="false" onAction="#setItaLanguage" text="%menu.italian" />
+    <MenuItem mnemonicParsing="false" onAction="#setEngLanguage" text="%menu.english" />
     </Menu>
 </Menu>
 <Menu mnemonicParsing="false" text="%menu.window">
-    <MenuItem mnemonicParsing="false" text="%menu.maximize" onAction="#fullScreen"/>
+    <MenuItem mnemonicParsing="false" onAction="#fullScreen" text="%menu.maximize" />
 </Menu>
 <Menu mnemonicParsing="false" onAction="#help" text="%menu.help">
-    <MenuItem mnemonicParsing="false" text="%menu.help"/>
+    <MenuItem mnemonicParsing="false" text="%menu.help.about" />
 </Menu>
 </MenuBar>

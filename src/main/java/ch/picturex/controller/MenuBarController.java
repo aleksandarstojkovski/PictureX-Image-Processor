@@ -4,6 +4,7 @@ import ch.picturex.events.*;
 import ch.picturex.filters.Filters;
 import ch.picturex.model.Direction;
 import ch.picturex.model.Model;
+import ch.picturex.model.Severity;
 import javafx.animation.ScaleTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -72,12 +73,14 @@ public class MenuBarController implements Initializable {
     @FXML
     private void setItaLanguage() {
         preference.put("language", "it");
+        model.publish(new EventLog(model.getResourceBundle().getString("log.message.changeLanguage") + " italian", Severity.INFO));
         model.publish(new EventLanguageChange());
     }
 
     @FXML
     private void setEngLanguage() {
         preference.put("language", "en");
+        model.publish(new EventLog(model.getResourceBundle().getString("log.message.changeLanguage") + " english", Severity.INFO));
         model.publish(new EventLanguageChange());
     }
 
@@ -99,7 +102,7 @@ public class MenuBarController implements Initializable {
     @FXML
     private void help() {
         Dialog dialog = new Dialog<>();
-        Image image = new Image(getClass().getResource("/icons/icon2.png").toExternalForm());
+        Image image = new Image(getClass().getResource("/icons/icon.png").toExternalForm());
         ImageView imageView = new ImageView(image);
         imageView.setFitHeight(150);
         imageView.setPreserveRatio(true);
@@ -123,7 +126,7 @@ public class MenuBarController implements Initializable {
         grid.add(text, 0, 0);
         grid.add(imageView, 1, 0);
         grid.setAlignment(Pos.TOP_CENTER);
-        grid.setHalignment(imageView, HPos.RIGHT);
+        GridPane.setHalignment(imageView, HPos.RIGHT);
 
         dialog.getDialogPane().setContent(grid);
 

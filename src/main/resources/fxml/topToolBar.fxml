@@ -6,17 +6,17 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 
-<HBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/"
+<HBox xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="ch.picturex.controller.TopToolBarController">
-   <Pane minWidth="4"/>
-   <Button fx:id="zoomResetButton" mnemonicParsing="false">
+   <Pane minWidth="4" />
+   <Button fx:id="zoomResetButton" mnemonicParsing="false" >
       <graphic>
          <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
             <Image url="@../icons/zoom_reset.png"/>
          </ImageView>
       </graphic>
    </Button>
-   <Pane minWidth="10"/>
+   <Pane minWidth="10" />
    <Button fx:id="zoomInButton" mnemonicParsing="false">
       <graphic>
          <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
@@ -24,7 +24,7 @@
          </ImageView>
       </graphic>
    </Button>
-   <Pane minWidth="10"/>
+   <Pane minWidth="10" />
    <Button fx:id="zoomOutButton" mnemonicParsing="false">
       <graphic>
          <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
@@ -32,7 +32,7 @@
          </ImageView>
       </graphic>
    </Button>
-   <Pane minWidth="10"/>
+   <Pane minWidth="10" />
    <Button fx:id="blackAndWhiteButton" mnemonicParsing="false">
       <graphic>
          <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
@@ -40,7 +40,7 @@
          </ImageView>
       </graphic>
    </Button>
-   <Pane minWidth="10"/>
+   <Pane minWidth="10" />
    <Button fx:id="rotateLeftButton" mnemonicParsing="false">
       <graphic>
          <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
@@ -48,7 +48,7 @@
          </ImageView>
       </graphic>
    </Button>
-   <Pane minWidth="10"/>
+   <Pane minWidth="10" />
    <Button fx:id="rotateRightButton" mnemonicParsing="false">
       <graphic>
          <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
@@ -56,7 +56,7 @@
          </ImageView>
       </graphic>
    </Button>
-   <Pane minWidth="10"/>
+   <Pane minWidth="10" />
    <Button fx:id="resizeButton" mnemonicParsing="false">
       <graphic>
          <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
@@ -64,7 +64,7 @@
          </ImageView>
       </graphic>
    </Button>
-   <Pane minWidth="10"/>
+   <Pane minWidth="10" />
    <Button fx:id="undoButton" mnemonicParsing="false">
       <graphic>
          <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
