@@ -58,7 +58,7 @@ public class Filters {
                 if (thumbnailContainers.size() == 1) {
                     model.publish(new EventImageChanged(thumbnailContainers.get(0)));
                 }
-                model.publish(new EventLog(model.getResourceBundle().getString("log.message.filter") + " " + filterName + model.getResourceBundle().getString("log.message.applyToImage") + " " + tc.getImageWrapper().getName(), Severity.INFO));
+                model.publish(new EventLog(model.getResourceBundle().getString("log.message.filter") + " " + filterName + " " + model.getResourceBundle().getString("log.message.applyToImage") + " " + tc.getImageWrapper().getName(), Severity.INFO));
             } else {
                 model.publish(new EventLog(model.getResourceBundle().getString("log.message.unableApplyFilter") + " " + filterName + " " + model.getResourceBundle().getString("log.message.toImage") + " " + tc.getImageWrapper().getName(), Severity.ERROR));
                 Platform.runLater(()-> Notifications.create()
