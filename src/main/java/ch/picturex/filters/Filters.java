@@ -139,9 +139,10 @@ public class Filters {
                     } catch (Exception e) {
                         Platform.runLater(() -> forcefullyHideDialog(progressAlert));
                     }
+                    model.publish(new EventImageChanged(lastSelection.get(0)));
                 });
             }
-            model.publish(new EventImageChanged(lastSelection.get(0)));
+
             selectionHistory.remove(selectionHistory.size() - 1);
         }
     }
