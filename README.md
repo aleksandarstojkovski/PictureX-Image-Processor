@@ -1,1 +1,1 @@
-# SUPSI_Ingegneria_e_sviluppo_software_1
+# PictureX - Image Viewer and Processor
