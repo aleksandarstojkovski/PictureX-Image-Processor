@@ -101,7 +101,7 @@ public class MainController implements Initializable {
         setSearchBarListener(globingTextField);
 
         //alla partenza se il programma è già stato usato fa partire tutto dall'ultimo path
-        if (getLastDirectoryPreferences() != null && getLastDirectoryPreferences().canRead()) {
+        if (getLastDirectoryPreferences() != null) {
             chosenDirectory = getLastDirectoryPreferences();
             directoryChosenAction();
         } else {
@@ -328,7 +328,10 @@ public class MainController implements Initializable {
         Preferences preference = Preferences.userNodeForPackage(Model.class);
         String filePath = preference.get("directory", null);
         if (filePath != null) {
-            return new File(filePath);
+            File file = new File(filePath);
+            if (file.canRead()) {
+                return file;
+            }
         }
         return null;
     }
