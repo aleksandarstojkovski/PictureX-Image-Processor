@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.*?>
-
-
 <ToolBar xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
          fx:controller="ch.picturex.controller.BottomToolBarController" prefHeight="10.0">
     <HBox HBox.hgrow="ALWAYS" minWidth="340"/>

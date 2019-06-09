@@ -61,7 +61,7 @@ public class Filters {
                 model.publish(new EventLog(model.getResourceBundle().getString("log.message.filter") + " " + filterName + " " + model.getResourceBundle().getString("log.message.applyToImage") + " " + tc.getImageWrapper().getName(), Severity.INFO));
             } else {
                 model.publish(new EventLog(model.getResourceBundle().getString("log.message.unableApplyFilter") + " " + filterName + " " + model.getResourceBundle().getString("log.message.toImage") + " " + tc.getImageWrapper().getName(), Severity.ERROR));
-                Platform.runLater(()-> Notifications.create()
+                Platform.runLater(() -> Notifications.create()
                         .title(model.getResourceBundle().getString("notify.notSupportedFormat.title"))
                         .text(model.getResourceBundle().getString("notify.notSupportedFormat.text"))
                         .showWarning());
@@ -101,7 +101,7 @@ public class Filters {
                     model.publish(new EventLog(model.getResourceBundle().getString("log.message.filter") + " " + filterName + " " + model.getResourceBundle().getString("log.message.applyToImage") + " " + tc.getImageWrapper().getName(), Severity.INFO));
                 } else {
                     model.publish(new EventLog(model.getResourceBundle().getString("log.message.unableApplyFilter") + " " + filterName + " " + model.getResourceBundle().getString("log.message.toImage") + " " + tc.getImageWrapper().getName(), Severity.ERROR));
-                    Platform.runLater(()-> Notifications.create()
+                    Platform.runLater(() -> Notifications.create()
                             .title(model.getResourceBundle().getString("notify.notSupportedFormat.title"))
                             .text(model.getResourceBundle().getString("notify.notSupportedFormat.text"))
                             .showWarning());

@@ -101,7 +101,7 @@ public class MainController implements Initializable {
         setSearchBarListener(globingTextField);
 
         //alla partenza se il programma è già stato usato fa partire tutto dall'ultimo path
-        if (getLastDirectoryPreferences() != null) {
+        if (getLastDirectoryPreferences() != null && getLastDirectoryPreferences().canRead()) {
             chosenDirectory = getLastDirectoryPreferences();
             directoryChosenAction();
         } else {
@@ -295,8 +295,7 @@ public class MainController implements Initializable {
                 String filename = iw.getName().trim();
                 if (!filename.toLowerCase().contains(t1.toLowerCase())) {
                     toBeRemovedTC.add(v);
-                }
-                else{
+                } else {
                     if (s.length() > t1.length()) {
                         toBeAddedTC.add(v);
                     }
