@@ -1,6 +1,8 @@
 # PictureX - Image Viewer and Processor
 Sviluppato per SUPSI - Ingegneria del Software 1
 
+![alt text](https://github.com/aleksandarstojkovski/PictureX-Image-Processor/blob/master/img/screenshots/picturex-main-full.png)
+
 ### Descrizione
 PictureX è un software per la elaborare delle immagini in formato JPG e PNG. 
 Il programma permette all’utente visualizzare le immagini di una directory (in forma di miniatura/anteprima). 
