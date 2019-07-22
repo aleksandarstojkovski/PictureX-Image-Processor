@@ -2,7 +2,7 @@
 Sviluppato al 2° anno del Bachelor in Ingegneria Informatica.
 Modulo: Ingegneria del Software 1.
 
-![alt text](https://github-oce.ubs.net/PFR/MSTR_PWD_PAGE/blob/master/web/resources/img/main_page.png)
+![alt text](https://github.com/aleksandarstojkovski/PictureX-Image-Processor/blob/master/img/screenshots/picturex-main-full.png)
 
 ### Descrizione
 PictureX è un software per la elaborare delle immagini in formato JPG e PNG. 
