@@ -6,7 +6,7 @@ Modulo: Ingegneria del Software 1.
 
 ### Descrizione
 PictureX è un software per la elaborazione delle immagini in formato JPG e PNG. 
-Il programma permette all’utente visualizzare le immagini di una directory (in forma di miniatura/anteprima). 
+Il programma permette all’utente di visualizzare le immagini di una directory (in forma di miniatura/anteprima). 
 L'utente può visualizzare i metadati principali (dati dell'immagine e metadati EXIF) selezionando un'immagine. 
 L'utente può filtrare la visualizzazione attraverso dei pattern applicati al nome del file. 
 L'utente può visualizzare un'immagine con livelli di zoom a sua scelta. 
